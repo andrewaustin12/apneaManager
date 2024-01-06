@@ -1,0 +1,429 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		3F53E9CF2B470D8400E821BC /* ApneaManagerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F53E9CE2B470D8400E821BC /* ApneaManagerApp.swift */; };
+		3F53E9D32B470D8500E821BC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3F53E9D22B470D8500E821BC /* Assets.xcassets */; };
+		3F53E9D62B470D8500E821BC /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3F53E9D52B470D8500E821BC /* Preview Assets.xcassets */; };
+		3F53E9DD2B470E3A00E821BC /* GuidanceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F53E9DC2B470E3A00E821BC /* GuidanceView.swift */; };
+		3F53E9DF2B47151100E821BC /* MainTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F53E9DE2B47151100E821BC /* MainTab.swift */; };
+		3F53E9E12B4717EA00E821BC /* GuidanceListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F53E9E02B4717EA00E821BC /* GuidanceListView.swift */; };
+		3F53E9E42B471CEB00E821BC /* BenifitsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F53E9E32B471CEB00E821BC /* BenifitsView.swift */; };
+		3F53E9E62B471E5400E821BC /* FrequencyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F53E9E52B471E5400E821BC /* FrequencyView.swift */; };
+		3F53E9EC2B4721F700E821BC /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F53E9EB2B4721F700E821BC /* SettingsView.swift */; };
+		3F53E9FB2B48698A00E821BC /* TrainingOptionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F53E9FA2B48698A00E821BC /* TrainingOptionsView.swift */; };
+		3F53E9FE2B486B6000E821BC /* TraningCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F53E9FD2B486B6000E821BC /* TraningCardView.swift */; };
+		3F53EA002B495A3700E821BC /* TrainingTimeCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F53E9FF2B495A3700E821BC /* TrainingTimeCardView.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		3F53E9CB2B470D8400E821BC /* ApneaManager.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ApneaManager.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		3F53E9CE2B470D8400E821BC /* ApneaManagerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApneaManagerApp.swift; sourceTree = "<group>"; };
+		3F53E9D22B470D8500E821BC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		3F53E9D52B470D8500E821BC /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		3F53E9DC2B470E3A00E821BC /* GuidanceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuidanceView.swift; sourceTree = "<group>"; };
+		3F53E9DE2B47151100E821BC /* MainTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTab.swift; sourceTree = "<group>"; };
+		3F53E9E02B4717EA00E821BC /* GuidanceListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuidanceListView.swift; sourceTree = "<group>"; };
+		3F53E9E32B471CEB00E821BC /* BenifitsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BenifitsView.swift; sourceTree = "<group>"; };
+		3F53E9E52B471E5400E821BC /* FrequencyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrequencyView.swift; sourceTree = "<group>"; };
+		3F53E9EB2B4721F700E821BC /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		3F53E9FA2B48698A00E821BC /* TrainingOptionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrainingOptionsView.swift; sourceTree = "<group>"; };
+		3F53E9FD2B486B6000E821BC /* TraningCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TraningCardView.swift; sourceTree = "<group>"; };
+		3F53E9FF2B495A3700E821BC /* TrainingTimeCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrainingTimeCardView.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		3F53E9C82B470D8400E821BC /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		3F53E9C22B470D8400E821BC = {
+			isa = PBXGroup;
+			children = (
+				3F53E9CE2B470D8400E821BC /* ApneaManagerApp.swift */,
+				3F53E9CD2B470D8400E821BC /* ApneaManager */,
+				3F53E9CC2B470D8400E821BC /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		3F53E9CC2B470D8400E821BC /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				3F53E9CB2B470D8400E821BC /* ApneaManager.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		3F53E9CD2B470D8400E821BC /* ApneaManager */ = {
+			isa = PBXGroup;
+			children = (
+				3F53E9EA2B4721A600E821BC /* Training */,
+				3F53E9E92B47219E00E821BC /* Models */,
+				3F53E9E82B47219800E821BC /* Exercises */,
+				3F53E9E72B47219100E821BC /* Settings */,
+				3F53E9E22B471CCF00E821BC /* Guidance */,
+				3F53E9FC2B486B4100E821BC /* Components */,
+				3F53E9DE2B47151100E821BC /* MainTab.swift */,
+				3F53E9D22B470D8500E821BC /* Assets.xcassets */,
+				3F53E9D42B470D8500E821BC /* Preview Content */,
+			);
+			path = ApneaManager;
+			sourceTree = "<group>";
+		};
+		3F53E9D42B470D8500E821BC /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				3F53E9D52B470D8500E821BC /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		3F53E9E22B471CCF00E821BC /* Guidance */ = {
+			isa = PBXGroup;
+			children = (
+				3F53E9E02B4717EA00E821BC /* GuidanceListView.swift */,
+				3F53E9DC2B470E3A00E821BC /* GuidanceView.swift */,
+				3F53E9E32B471CEB00E821BC /* BenifitsView.swift */,
+				3F53E9E52B471E5400E821BC /* FrequencyView.swift */,
+			);
+			path = Guidance;
+			sourceTree = "<group>";
+		};
+		3F53E9E72B47219100E821BC /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				3F53E9EB2B4721F700E821BC /* SettingsView.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+		3F53E9E82B47219800E821BC /* Exercises */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Exercises;
+			sourceTree = "<group>";
+		};
+		3F53E9E92B47219E00E821BC /* Models */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		3F53E9EA2B4721A600E821BC /* Training */ = {
+			isa = PBXGroup;
+			children = (
+				3F53E9FA2B48698A00E821BC /* TrainingOptionsView.swift */,
+			);
+			path = Training;
+			sourceTree = "<group>";
+		};
+		3F53E9FC2B486B4100E821BC /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				3F53E9FD2B486B6000E821BC /* TraningCardView.swift */,
+				3F53E9FF2B495A3700E821BC /* TrainingTimeCardView.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		3F53E9CA2B470D8400E821BC /* ApneaManager */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 3F53E9D92B470D8500E821BC /* Build configuration list for PBXNativeTarget "ApneaManager" */;
+			buildPhases = (
+				3F53E9C72B470D8400E821BC /* Sources */,
+				3F53E9C82B470D8400E821BC /* Frameworks */,
+				3F53E9C92B470D8400E821BC /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = ApneaManager;
+			productName = ApneaManager;
+			productReference = 3F53E9CB2B470D8400E821BC /* ApneaManager.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		3F53E9C32B470D8400E821BC /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1510;
+				LastUpgradeCheck = 1510;
+				TargetAttributes = {
+					3F53E9CA2B470D8400E821BC = {
+						CreatedOnToolsVersion = 15.1;
+					};
+				};
+			};
+			buildConfigurationList = 3F53E9C62B470D8400E821BC /* Build configuration list for PBXProject "ApneaManager" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 3F53E9C22B470D8400E821BC;
+			productRefGroup = 3F53E9CC2B470D8400E821BC /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				3F53E9CA2B470D8400E821BC /* ApneaManager */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		3F53E9C92B470D8400E821BC /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3F53E9D62B470D8500E821BC /* Preview Assets.xcassets in Resources */,
+				3F53E9D32B470D8500E821BC /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		3F53E9C72B470D8400E821BC /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3F53E9EC2B4721F700E821BC /* SettingsView.swift in Sources */,
+				3F53E9FE2B486B6000E821BC /* TraningCardView.swift in Sources */,
+				3F53E9E42B471CEB00E821BC /* BenifitsView.swift in Sources */,
+				3F53E9DF2B47151100E821BC /* MainTab.swift in Sources */,
+				3F53E9DD2B470E3A00E821BC /* GuidanceView.swift in Sources */,
+				3F53EA002B495A3700E821BC /* TrainingTimeCardView.swift in Sources */,
+				3F53E9E62B471E5400E821BC /* FrequencyView.swift in Sources */,
+				3F53E9E12B4717EA00E821BC /* GuidanceListView.swift in Sources */,
+				3F53E9CF2B470D8400E821BC /* ApneaManagerApp.swift in Sources */,
+				3F53E9FB2B48698A00E821BC /* TrainingOptionsView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		3F53E9D72B470D8500E821BC /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.2;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		3F53E9D82B470D8500E821BC /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.2;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		3F53E9DA2B470D8500E821BC /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"ApneaManager/Preview Content\"";
+				DEVELOPMENT_TEAM = BV862H23C8;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.andy.ApneaManager;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		3F53E9DB2B470D8500E821BC /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"ApneaManager/Preview Content\"";
+				DEVELOPMENT_TEAM = BV862H23C8;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.andy.ApneaManager;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		3F53E9C62B470D8400E821BC /* Build configuration list for PBXProject "ApneaManager" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3F53E9D72B470D8500E821BC /* Debug */,
+				3F53E9D82B470D8500E821BC /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		3F53E9D92B470D8500E821BC /* Build configuration list for PBXNativeTarget "ApneaManager" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3F53E9DA2B470D8500E821BC /* Debug */,
+				3F53E9DB2B470D8500E821BC /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 3F53E9C32B470D8400E821BC /* Project object */;
+}
