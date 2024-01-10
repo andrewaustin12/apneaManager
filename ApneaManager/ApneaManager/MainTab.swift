@@ -21,38 +21,38 @@ struct MainTab: View {
                     Text("Training")
                 }.tag(0)
             
-            Text("Exercises")
+//            ExerciseView()
+//                .onAppear{
+//                    selectedIndex = 1
+//                }
+//                .tabItem{
+//                    Image(systemName: "figure.mind.and.body")
+//                    Text("Exercises")
+//                }.tag(1)
+            GuidanceListView()
                 .onAppear{
                     selectedIndex = 1
                 }
                 .tabItem{
-                    Image(systemName: "figure.mind.and.body")
-                    Text("Exercises")
+                    Image(systemName: "pencil.and.list.clipboard")
+                    Text("Guidance")
                 }.tag(1)
-            GuidanceListView()
+            HistoryView()
                 .onAppear{
                     selectedIndex = 2
                 }
                 .tabItem{
-                    Image(systemName: "pencil.and.list.clipboard")
-                    Text("Guidance")
+                    Image(systemName: "list.dash")
+                    Text("History")
                 }.tag(2)
-            Text("History")
+            SettingsView(userTheme: .buttercup)
                 .onAppear{
                     selectedIndex = 3
                 }
                 .tabItem{
-                    Image(systemName: "list.dash")
-                    Text("History")
-                }.tag(3)
-            SettingsView()
-                .onAppear{
-                    selectedIndex = 4
-                }
-                .tabItem{
                     Image(systemName: "gear")
                     Text("Settings")
-                }.tag(4)
+                }.tag(3)
             
         }
     }

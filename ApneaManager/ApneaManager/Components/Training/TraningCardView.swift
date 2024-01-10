@@ -22,7 +22,7 @@ struct TraningCardView: View {
                 .clipShape(RoundedRectangle(cornerRadius: 20))
                 .overlay(
                     RoundedRectangle(cornerRadius: 20) // Apply the corner radius to the overlay as well.
-                        .stroke(Color.white, lineWidth: 4)
+                        .stroke(Color.gray, lineWidth: 2)
                 )
                 
             
@@ -34,10 +34,12 @@ struct TraningCardView: View {
                 
                 Text(subHeading)
                     .font(.subheadline)
+                    .bold()
                     .foregroundColor(.white)
                 
                 Text(description)
                     .font(.caption)
+                    .bold()
                     .foregroundColor(.white)
                     .lineLimit(2)
             }
@@ -50,5 +52,5 @@ struct TraningCardView: View {
 }
 
 #Preview {
-    TraningCardView(image: "freediver-1", title: "CO2 Training", subHeading: "16 CYCLES | TIME - 11:32", description: "CO2 table is a series of breath hold sessions that give you less time to recover between them.")
+    TraningCardView(image: "freediver-1", title: "CO2 Training", subHeading: "4 CYCLES | TIME - 2:00", description: "Pre-breathing involves controlled breathing exercises to balance oxygen and carbon dioxide levels")
 }
