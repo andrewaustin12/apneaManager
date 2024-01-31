@@ -51,6 +51,17 @@ struct TrainingTimeCardView: View {
         
         
     }
+    private func timeString(from totalSeconds: CGFloat) -> String {
+        let minutes = Int(totalSeconds) / 60
+        let seconds = Int(totalSeconds) % 60
+
+        if minutes == 0 {
+            return "\(seconds)s"
+        } else {
+            return String(format: "%d:%02d", minutes, seconds)
+        }
+    }
+
 }
 
 #Preview {

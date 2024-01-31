@@ -14,8 +14,9 @@ struct BreathHoldHeader: View {
 
     
     private var progress: Double {
-        guard personalBestSeconds > 0 else { return 1 }
-        return Double(secondsElapsed) / Double(personalBestSeconds)  // Use personal best time here
+        guard personalBestSeconds > 0 else { return 0 }
+        let progressValue = Double(secondsElapsed) / Double(personalBestSeconds)
+        return min(progressValue, 1)  // Ensure progress does not exceed 1
     }
     private var secondsRemaining: Int {
         personalBestSeconds - secondsElapsed
@@ -25,7 +26,7 @@ struct BreathHoldHeader: View {
         NavigationStack {
             
             ProgressView(value: progress)
-                .progressViewStyle(TrainingProgressViewStyle(theme: theme))
+                .progressViewStyle(TrainingProgressViewStyle())
 //                .overlay {
 //                    Text("\(secondsElapsed) / \(personalBestSeconds) seconds")  // Display elapsed vs. personal best
 //                        .font(.caption)
@@ -41,13 +42,26 @@ struct BreathHoldHeader: View {
                 VStack(alignment: .trailing) {
                     Text("Personal Best")
                         .font(.caption)
-                    Label("\(personalBestSeconds)", systemImage: "trophy")
+                    Label(timeString(from: CGFloat(personalBestSeconds)), systemImage: "trophy")
                         .labelStyle(.trailingIcon)
                 }
             }
         }
         .padding([.horizontal])
     }
+    private func timeString(from totalSeconds: CGFloat) -> String {
+        let minutes = Int(totalSeconds) / 60
+        let seconds = Int(totalSeconds) % 60
+
+        if minutes == 0 {
+            // For durations less than a minute, display in seconds format (e.g., "7s")
+            return "\(seconds)s"
+        } else {
+            // For durations a minute or longer, display in minute:second format (e.g., "1:01")
+            return String(format: "%d:%02d", minutes, seconds)
+        }
+    }
+
 }
 
 

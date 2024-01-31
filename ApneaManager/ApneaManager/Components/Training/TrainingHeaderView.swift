@@ -1,39 +1,34 @@
-//
-//  TrainingHeaderView.swift
-//  ApneaManager
-//
-//  Created by andrew austin on 1/7/24.
-//
 import SwiftUI
 
 struct TrainingHeaderView: View {
-    let secondsElapsed: Int
-    let secondsRemaining: Int
-    let theme: Theme
+    let roundsElapsed: Int
+    let roundsRemaining: Int
 
-    private var totalSeconds: Int {
-        secondsElapsed + secondsRemaining
+    private var totalRounds: Int {
+        roundsElapsed + roundsRemaining
     }
+
     private var progress: Double {
-        guard totalSeconds > 0 else { return 1 }
-        return Double(secondsElapsed) / Double(totalSeconds)
+        guard totalRounds > 0 else { return 1 }
+        return Double(roundsElapsed) / Double(totalRounds)
     }
     
     var body: some View {
-        NavigationStack {
+        VStack {
             ProgressView(value: progress)
-                .progressViewStyle(TrainingProgressViewStyle(theme: theme))
+                .progressViewStyle(TrainingProgressViewStyle())
+            
             HStack {
                 VStack(alignment: .leading) {
                     Text("Rounds Elapsed")
                         .font(.caption)
-                    Label("\(secondsElapsed)", systemImage: "hourglass.tophalf.fill")
+                    Label("\(roundsElapsed)", systemImage: "hourglass.tophalf.fill")
                 }
                 Spacer()
                 VStack(alignment: .trailing) {
                     Text("Rounds Remaining")
                         .font(.caption)
-                    Label("\(secondsRemaining)", systemImage: "hourglass.bottomhalf.fill")
+                    Label("\(roundsRemaining)", systemImage: "hourglass.bottomhalf.fill")
                         .labelStyle(.trailingIcon)
                 }
             }
@@ -42,6 +37,9 @@ struct TrainingHeaderView: View {
     }
 }
 
-#Preview {
-    TrainingHeaderView(secondsElapsed: 1, secondsRemaining: 16, theme: .bubblegum)
+// Preview
+struct TrainingHeaderView_Previews: PreviewProvider {
+    static var previews: some View {
+        TrainingHeaderView(roundsElapsed: 1, roundsRemaining: 16)
+    }
 }

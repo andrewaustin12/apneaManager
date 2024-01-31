@@ -8,24 +8,39 @@
 import SwiftUI
 
 struct PrebreatheTimer: View {
-    @State private var progress: CGFloat = 0
-    @State private var elapsedTime: CGFloat = 0
-    @State private var isActive = false
-    @State private var showAlert = false  // New state variable for showing the alert
-    let timer = Timer.publish(every: 0.05, on: .main, in: .common).autoconnect()
-    
-    let maxTime: CGFloat = 120 // Two minutes in seconds
+    @Environment(\.modelContext) private var context
+        @State private var progress: CGFloat = 0
+        @State private var elapsedTime: CGFloat = 0
+        @State private var isActive = false
+        @State private var showAlert = false  // New state variable for showing the alert
+        let timer = Timer.publish(every: 0.05, on: .main, in: .common).autoconnect()
+        
+        @Binding var totalDuration: Int  // Binding to pass in the total duration
+        
+        let maxTime: CGFloat  // Use the total duration as the max time
+
+        init(totalDuration: Binding<Int>) {
+            self._totalDuration = totalDuration
+            self.maxTime = CGFloat(totalDuration.wrappedValue)
+        }
 
     var body: some View {
         VStack {
             Button(action: {
                 if isActive {
                     isActive = false
+                    let elapsedInt = Int(elapsedTime)
+                    
+                    // Save the session and check for new prebreathe
+                    saveSession(duration: elapsedInt)
+                    
+                    // Reset for the next session
                     progress = 0
                     elapsedTime = 0
                 } else {
                     isActive = true
                     showAlert = false  // Reset alert when starting
+                    
                 }
             }) {
                 Text(isActive ? "Stop" : "Start")
@@ -58,6 +73,7 @@ struct PrebreatheTimer: View {
         .onReceive(timer) { _ in
             guard isActive else { return }
             updateProgress()
+            
         }
         .alert(isPresented: $showAlert) {  // Alert view
             Alert(
@@ -73,8 +89,9 @@ struct PrebreatheTimer: View {
             elapsedTime += 0.05
             progress = elapsedTime / maxTime
         } else {
-            isActive = false // Stop the timer
-            showAlert = true  // Show the alert
+            isActive = false
+            showAlert = true
+            saveSession(duration: Int(elapsedTime))
         }
     }
     
@@ -83,10 +100,24 @@ struct PrebreatheTimer: View {
         let seconds = Int(totalSeconds) % 60
         return String(format: "%02d:%02d", minutes, seconds)
     }
+    
+    private func saveSession(duration: Int) {
+        let newSession = Session(
+            //sessionID: UUID(),
+            date: Date(),
+            image: "freediver-2",
+            sessionType : .prebreathe,
+            duration: Int(duration)
+            )
+
+        // Save the session using SwiftData
+        context.insert(newSession)
+        print("DEBUG: New pre breathe session added! Session length: \(newSession.duration)")
+    }
 }
 
 
 
 #Preview {
-    PrebreatheTimer()
+    PrebreatheTimer(totalDuration: .constant(120))
 }
