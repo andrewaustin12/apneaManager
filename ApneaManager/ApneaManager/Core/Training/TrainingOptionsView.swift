@@ -41,6 +41,14 @@ struct TrainingOptionsView: View {
             .first
     }
     
+    /// finds most recent SQUARE BREATHING for LAST SESION
+    private var mostRecentPranayamaBreathe: Session? {
+        sessions
+            .filter { $0.sessionType == .pranayama }
+            .sorted(by: { $0.date > $1.date })
+            .first
+    }
+    
     /// Formats the time into 4m 32s
     private func formattedDuration(seconds: Double) -> String {
             if seconds < 60 {
@@ -103,14 +111,14 @@ struct TrainingOptionsView: View {
                             )
                         }
                         
-                        NavigationLink(destination: PranayamaBreathingView()) {
-                            TraningCardView(
-                                image: "pranayama-1",
-                                title: "Pranayama Breath",
-                                subHeading: "10 Cycles - 4 in 4 out",
-                                description: "Begin with 5-10 minutes of square breathing to prepare for the breath-hold exercises."
-                            )
-                        }
+//                        NavigationLink(destination: PranayamaBreathingView()) {
+//                            TraningCardView(
+//                                image: "pranayama-1",
+//                                title: "Pranayama Breath",
+//                                subHeading: "10 Cycles - 4 in 4 out",
+//                                description: "Begin with 5-10 minutes of square breathing to prepare for the breath-hold exercises."
+//                            )
+//                        }
                         
                     }
                 }
@@ -172,8 +180,9 @@ struct TrainingOptionsView: View {
                         TrainingLastSessionCard(image: "freediver-4", sessionType: "Square Breath", duration: mostRecentSquareBreathe.duration)
                     }
                     /// Last Session: Pranayama
-                    TrainingLastSessionCard(image: "pranayama-1", sessionType: "Pranayama Breathe", duration: 322)
-                    
+                    if let mostRecentPranayamaBreathe = mostRecentPranayamaBreathe {
+                        TrainingLastSessionCard(image: "pranayama-1", sessionType: "Pranayama Breathe", duration: mostRecentPranayamaBreathe.duration)
+                    }
                     
                 }
                 .listStyle(.plain)

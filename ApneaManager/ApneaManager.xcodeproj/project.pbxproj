@@ -58,6 +58,7 @@
 		3F69B6BC2B4DA03E00BC9222 /* BreathHoldDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F69B6BB2B4DA03E00BC9222 /* BreathHoldDetailView.swift */; };
 		3FA7C1EB2B66913C00AED17A /* TrainingLastSessionCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FA7C1EA2B66913C00AED17A /* TrainingLastSessionCard.swift */; };
 		3FA7C1F12B6A557B00AED17A /* O2TrainingTableDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FA7C1F02B6A557B00AED17A /* O2TrainingTableDetailView.swift */; };
+		3FAE0ABA2B6D5B3300FB0110 /* PranayamaBreathingSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FAE0AB92B6D5B3300FB0110 /* PranayamaBreathingSettingsView.swift */; };
 		3FDB89DA2B57D0B300DF0C51 /* TipStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FDB89D92B57D0B300DF0C51 /* TipStore.swift */; };
 		3FDB89DC2B57D0FA00DF0C51 /* TipsButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FDB89DB2B57D0FA00DF0C51 /* TipsButtonView.swift */; };
 		3FDB89DE2B57D11700DF0C51 /* TipsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FDB89DD2B57D11700DF0C51 /* TipsView.swift */; };
@@ -134,6 +135,7 @@
 		3F69B6BB2B4DA03E00BC9222 /* BreathHoldDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreathHoldDetailView.swift; sourceTree = "<group>"; };
 		3FA7C1EA2B66913C00AED17A /* TrainingLastSessionCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrainingLastSessionCard.swift; sourceTree = "<group>"; };
 		3FA7C1F02B6A557B00AED17A /* O2TrainingTableDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = O2TrainingTableDetailView.swift; sourceTree = "<group>"; };
+		3FAE0AB92B6D5B3300FB0110 /* PranayamaBreathingSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PranayamaBreathingSettingsView.swift; sourceTree = "<group>"; };
 		3FDB89D92B57D0B300DF0C51 /* TipStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TipStore.swift; sourceTree = "<group>"; };
 		3FDB89DB2B57D0FA00DF0C51 /* TipsButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TipsButtonView.swift; sourceTree = "<group>"; };
 		3FDB89DD2B57D11700DF0C51 /* TipsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TipsView.swift; sourceTree = "<group>"; };
@@ -407,6 +409,7 @@
 			isa = PBXGroup;
 			children = (
 				3F53EA152B4AC15B00E821BC /* PranayamaBreathingView.swift */,
+				3FAE0AB92B6D5B3300FB0110 /* PranayamaBreathingSettingsView.swift */,
 				3F69B6B92B4D9E2D00BC9222 /* PranayamaBreathingDetailView.swift */,
 			);
 			path = Pranayama;
@@ -621,6 +624,7 @@
 				3F53E9E42B471CEB00E821BC /* BenifitsView.swift in Sources */,
 				3F53EA462B4C5A5D00E821BC /* HistoryChartView.swift in Sources */,
 				3FA7C1F12B6A557B00AED17A /* O2TrainingTableDetailView.swift in Sources */,
+				3FAE0ABA2B6D5B3300FB0110 /* PranayamaBreathingSettingsView.swift in Sources */,
 				3FDB89E72B57D8B000DF0C51 /* TestView.swift in Sources */,
 				3F53E9DF2B47151100E821BC /* MainTab.swift in Sources */,
 				3F53EA192B4AC1A000E821BC /* PreBreatheView.swift in Sources */,

@@ -23,6 +23,7 @@ struct TrainingHeaderView: View {
                     Text("Rounds Elapsed")
                         .font(.caption)
                     Label("\(roundsElapsed)", systemImage: "hourglass.tophalf.fill")
+                        
                 }
                 Spacer()
                 VStack(alignment: .trailing) {

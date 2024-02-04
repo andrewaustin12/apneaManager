@@ -43,10 +43,13 @@ struct HistoryView: View {
                 .padding()
                 
                 HStack {
-                    Text("Total Training sessions: \(sessions.count)")
+                    Text("Total Training sessions: ")
                     Spacer()
+                    Text("\(sessions.count)")
                 }
+                .font(.headline)
                 .padding(.leading)
+                .padding(.trailing)
                 
                 
                 List {
