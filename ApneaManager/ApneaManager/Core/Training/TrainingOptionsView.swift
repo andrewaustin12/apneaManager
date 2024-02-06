@@ -25,6 +25,14 @@ struct TrainingOptionsView: View {
             .first
     }
     
+    /// finds most recent CO2 Table Session for LAST SESION
+    private var mostRecentC02TableTraining: Session? {
+        sessions
+            .filter { $0.sessionType == .Co2Table }
+            .sorted(by: { $0.date > $1.date })
+            .first
+    }
+    
     /// finds most recent PRE Breathe for LAST SESION
     private var mostRecentPreBreathe: Session? {
         sessions
@@ -41,7 +49,7 @@ struct TrainingOptionsView: View {
             .first
     }
     
-    /// finds most recent SQUARE BREATHING for LAST SESION
+    /// finds most recent PRANAYAMA for LAST SESION
     private var mostRecentPranayamaBreathe: Session? {
         sessions
             .filter { $0.sessionType == .pranayama }
@@ -67,7 +75,7 @@ struct TrainingOptionsView: View {
                     HStack {
                         
                         NavigationLink(destination: BreathHoldView()) {
-                            TraningCardView(
+                            TrainingCardView(
                                 image: "freediver-3",
                                 title: "Breath Hold Test",
                                 subHeading: "Test Your Hold",
@@ -76,49 +84,49 @@ struct TrainingOptionsView: View {
                         }
                         
                         NavigationLink(destination: PreBreatheView()) {
-                            TraningCardView(
+                            TrainingCardView(
                                 image: "freediver-2",
                                 title: "Pre Breathe",
-                                subHeading: "TIME - 2:00",
+                                subHeading: "TIME | 2:00",
                                 description: "Pre-breathing involves controlled breathing a exercise to balance oxygen and carbon dioxide levels."
                             )
                         }
                         
                         NavigationLink(destination: CO2TrainingView()) {
-                            TraningCardView(
+                            TrainingCardView(
                                 image: "freediver-1",
                                 title: "CO2 Training",
-                                subHeading: "16 CYCLES | TIME - 11:32",
-                                description: "CO2 table is a series of breath hold sessions that give you less time to recover between them."
+                                subHeading: "8 Rounds | 10 min",
+                                description: "CO2 table is a series of breath hold sessions that give you less recovery time between each round."
                             )
                         }
                         
                         NavigationLink(destination: O2TrainingView()) {
-                            TraningCardView(
-                                image: "freediver-5",
+                            TrainingCardView(
+                                image: "freediver-8",
                                 title: "O2 Training",
-                                subHeading: "8 CYCLES | TIME - 22:32",
-                                description: "CO2 table is a series of breath hold sessions that give you less time to recover between them."
+                                subHeading: "8 Rounds | 21 min",
+                                description: "O2 table is a series of breath hold sessions that give you more apnea time each round."
                             )
                         }
                         
                         NavigationLink(destination: SquareBreathingView()) {
-                            TraningCardView(
-                                image: "freediver-4",
+                            TrainingCardView(
+                                image: "freediver-7",
                                 title: "Square Table",
-                                subHeading: "10 Cycles - 4 in 4 out",
+                                subHeading: "4 Cycles | 5 min",
                                 description: "Begin with 5-10 minutes of square breathing to prepare for the breath-hold exercises."
                             )
                         }
                         
-//                        NavigationLink(destination: PranayamaBreathingView()) {
-//                            TraningCardView(
-//                                image: "pranayama-1",
-//                                title: "Pranayama Breath",
-//                                subHeading: "10 Cycles - 4 in 4 out",
-//                                description: "Begin with 5-10 minutes of square breathing to prepare for the breath-hold exercises."
-//                            )
-//                        }
+                        NavigationLink(destination: PranayamaBreathingView()) {
+                            TrainingCardView(
+                                image: "pranayama-2",
+                                title: "Pranayama Breath",
+                                subHeading: "4 Cycles | 5 min",
+                                description: "Begin with 5-10 minutes of alternate nose breathing to relax."
+                            )
+                        }
                         
                     }
                 }
@@ -169,8 +177,9 @@ struct TrainingOptionsView: View {
                         TrainingLastSessionCard(image: "freediver-2", sessionType: "Pre Breathe", duration: mostRecentPreBreatheSession.duration)
                     }
                     /// Last Session : CO2  Table
-                    
-                    TrainingLastSessionCard(image: "freediver-1", sessionType: "CO2 Table", duration: 184)
+                    if let mostRecentC02TableTraining = mostRecentC02TableTraining {
+                        TrainingLastSessionCard(image: "freediver-1", sessionType: "CO2 Table", duration: mostRecentC02TableTraining.duration)
+                    }
                     
                     /// Last Session: O2 Table
                     TrainingLastSessionCard(image: "freediver-5", sessionType: "O2 Table", duration: 198)

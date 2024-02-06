@@ -50,6 +50,7 @@ struct GuidanceView: View {
                     Text("To hook breathe: \nInhale, push down for 1 second, exhale and repeat. Do this 3 – 5 times.")
                 }
             }
+            .listStyle(.plain)
             .listSectionSpacing(1.0)
         }
     }

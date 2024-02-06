@@ -21,7 +21,7 @@ struct SettingsView: View {
                 Text("Apnea Manager")
                     .font(.largeTitle)
                     .fontWeight(.bold) // Make the title bold
-                    .foregroundColor(colorScheme == .light ? .blue : .white) // Change the text color
+                    //.foregroundColor(colorScheme == .light ? .black : .white) // Change the text color
                     .padding(.bottom, 10)
                 VStack {
                     UpgradeCardView(image: "freediver-3", title: "Upgrade to pro", buttonLabel: "Learn more")

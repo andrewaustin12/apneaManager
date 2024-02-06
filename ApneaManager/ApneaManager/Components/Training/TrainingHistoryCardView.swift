@@ -13,6 +13,7 @@ struct TrainingHistoryCardView: View {
 
     let date: Date
     let duration: Double
+    @Environment(\.colorScheme) var colorScheme
     
     private func formattedDuration(seconds: Double) -> String {
             if seconds < 60 {
@@ -33,6 +34,7 @@ struct TrainingHistoryCardView: View {
                 .scaledToFill()
                 .frame(width: 45, height: 45)
                 .clipShape(RoundedRectangle(cornerRadius: 8))
+                .shadow(color: colorScheme == .light ? Color.black.opacity(0.1) : Color.white.opacity(0.3), radius: 2, x: 0, y: 1)
                 //.padding(.leading, 10)
             
             

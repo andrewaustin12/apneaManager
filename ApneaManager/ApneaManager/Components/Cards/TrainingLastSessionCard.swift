@@ -11,6 +11,7 @@ struct TrainingLastSessionCard: View {
     let image: String
     let sessionType: String
     let duration: Int
+    @Environment(\.colorScheme) var colorScheme
     
     var body: some View {
         HStack {
@@ -20,7 +21,7 @@ struct TrainingLastSessionCard: View {
                 .scaledToFill()
                 .frame(width: 45, height: 45)
                 .clipShape(RoundedRectangle(cornerRadius: 8))
-            
+                .shadow(color: colorScheme == .light ? Color.black.opacity(0.1) : Color.white.opacity(0.3), radius: 2, x: 0, y: 1)
             
             
             VStack(alignment: .leading) {

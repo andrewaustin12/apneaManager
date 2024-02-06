@@ -15,6 +15,7 @@ final class Session: Identifiable, Hashable {
     var image: String
     var sessionType: SessionType
     var duration: Int // Duration in seconds
+    
 
     init(
         id: UUID = UUID(),

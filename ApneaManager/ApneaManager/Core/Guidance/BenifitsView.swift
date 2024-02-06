@@ -27,6 +27,7 @@ struct BenifitsView: View {
                     Text("Like meditation, static apnea can induce a state of relaxation and mental calmness, reducing stress levels")
                 }
             }
+            .listStyle(.plain)
             .listSectionSpacing(1.0)
             .navigationTitle("Benifits to static apnea")
         }

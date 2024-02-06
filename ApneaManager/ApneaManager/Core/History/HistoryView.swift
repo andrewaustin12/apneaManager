@@ -12,6 +12,7 @@ import SwiftData
 struct HistoryView: View {
     @Environment(\.modelContext) private var context
     @Query(sort: \Session.date) var sessions: [Session]
+    @State private var isChartExpanded: Bool = true
     
     
     /// sorting session history
@@ -29,18 +30,53 @@ struct HistoryView: View {
         }
     }
     
+    // Filtered sessions for breathhold only
+    var breathholdSessions: [Session] {
+        sortedSessionHistorys.filter { $0.sessionType == .breathHold }
+    }
     
     
     var body: some View {
         NavigationStack{
             VStack {
-                UpgradeCardView(image: "freediver-3", title: "Upgrade to pro", buttonLabel: "Learn more")
+                VStack {
+                    /// IF pro user this does not display
+                    UpgradeCardView(image: "freediver-3", title: "Upgrade to pro", buttonLabel: "Learn more")
+                }
+                
+                HStack {
+                    Text("Breath Hold Test Progress Chart")
+                        .font(.headline)
+                    Spacer()
+                    Button(action: { isChartExpanded.toggle() }) {
+                        Image(systemName: isChartExpanded ? "chevron.up" : "chevron.down")
+                    }
+                }
+                .padding()
+                
+                // Collapsible Chart View
+                if isChartExpanded && breathholdSessions.count > 1 {
+                    HistoryChartView(sessions: breathholdSessions)
+                } else if !isChartExpanded {
+                    // Optionally show a compact representation or nothing
+                } else {
+                    ContentUnavailableView(label: {
+                        Label("Not Enough Data", systemImage: "chart.xyaxis.line")
+                    }, description: {
+                        Text("Two or more breath hold tests are needed to show charts")
+                            .padding()
+                    })
+                }
+                
                 Picker("Sort Order", selection: $sortOrder) {
                     Text("Newest First").tag(SortOrder.newestFirst)
                     Text("Oldest First").tag(SortOrder.oldestFirst)
                 }
                 .pickerStyle(.segmented)
-                .padding()
+                .padding(.bottom)
+                .padding(.leading)
+                .padding(.trailing)
+                
                 
                 HStack {
                     Text("Total Training sessions: ")
@@ -56,7 +92,7 @@ struct HistoryView: View {
                     ForEach(sortedSessionHistorys, id: \.self) { session in
                         
                         TrainingHistoryCardView(image: session.image, title: session.sessionType.rawValue, date: session.date, duration: Double(session.duration))
-                            .foregroundStyle(Color.primary)                        
+                            .foregroundStyle(Color.primary)
                     }
                     .onDelete { indexSet in
                         for index in indexSet {

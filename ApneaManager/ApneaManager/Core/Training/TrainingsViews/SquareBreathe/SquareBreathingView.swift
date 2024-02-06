@@ -28,16 +28,16 @@ struct SquareBreathingView: View {
     }
     
     // Utility function to format duration in "X min Y sec" format, or just "X min" if Y is 0
-        private func formatDuration(_ totalSeconds: Int) -> String {
-            let minutes = totalSeconds / 60
-            let seconds = totalSeconds % 60
-            if seconds == 0 {
-                return "\(minutes) min" // Only show minutes if there are no remaining seconds
-            } else {
-                return "\(minutes) min \(seconds) sec" // Show both minutes and seconds
-            }
+    private func formatDuration(_ totalSeconds: Int) -> String {
+        let minutes = totalSeconds / 60
+        let seconds = totalSeconds % 60
+        if seconds == 0 {
+            return "\(minutes) min" // Only show minutes if there are no remaining seconds
+        } else {
+            return "\(minutes) min \(seconds) sec" // Show both minutes and seconds
         }
-
+    }
+    
     
     var body: some View {
         NavigationStack {
@@ -47,7 +47,7 @@ struct SquareBreathingView: View {
                     // Progress View
                     ProgressView(value: progress)
                         .progressViewStyle(TrainingProgressViewStyle())
-                        
+                    
                     
                     HStack {
                         VStack(alignment:.leading) {
@@ -132,7 +132,7 @@ struct SquareBreathingView: View {
                 }
             }
             .navigationTitle("Square Breath Training")
-
+            
             .sheet(isPresented: $showingDetail) {
                 SquareBreathingDetailView()
             }
