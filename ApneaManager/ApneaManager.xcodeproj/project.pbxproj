@@ -61,6 +61,9 @@
 		3FAE0ABA2B6D5B3300FB0110 /* PranayamaBreathingSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FAE0AB92B6D5B3300FB0110 /* PranayamaBreathingSettingsView.swift */; };
 		3FAE0ABC2B70D86200FB0110 /* O2TrainingSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FAE0ABB2B70D86200FB0110 /* O2TrainingSettingsView.swift */; };
 		3FAE0ABE2B7104E100FB0110 /* CO2TrainingSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FAE0ABD2B7104E100FB0110 /* CO2TrainingSettingsView.swift */; };
+		3FAE0AC32B72471000FB0110 /* TrainingReminder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FAE0AC22B72471000FB0110 /* TrainingReminder.swift */; };
+		3FAE0AC52B724E1000FB0110 /* TrainingReminderDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FAE0AC42B724E1000FB0110 /* TrainingReminderDetailView.swift */; };
+		3FAE0AC82B724E7000FB0110 /* NotificationHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FAE0AC72B724E7000FB0110 /* NotificationHandler.swift */; };
 		3FDB89DA2B57D0B300DF0C51 /* TipStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FDB89D92B57D0B300DF0C51 /* TipStore.swift */; };
 		3FDB89DC2B57D0FA00DF0C51 /* TipsButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FDB89DB2B57D0FA00DF0C51 /* TipsButtonView.swift */; };
 		3FDB89DE2B57D11700DF0C51 /* TipsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FDB89DD2B57D11700DF0C51 /* TipsView.swift */; };
@@ -140,6 +143,10 @@
 		3FAE0AB92B6D5B3300FB0110 /* PranayamaBreathingSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PranayamaBreathingSettingsView.swift; sourceTree = "<group>"; };
 		3FAE0ABB2B70D86200FB0110 /* O2TrainingSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = O2TrainingSettingsView.swift; sourceTree = "<group>"; };
 		3FAE0ABD2B7104E100FB0110 /* CO2TrainingSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CO2TrainingSettingsView.swift; sourceTree = "<group>"; };
+		3FAE0AC12B723F9100FB0110 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		3FAE0AC22B72471000FB0110 /* TrainingReminder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrainingReminder.swift; sourceTree = "<group>"; };
+		3FAE0AC42B724E1000FB0110 /* TrainingReminderDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrainingReminderDetailView.swift; sourceTree = "<group>"; };
+		3FAE0AC72B724E7000FB0110 /* NotificationHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationHandler.swift; sourceTree = "<group>"; };
 		3FDB89D92B57D0B300DF0C51 /* TipStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TipStore.swift; sourceTree = "<group>"; };
 		3FDB89DB2B57D0FA00DF0C51 /* TipsButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TipsButtonView.swift; sourceTree = "<group>"; };
 		3FDB89DD2B57D11700DF0C51 /* TipsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TipsView.swift; sourceTree = "<group>"; };
@@ -201,6 +208,7 @@
 		3F53E9CD2B470D8400E821BC /* ApneaManager */ = {
 			isa = PBXGroup;
 			children = (
+				3FAE0AC12B723F9100FB0110 /* Info.plist */,
 				3FDB89FB2B597DFB00DF0C51 /* Utils */,
 				3FDB89F82B57F8BC00DF0C51 /* Core */,
 				3FDB89EE2B57EFBA00DF0C51 /* SplashScreen */,
@@ -257,6 +265,7 @@
 			children = (
 				3F53EA1C2B4AC44200E821BC /* Theme.swift */,
 				3FDB89F92B582A5A00DF0C51 /* Session.swift */,
+				3FAE0AC22B72471000FB0110 /* TrainingReminder.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -347,6 +356,7 @@
 			children = (
 				3F53EA412B4C4EF300E821BC /* TrainingRemindersView.swift */,
 				3F53EA432B4C4FA200E821BC /* TimerNotificationView.swift */,
+				3FAE0AC42B724E1000FB0110 /* TrainingReminderDetailView.swift */,
 			);
 			path = Notifications;
 			sourceTree = "<group>";
@@ -429,6 +439,14 @@
 			path = Cards;
 			sourceTree = "<group>";
 		};
+		3FAE0AC62B724E5D00FB0110 /* Handlers */ = {
+			isa = PBXGroup;
+			children = (
+				3FAE0AC72B724E7000FB0110 /* NotificationHandler.swift */,
+			);
+			path = Handlers;
+			sourceTree = "<group>";
+		};
 		3FDB89D82B57D09100DF0C51 /* StoreKit */ = {
 			isa = PBXGroup;
 			children = (
@@ -493,6 +511,7 @@
 		3FDB89FB2B597DFB00DF0C51 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				3FAE0AC62B724E5D00FB0110 /* Handlers */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -597,6 +616,7 @@
 				3F69B6A42B4D7F5D00BC9222 /* PrebreatheTimer.swift in Sources */,
 				3F53EA122B4AC11F00E821BC /* O2TrainingView.swift in Sources */,
 				3F53E9EC2B4721F700E821BC /* SettingsView.swift in Sources */,
+				3FAE0AC32B72471000FB0110 /* TrainingReminder.swift in Sources */,
 				3F53EA052B4AA42C00E821BC /* HistoryView.swift in Sources */,
 				3FEC43DC2B4EBF5000C262E5 /* BuyMeACoffeeView.swift in Sources */,
 				3FDB89DE2B57D11700DF0C51 /* TipsView.swift in Sources */,
@@ -643,6 +663,7 @@
 				3FDB89ED2B57EF5F00DF0C51 /* WarningView.swift in Sources */,
 				3F69B6A22B4D78A300BC9222 /* CircleProgressShape.swift in Sources */,
 				3F53EA162B4AC15B00E821BC /* PranayamaBreathingView.swift in Sources */,
+				3FAE0AC52B724E1000FB0110 /* TrainingReminderDetailView.swift in Sources */,
 				3FDB89F72B57F17900DF0C51 /* RoundedShape.swift in Sources */,
 				3F03B9962B6A9AA700E31152 /* SquareBreathingSettingsView.swift in Sources */,
 				3F53E9DD2B470E3A00E821BC /* GuidanceView.swift in Sources */,
@@ -659,6 +680,7 @@
 				3FDB89E22B57D15B00DF0C51 /* ThanksView.swift in Sources */,
 				3F53E9CF2B470D8400E821BC /* ApneaManagerApp.swift in Sources */,
 				3FAE0ABC2B70D86200FB0110 /* O2TrainingSettingsView.swift in Sources */,
+				3FAE0AC82B724E7000FB0110 /* NotificationHandler.swift in Sources */,
 				3FDB89DC2B57D0FA00DF0C51 /* TipsButtonView.swift in Sources */,
 				3F53E9FB2B48698A00E821BC /* TrainingOptionsView.swift in Sources */,
 				3FEC43D12B4DA4D900C262E5 /* CO2TablesInfoView.swift in Sources */,
@@ -801,6 +823,7 @@
 				DEVELOPMENT_TEAM = BV862H23C8;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = ApneaManager/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Apnea Manager";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -831,6 +854,7 @@
 				DEVELOPMENT_TEAM = BV862H23C8;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = ApneaManager/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Apnea Manager";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;

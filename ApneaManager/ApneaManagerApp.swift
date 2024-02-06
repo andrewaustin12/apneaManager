@@ -13,7 +13,7 @@ import StoreKit
 @main
 struct ApneaManagerApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
-    //let container: ModelContainer
+    let container: ModelContainer
     @StateObject private var store = TipStore()
     
     
@@ -21,8 +21,8 @@ struct ApneaManagerApp: App {
     var body: some Scene {
         WindowGroup {
             WarningView()
-                .modelContainer(for: Session.self)
-                //.modelContainer(container)
+                //.modelContainer(for: [TrainingReminder.self ,Session.self])
+                .modelContainer(container)
                 .environmentObject(store)
         }
         
@@ -36,13 +36,13 @@ struct ApneaManagerApp: App {
         WishKit.config.buttons.saveButton.textColor = .setBoth(to: .white)
         
         
-//        let schema = Schema(Session.self)
-//        let config = ModelConfiguration("ApneaManager", schema: schema)
-//        do {
-//            container = try ModelContainer(for: schema, configurations: config)
-//        } catch {
-//            fatalError("Could not configure the container")
-//        }
+        let schema = Schema([TrainingReminder.self ,Session.self])
+        let config = ModelConfiguration("ApneaManager", schema: schema)
+        do {
+            container = try ModelContainer(for: schema, configurations: config)
+        } catch {
+            fatalError("Could not configure the container")
+        }
         print(URL.applicationSupportDirectory.path(percentEncoded: false))
         
         }
