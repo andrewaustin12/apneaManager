@@ -89,15 +89,24 @@ struct HistoryView: View {
                 
                 
                 List {
-                    ForEach(sortedSessionHistorys, id: \.self) { session in
-                        
-                        TrainingHistoryCardView(image: session.image, title: session.sessionType.rawValue, date: session.date, duration: Double(session.duration))
-                            .foregroundStyle(Color.primary)
-                    }
-                    .onDelete { indexSet in
-                        for index in indexSet {
-                            context.delete(sortedSessionHistorys[index])
+                    if sortedSessionHistorys.count >= 1 {
+                        ForEach(sortedSessionHistorys, id: \.self) { session in
+                            
+                            TrainingHistoryCardView(image: session.image, title: session.sessionType.rawValue, date: session.date, duration: Double(session.duration))
+                                .foregroundStyle(Color.primary)
                         }
+                        .onDelete { indexSet in
+                            for index in indexSet {
+                                context.delete(sortedSessionHistorys[index])
+                            }
+                        }
+                    } else {
+                        ContentUnavailableView(label: {
+                            Label("No Training Session", systemImage: "list.bullet.rectangle.portrait")
+                        }, description: {
+                            Text("Complete your first session to see your most recent trainings")
+                                .padding()
+                        })
                     }
                     /// IF user is PRO open full history view
                     /// ELSE show just card list

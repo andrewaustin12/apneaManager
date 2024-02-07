@@ -31,7 +31,7 @@ struct GuidanceView: View {
                     Text("Take your last inhale so your lungs are about 95% full of air. Start with your stomach and then fill up your lungs. Don’t over pack or over-inhale. Not only is this bad practice for real breath-hold freediving; but it also causes you to be uncomfortable and breaks relaxation.")
                 }
                 Section("Step 6") {
-                    Text("Start your timer or table.")
+                    Text("Start your timer or table. The app automatically calculates your table based on your personal best breath hold.")
                 }
                 Section("Step 7") {
                     Text("While holding your breath, close your eyes. Visualize yourself in an underwater environment you find relaxing.")

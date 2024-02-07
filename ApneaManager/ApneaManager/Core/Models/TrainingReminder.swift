@@ -9,20 +9,21 @@ import Foundation
 import SwiftData
 import SwiftUI
 
-// Define the SwiftData model
-@Model 
+@Model
 class TrainingReminder {
-    @Attribute(.unique) var sessionType = ""
+    var id: UUID = UUID() // Add a unique identifier
+    var sessionType = ""
     var dueDate = Date.now + (60*60*24)
     var notes = ""
     
-    
-    init(sessionType: String = "", dueDate: Date = .now + (60*60*24), notes: String = "") {
+    init(id: UUID = UUID(), sessionType: String = "", dueDate: Date = Date.now + (60*60*24), notes: String = "") {
+        self.id = id
         self.sessionType = sessionType
         self.dueDate = dueDate
         self.notes = notes
     }
 }
+
 
 
 

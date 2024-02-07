@@ -33,6 +33,14 @@ struct TrainingOptionsView: View {
             .first
     }
     
+    /// finds most recent O2 Table Session for LAST SESION
+    private var mostRecent02TableTraining: Session? {
+        sessions
+            .filter { $0.sessionType == .O2Table }
+            .sorted(by: { $0.date > $1.date })
+            .first
+    }
+    
     /// finds most recent PRE Breathe for LAST SESION
     private var mostRecentPreBreathe: Session? {
         sessions
@@ -142,97 +150,74 @@ struct TrainingOptionsView: View {
                 
                 List {
                     
-                    /// Personal Best Breath Hold
-                    let breathHoldSessions = sessions.filter { $0.sessionType == .breathHold }
-                    if let longestBreathHoldSession = Session.longestSessionByType(sessions: breathHoldSessions) {
-                        HStack {
-                            
-                            Image("trophy")
-                                .resizable()
-                                .scaledToFit()
-                                .clipShape(RoundedRectangle(cornerRadius: 4))
-                                .frame(width: 45, height: 45)
-                            VStack(alignment: .leading) {
-                                Text("Personal Best")
-                                    .font(.headline)
-                                Text("Breath Hold ")
-                                    .font(.subheadline)
+                    if sessions.count >= 1 {
+                        /// Personal Best Breath Hold
+                        let breathHoldSessions = sessions.filter { $0.sessionType == .breathHold }
+                        if let longestBreathHoldSession = Session.longestSessionByType(sessions: breathHoldSessions) {
+                            HStack {
+                                Image("trophy")
+                                    .resizable()
+                                    .scaledToFit()
+                                    .clipShape(RoundedRectangle(cornerRadius: 4))
+                                    .frame(width: 45, height: 45)
+                                VStack(alignment: .leading) {
+                                    Text("Personal Best")
+                                        .font(.headline)
+                                    Text("Breath Hold ")
+                                        .font(.subheadline)
+                                }
+                                Spacer()
+                                VStack {
+                                    Text( formattedDuration(seconds: Double(longestBreathHoldSession.duration)))
+                                }
+                                .font(.headline)
+                                
                             }
-                            Spacer()
-                            VStack {
-                            Text( formattedDuration(seconds: Double(longestBreathHoldSession.duration)))
-                            }
-                            .font(.headline)
-                            
                         }
-                    }
+                        
+                        /// Last Session Breath Hold
+                        if let mostRecentBreathHoldSession = mostRecentBreathHold {
+                            TrainingLastSessionCard(image: "freediver-3", sessionType: "Breath Hold Test", duration: mostRecentBreathHoldSession.duration)
+                        }
+                        
+                        /// Last Session: Prebreathe
+                        if let mostRecentPreBreatheSession = mostRecentPreBreathe {
+                            TrainingLastSessionCard(image: "freediver-2", sessionType: "Pre Breathe", duration: mostRecentPreBreatheSession.duration)
+                        }
+                        /// Last Session : CO2  Table
+                        if let mostRecentC02TableTraining = mostRecentC02TableTraining {
+                            TrainingLastSessionCard(image: "freediver-1", sessionType: "CO2 Table", duration: mostRecentC02TableTraining.duration)
+                        }
+                        
+                        /// Last Session: O2 Table
+                        if let mostRecent02TableTraining = mostRecent02TableTraining {
+                            TrainingLastSessionCard(image: "freediver-5", sessionType: "O2 Table", duration: mostRecent02TableTraining.duration)
+                        }
+                        /// Last Session: Square Breath
+                        if let mostRecentSquareBreathe = mostRecentSquareBreathe {
+                            TrainingLastSessionCard(image: "freediver-4", sessionType: "Square Breath", duration: mostRecentSquareBreathe.duration)
+                        }
+                        /// Last Session: Pranayama
+                        if let mostRecentPranayamaBreathe = mostRecentPranayamaBreathe {
+                            TrainingLastSessionCard(image: "pranayama-2", sessionType: "Pranayama Breathe", duration: mostRecentPranayamaBreathe.duration)
+                        }
                     
-                    /// Last Session Breath Hold
-                    if let mostRecentBreathHoldSession = mostRecentBreathHold {
-                        TrainingLastSessionCard(image: "freediver-3", sessionType: "Breath Hold Test", duration: mostRecentBreathHoldSession.duration)
+                } else {
+                        ContentUnavailableView(label: {
+                            Label("No Training Session", systemImage: "list.bullet.rectangle.portrait")
+                        }, description: {
+                            Text("Complete your first session to see your most recent trainings")
+                                .padding()
+                        })
                     }
-                    
-                    /// Last Session: Prebreathe
-                    if let mostRecentPreBreatheSession = mostRecentPreBreathe {
-                        TrainingLastSessionCard(image: "freediver-2", sessionType: "Pre Breathe", duration: mostRecentPreBreatheSession.duration)
-                    }
-                    /// Last Session : CO2  Table
-                    if let mostRecentC02TableTraining = mostRecentC02TableTraining {
-                        TrainingLastSessionCard(image: "freediver-1", sessionType: "CO2 Table", duration: mostRecentC02TableTraining.duration)
-                    }
-                    
-                    /// Last Session: O2 Table
-                    TrainingLastSessionCard(image: "freediver-5", sessionType: "O2 Table", duration: 198)
-                    
-                    /// Last Session: Square Breath
-                    if let mostRecentSquareBreathe = mostRecentSquareBreathe {
-                        TrainingLastSessionCard(image: "freediver-4", sessionType: "Square Breath", duration: mostRecentSquareBreathe.duration)
-                    }
-                    /// Last Session: Pranayama
-                    if let mostRecentPranayamaBreathe = mostRecentPranayamaBreathe {
-                        TrainingLastSessionCard(image: "pranayama-1", sessionType: "Pranayama Breathe", duration: mostRecentPranayamaBreathe.duration)
-                    }
-                    
                 }
                 .listStyle(.plain)
-//                ScrollView {
-//                    VStack(alignment: .leading){
-////                        let breathHoldSessions = sessions.filter { $0.sessionType == .breathHold }
-////                        if let longestBreathHoldSession = Session.longestSessionByType(sessions: breathHoldSessions) {
-////                            TrainingTimeCardView(
-////                                image: "trophy",
-////                                title: "Personal Best",
-////                                subTitle: "BREATH HOLD",
-////                                time: formattedDuration(seconds: Double(longestBreathHoldSession.duration))
-////                                
-////                            )
-////                        }
-//                        if let mostRecentSession = mostRecentBreathHold {
-//                            TrainingTimeCardView(
-//                                image: "freediver-3",
-//                                title: "Last Session",
-//                                subTitle: "BREATH HOLD Test",
-//                                time: formattedDuration(seconds: Double(mostRecentSession.duration))
-//                            )
-//                        }
-//                        TrainingTimeCardView(image: "freediver-1", title: "Last Session", subTitle: "CO2 TABLE", time: "2m 42s")
-//                        TrainingTimeCardView(image: "freediver-2", title: "Last Session", subTitle: "O2 TABLE", time: "3m 42s")
-//                        
-//                        TrainingTimeCardView(image: "freediver-4", title: "Last Session", subTitle: "SQUARE BREATHING", time: "13m 42s")
-//                        TrainingTimeCardView(image: "pranayama-1", title: "Last Session", subTitle: "PRANAYAMA BREATHING", time: "20:42")
-//                        
-//                    }
-//                }
-                //.padding(.leading)
-                //.padding(.trailing)
                 .scrollIndicators(.hidden)
-                
-                
             }
             .navigationTitle("Training")
         }
-        
     }
+    
     private func timeString(from totalSeconds: Int) -> String {
         let minutes = Int(totalSeconds) / 60
         let seconds = Int(totalSeconds) % 60

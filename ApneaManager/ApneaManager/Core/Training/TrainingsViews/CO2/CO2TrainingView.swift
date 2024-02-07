@@ -19,7 +19,7 @@ struct CO2TrainingView: View {
     @State private var showingSettings = false
     @State private var currentRoundIndex = 0
     @State private var co2Table: [(hold: Int, rest: Int)] = []
-    @State private var totalTrainingDuration: Int = 0
+    
     
     private var longestBreathHoldDuration: Int? {
         let breathHoldSessions = sessions.filter { $0.sessionType == .breathHold }
@@ -42,7 +42,9 @@ struct CO2TrainingView: View {
                 TrainingHeaderView(roundsElapsed: roundsElapsed, roundsRemaining: roundsRemaining)
                 
                 // Display the CO2 training timer
-                CO2TrainingTimerView(co2Table: co2Table, currentRoundIndex: $currentRoundIndex)
+                CO2TrainingTimerView(co2Table: co2Table, currentRoundIndex: $currentRoundIndex) { totalDuration in
+                    saveSession(duration: totalDuration)
+                }
                 
                 // HStack for buttons
                 HStack {
@@ -67,11 +69,6 @@ struct CO2TrainingView: View {
                     co2Table = createCO2Table(personalBest: personalBest)
                 }
             }
-//            .onDisappear {
-//                if isActive {
-//                    endCO2TrainingSession()
-//                }
-//            }
             .sheet(isPresented: $showingSettings) {
                 CO2TrainingSettingsView()
             }
@@ -97,7 +94,7 @@ struct CO2TrainingView: View {
             let initialBreathHoldDuration = Int(Double(personalBest) * 0.6) // 60% of personal best
             let initialRestDuration = initialBreathHoldDuration + 15 // 15 seconds more than hold duration
             let reductionPerRound = 5 // Reduce rest by 5 seconds each round
-            let totalRounds = 8 // Total number of rounds
+            let totalRounds = 2 // Total number of rounds
             
             var table: [(hold: Int, rest: Int)] = []
             var currentRestDuration = initialRestDuration
@@ -112,28 +109,36 @@ struct CO2TrainingView: View {
             
         }
     
-//    func endCO2TrainingSession() {
-//        // Ensure that there is data to save
-//        guard !co2Table.isEmpty else { return }
-//
-//        // Calculate the total duration of the CO2 session
-//        let totalDuration = co2Table.reduce(0) { $0 + $1.hold + $1.rest }
-//
-//        // Create a new Session instance
-//        let newSession = Session(
-//            image: "freediver-4", // Replace with actual image name
-//            sessionType: .Co2Table,
-//            duration: totalDuration + totalTrainingDuration // Add total training duration
-//        )
-//
-//        // Save the session using SwiftData
-//        context.insert(newSession)
-//        print("CO2 training session saved with total duration: \(totalDuration + totalTrainingDuration)")
-//    }
-
-
-
+    //    func endCO2TrainingSession() {
+    //        // Ensure that there is data to save
+    //        guard !co2Table.isEmpty else { return }
+    //
+    //        // Calculate the total duration of the CO2 session
+    //        let totalDuration = co2Table.reduce(0) { $0 + $1.hold + $1.rest }
+    //
+    //        // Create a new Session instance
+    //        let newSession = Session(
+    //            image: "freediver-4", // Replace with actual image name
+    //            sessionType: .Co2Table,
+    //            duration: totalDuration + totalTrainingDuration // Add total training duration
+    //        )
+    //
+    //        // Save the session using SwiftData
+    //        context.insert(newSession)
+    //        print("CO2 training session saved with total duration: \(totalDuration + totalTrainingDuration)")
+    //    }
     
+    func saveSession(duration: Int) {
+        let newSession = Session(
+            image: "freediver-4",  // Example image property
+            sessionType: .Co2Table, // Session type indicating this is an O2Table session
+            duration: duration     // The total elapsed time passed to this function
+        )
+        // Save the session using SwiftData (or your context management strategy)
+        context.insert(newSession)
+        print("CO2 training session saved with a duration of \(duration)")
+        
+    }
 }
 
 #Preview {
@@ -144,14 +149,15 @@ struct CO2TrainingView: View {
 struct CO2TrainingTimerView: View {
     var co2Table: [(hold: Int, rest: Int)]
     @Binding var currentRoundIndex: Int
-    @Environment(\.modelContext) private var context
-    @State private var totalTrainingDuration: Int = 0
     
     @State private var progress: CGFloat = 0
     @State private var elapsedTime: CGFloat = 0
+    @State private var totalDuration: CGFloat = 0 // Track total duration accurately
     @State private var isActive = false
-    @State private var isHoldPhase = true
+    @State private var isHoldPhase = true //changes initial start phase
     @State private var phaseTimeRemaining: CGFloat = 0
+    
+    var onSave: (Int) -> Void
     
     let timer = Timer.publish(every: 0.05, on: .main, in: .common).autoconnect()
     
@@ -162,8 +168,12 @@ struct CO2TrainingTimerView: View {
                 Text(isActive ? "Stop" : "Start")
                     .font(.title)
                     .bold()
+                    .padding()
+                    .background(isActive ? Color.red : Color.green)
+                    .foregroundColor(.white)
+                    .clipShape(RoundedRectangle(cornerRadius: 8))
             }
-            .buttonStyle(.borderedProminent)
+            .padding(.vertical)
             
             // Circular Progress
             ZStack {
@@ -172,21 +182,19 @@ struct CO2TrainingTimerView: View {
                     .opacity(0.1)
                     .foregroundColor(Color.gray)
                 
-                CircleProgressShape(progress: progress)
+                Circle()
+                    .trim(from: 0.0, to: CGFloat(min(self.progress, 1.0)))
                     .stroke(style: StrokeStyle(lineWidth: 24, lineCap: .round, lineJoin: .round))
                     .foregroundColor(Color.blue)
+                    .rotationEffect(Angle(degrees: 270.0))
                     .animation(.linear, value: progress)
                 
-                // Time Display
                 VStack {
-                    // Phase Indicator
                     Text(phaseIndicatorText())
                         .font(.headline)
-                        .foregroundColor(phaseIndicatorColor())
                         .padding()
                         .background(phaseIndicatorColor().opacity(0.2))
                         .cornerRadius(10)
-                        .padding(.bottom, 5)
                     
                     Text(timeString(from: elapsedTime))
                         .font(.largeTitle)
@@ -194,8 +202,6 @@ struct CO2TrainingTimerView: View {
                 }
             }
             .padding(.horizontal)
-            
-            
         }
         .onReceive(timer) { _ in
             guard isActive else { return }
@@ -214,38 +220,36 @@ struct CO2TrainingTimerView: View {
         if !isActive {
             return Color.gray
         }
-        return isHoldPhase ? Color.red : Color.green
+        return isHoldPhase ? Color.purple : Color.green
     }
     
     private func toggleTimer() {
         isActive.toggle()
         if isActive {
-            // If the timer is started, initialize the phase time without resetting the total elapsed time
-            setPhaseTime(initialize: true)
+            setPhaseTime()
         } else {
-            // If the timer is stopped manually, call endCO2TrainingSession and then reset
-            endCO2TrainingSession()
+            // Include the last active phase's elapsedTime before saving
+            totalDuration += elapsedTime
+            onSave(Int(totalDuration))
             resetTimer()
         }
     }
 
-    private func setPhaseTime(initialize: Bool = false) {
+    private func setPhaseTime() {
         if currentRoundIndex < co2Table.count {
             let phaseDuration = isHoldPhase ? co2Table[currentRoundIndex].hold : co2Table[currentRoundIndex].rest
             phaseTimeRemaining = CGFloat(phaseDuration)
-            if initialize {
-                progress = 0
-                // Do not reset elapsedTime here to keep accumulating total session duration
-            }
+            progress = 0
+            elapsedTime = 0
         }
     }
 
     private func resetTimer() {
-        // Reset only when the session completely ends or is manually stopped
         elapsedTime = 0
         progress = 0
         isHoldPhase = true
-        currentRoundIndex = 0 // Ensure this resets to allow restarting the session
+        totalDuration = 0 // Reset total duration for a new session
+        currentRoundIndex = 0 // Reset to start from the first round
     }
     
     private func updateProgress() {
@@ -256,19 +260,23 @@ struct CO2TrainingTimerView: View {
         progress = (totalPhaseTime - phaseTimeRemaining) / totalPhaseTime
         
         if phaseTimeRemaining <= 0 {
+            totalDuration += totalPhaseTime // Add completed phase time to total duration
+            
             if isHoldPhase {
                 isHoldPhase = false
+                elapsedTime = 0
                 setPhaseTime()
             } else {
                 isHoldPhase = true
                 currentRoundIndex += 1
-                if currentRoundIndex >= co2Table.count {
+                if currentRoundIndex < co2Table.count {
+                    elapsedTime = 0
+                    setPhaseTime()
+                } else {
                     // Session ends, so we call endCO2TrainingSession and reset timer
                     isActive = false
-                    endCO2TrainingSession()
+                    onSave(Int(totalDuration))
                     resetTimer()
-                } else {
-                    setPhaseTime()
                 }
             }
         }
@@ -281,24 +289,6 @@ struct CO2TrainingTimerView: View {
         return String(format: "%02d:%02d", minutes, seconds)
     }
     
-    func endCO2TrainingSession() {
-        // Ensure that there is data to save
-        guard !co2Table.isEmpty else { return }
-
-        // Calculate the total duration of the CO2 session
-        let totalDuration = Int(elapsedTime)
-
-        // Create a new Session instance
-        let newSession = Session(
-            image: "freediver-4", // Replace with actual image name
-            sessionType: .Co2Table,
-            duration: totalDuration  // Add total training duration
-        )
-
-        // Save the session using SwiftData
-        context.insert(newSession)
-        print("CO2 training session saved with total duration: \(totalDuration)")
-    }
 }
 
 

@@ -18,12 +18,36 @@ struct TrainingReminderDetailView: View {
     @State private var isDateChanged = false // Flag to track if the date is changed
     @State private var showAlert: Bool = false
     
+    @State private var selectedSessionType = ""
+    let sessionTypes = [
+        "Breath Hold Test",
+        "Pre Breathe",
+        "O2 Table",
+        "CO2 Table",
+        "Square Breathe",
+        "Paranayama Breathe"
+    ]
+        
+    
     var body: some View {
         NavigationStack {
             Form {
                 Section {
-                    TextField("Enter Session Type here", text: $trainingReminder.sessionType)
-                        .font(.title)
+                    HStack {
+                        Picker("Session Type", selection: $selectedSessionType) {
+                            ForEach(sessionTypes, id: \.self) { sessionType in
+                                Text(sessionType).tag(sessionType)
+                            }
+
+                        }
+                        .onAppear {
+                            // Set the initial selectedSessionType if needed
+                            selectedSessionType = trainingReminder.sessionType
+                        }
+                        .onChange(of: selectedSessionType) { newValue in
+                            trainingReminder.sessionType = newValue
+                        }
+                    }
                     VStack {
                         
                         TextField("Leave a note if needed ", text: $trainingReminder.notes, axis: .vertical)
@@ -49,8 +73,8 @@ struct TrainingReminderDetailView: View {
                     }
                     .alert(isPresented: $showAlert) {
                         Alert(
-                            title: Text("Notification Scheduled"),
-                            message: Text("Your notification for this item has been scheduled."),
+                            title: Text("Training Scheduled"),
+                            message: Text("Your notification for this training session has been scheduled."),
                             dismissButton: .default(Text("OK"))
                         )
                     }

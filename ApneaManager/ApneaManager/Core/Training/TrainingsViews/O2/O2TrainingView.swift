@@ -120,7 +120,6 @@ struct O2TrainingView: View {
         return o2table
     }
     
-    
     func endO2TrainingSession() {
         // Ensure that there is data to save
         guard !o2Table.isEmpty else { return }
@@ -172,7 +171,7 @@ struct O2TrainingTimerView: View {
     @State private var elapsedTime: CGFloat = 0
     @State private var totalDuration: CGFloat = 0 // Track total duration accurately
     @State private var isActive = false
-    @State private var isHoldPhase = true
+    @State private var isHoldPhase = true //changes initial start phase
     @State private var phaseTimeRemaining: CGFloat = 0
     
     var onSave: (Int) -> Void

@@ -28,12 +28,26 @@ struct TrainingRemindersView: View {
                                     TrainingReminderDetailView(trainingReminder: trainingReminder)
                                 } label: {
                                     if trainingReminder.notes.isEmpty {
-                                        Text(trainingReminder.sessionType)
-                                    } else {
-                                        VStack(alignment: .leading) {
+                                        HStack {
                                             Text(trainingReminder.sessionType)
-                                            Text(trainingReminder.notes)
-                                                .font(.caption)
+                                                .font(.headline)
+                                            Spacer()
+                                            Text(trainingReminder.dueDate.formatted(.dateTime.hour().minute().month(.abbreviated).day()))
+                                                .font(.subheadline)
+
+                                        }
+                                        
+                                    } else {
+                                        HStack {
+                                            VStack(alignment: .leading) {
+                                                Text(trainingReminder.sessionType)
+                                                    .font(.headline)
+                                                Text(trainingReminder.notes)
+                                                    .font(.caption)
+                                            }
+                                            Spacer()
+                                            Text(trainingReminder.dueDate.formatted(.dateTime.hour().minute().month(.abbreviated).day()))
+                                                .font(.subheadline)
                                         }
                                     }
 

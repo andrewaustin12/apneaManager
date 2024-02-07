@@ -17,6 +17,11 @@ struct FrequencyView: View {
                 Section("Which training?") {
                     Text("Never do CO2 and O2 tables on the same day.")
                 }
+                Section("Suggested schedule") {
+                    Text("First two week do CO2 training every other day.")
+                    Text("Then try taking your breath hold test again.")
+                    Text("The next two weeks do O2 training once a day.")
+                }
             }
             .listStyle(.plain)
             .listSectionSpacing(1.0)

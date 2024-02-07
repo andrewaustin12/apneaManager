@@ -37,27 +37,24 @@ struct SettingsView: View {
                 
                 List {
                     
-                    Section{
-                        Toggle(isOn: $isPreBreatheChecked) {
-                            Label("Always Pre Breathe", systemImage: "clock")
-                        }
-                        Toggle(isOn: $isVibrationChecked) {
-                            Label("Vibrations", systemImage: "iphone.gen3.radiowaves.left.and.right")
-                        }
-                        
-                    } header: {
-                        Text("User Settings")
-                    }
-                    Section{
-                        NavigationLink(destination: TrainingRemindersView()) {
-                            Label("Training Reminders", systemImage: "bell.badge")
-                        }
-                        NavigationLink(destination: TimerNotificationView()) {
-                            Label("Timer Notifications", systemImage: "clock")
-                        }
-                    } header: {
-                        Text("Notifications")
-                    }
+//                    Section{
+//                        Toggle(isOn: $isVibrationChecked) {
+//                            Label("Vibrations", systemImage: "iphone.gen3.radiowaves.left.and.right")
+//                        }
+//                        
+//                    } header: {
+//                        Text("User Settings")
+//                    }
+//                    Section{
+//                        NavigationLink(destination: TrainingRemindersView()) {
+//                            Label("Training Reminders", systemImage: "bell.badge")
+//                        }
+//                        NavigationLink(destination: TimerNotificationView()) {
+//                            Label("Timer Notifications", systemImage: "clock")
+//                        }
+//                    } header: {
+//                        Text("Notifications")
+//                    }
                     
                     /// IF is not a PRO user DISABLE
                     Section{
@@ -66,6 +63,9 @@ struct SettingsView: View {
                             Spacer()
                             NavigationLink(destination: ThemePicker(selection: userTheme)) {
                             }
+                        }
+                        NavigationLink(destination: TrainingRemindersView()) {
+                            Label("Training Reminders", systemImage: "bell.badge")
                         }
                         NavigationLink(destination: TimerNotificationView()) {
                             Label("Audio Guidance Options", systemImage: "person.wave.2")
