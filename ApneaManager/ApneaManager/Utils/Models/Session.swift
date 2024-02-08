@@ -52,6 +52,11 @@ final class Session: Identifiable, Hashable, Codable {
         guard sessionType == .O2Table, let data = tableData?.data(using: .utf8) else { return nil }
         return try? JSONDecoder().decode([Cycle].self, from: data)
     }
+    
+    var co2Table: [Cycle]? {
+        guard sessionType == .Co2Table, let data = tableData?.data(using: .utf8) else { return nil }
+        return try? JSONDecoder().decode([Cycle].self, from: data)
+    }
 }
 
 struct Cycle: Codable, Identifiable {

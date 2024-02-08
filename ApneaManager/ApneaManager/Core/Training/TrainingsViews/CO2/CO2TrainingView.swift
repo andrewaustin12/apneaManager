@@ -18,7 +18,7 @@ struct CO2TrainingView: View {
     @State private var showingDetail = false
     @State private var showingSettings = false
     @State private var currentRoundIndex = 0
-    @State private var co2Table: [(hold: Int, rest: Int)] = []
+    @State private var co2Table: [Cycle] = []
     
     
     private var longestBreathHoldDuration: Int? {
@@ -42,8 +42,10 @@ struct CO2TrainingView: View {
                 TrainingHeaderView(roundsElapsed: roundsElapsed, roundsRemaining: roundsRemaining)
                 
                 // Display the CO2 training timer
-                CO2TrainingTimerView(co2Table: co2Table, currentRoundIndex: $currentRoundIndex) { totalDuration in
-                    saveSession(duration: totalDuration)
+                CO2TrainingTimerView(co2Table: co2Table, 
+                                     currentRoundIndex: $currentRoundIndex
+                                    ) { totalDuration in
+                                        saveSession(duration: totalDuration, table: co2Table, sessionType: .Co2Table)
                 }
                 
                 // HStack for buttons
@@ -90,22 +92,22 @@ struct CO2TrainingView: View {
         }
     }
     
-    private func createCO2Table(personalBest: Int) -> [(hold: Int, rest: Int)] {
+    private func createCO2Table(personalBest: Int) -> [Cycle] {
             let initialBreathHoldDuration = Int(Double(personalBest) * 0.6) // 60% of personal best
             let initialRestDuration = initialBreathHoldDuration + 15 // 15 seconds more than hold duration
             let reductionPerRound = 5 // Reduce rest by 5 seconds each round
             let totalRounds = 2 // Total number of rounds
             
-            var table: [(hold: Int, rest: Int)] = []
+            var cycles: [Cycle] = []
             var currentRestDuration = initialRestDuration
             
             for _ in 1...totalRounds {
-                table.append((hold: initialBreathHoldDuration, rest: currentRestDuration))
+                cycles.append(Cycle(hold: initialBreathHoldDuration, rest: currentRestDuration))
                 currentRestDuration = max(15, currentRestDuration - reductionPerRound) // Rest duration should not go below 15 seconds
             }
             print("DEBUG: Your personal best hold being used is \(personalBest) and your initial breath hold duration is \(initialBreathHoldDuration) which should be 60% of your personal best.")
-            print(table)
-            return table
+            print(cycles)
+            return cycles
             
         }
     
@@ -128,15 +130,24 @@ struct CO2TrainingView: View {
     //        print("CO2 training session saved with total duration: \(totalDuration + totalTrainingDuration)")
     //    }
     
-    func saveSession(duration: Int) {
+    func saveSession(duration: Int, table: [Cycle], sessionType: Session.SessionType) {
+        // Serialize the table data to a JSON string
+        guard let jsonData = try? JSONEncoder().encode(table) else {
+            print("Failed to serialize table data")
+            return
+        }
+        
+        let jsonString = String(data: jsonData, encoding: .utf8)
+        
         let newSession = Session(
             image: "freediver-4",  // Example image property
-            sessionType: .Co2Table, // Session type indicating this is an O2Table session
-            duration: duration     // The total elapsed time passed to this function
+            sessionType: sessionType, // Session type indicating this is an O2Table session
+            duration: duration ,    // The total elapsed time passed to this function
+            tableData: jsonString
         )
         // Save the session using SwiftData (or your context management strategy)
         context.insert(newSession)
-        print("CO2 training session saved with a duration of \(duration)")
+        print("CO2 training session saved with a duration of \(duration) and table data for \(sessionType.rawValue): \(String(describing: jsonString)).")
         
     }
 }
@@ -147,7 +158,7 @@ struct CO2TrainingView: View {
 
 
 struct CO2TrainingTimerView: View {
-    var co2Table: [(hold: Int, rest: Int)]
+    var co2Table: [Cycle]
     @Binding var currentRoundIndex: Int
     
     @State private var progress: CGFloat = 0

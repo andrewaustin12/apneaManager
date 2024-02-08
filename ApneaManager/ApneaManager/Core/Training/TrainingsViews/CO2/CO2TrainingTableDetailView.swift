@@ -2,7 +2,7 @@ import SwiftUI
 
 struct CO2TrainingTableDetailView: View {
     @Environment(\.presentationMode) var presentationMode
-    var co2Table: [(hold: Int, rest: Int)]
+    var co2Table: [Cycle]
 
     var body: some View {
         NavigationView {
@@ -64,8 +64,10 @@ struct CO2TrainingTableDetailView: View {
     }
 }
 
-struct CO2TrainingTableDetailView_Previews: PreviewProvider {
-    static var previews: some View {
-        CO2TrainingTableDetailView(co2Table: [(hold: 30, rest: 60), (hold: 30, rest: 55), (hold: 30, rest: 50)])
-    }
+#Preview {
+    CO2TrainingTableDetailView(co2Table: [
+        Cycle(hold: 30, rest: 60),
+        Cycle(hold: 30, rest: 55),
+        Cycle(hold: 30, rest: 50)
+    ])
 }
