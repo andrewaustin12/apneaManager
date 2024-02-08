@@ -152,15 +152,25 @@ struct HistoryView: View {
     @ViewBuilder
     private func sessionList(filteredSessions: [Session]) -> some View {
         ForEach(filteredSessions) { session in
-            VStack {
-                TrainingHistoryCardView(image: session.image, title: session.sessionType.rawValue, date: session.date, duration: Double(session.duration))
-                    .padding(.horizontal)
-                    .padding(.bottom, 2)
-
-                Divider()
-                    .padding(.horizontal)
-                    .padding(.bottom, 10)
+            NavigationLink(destination: SessionHistoryDetailView(session: session)) {
+                HStack {
+                    TrainingHistoryCardView(image: session.image, title: session.sessionType.rawValue, date: session.date, duration: Double(session.duration))
+                        .foregroundColor(.primary) // Ensure text color remains black
+                    
+                    Spacer() // Use Spacer to push the arrow to the right
+                    
+                    Image(systemName: "chevron.right")
+                        .foregroundColor(.gray) // Right arrow to indicate it's a link
+                }
+                .padding(.horizontal)
+                .padding(.bottom, 2)
             }
+            .buttonStyle(PlainButtonStyle()) // Use PlainButtonStyle to avoid NavigationLink altering the appearance
+            Divider()
+                .padding(.horizontal)
+                .padding(.bottom, 10)
         }
     }
+
+
 }

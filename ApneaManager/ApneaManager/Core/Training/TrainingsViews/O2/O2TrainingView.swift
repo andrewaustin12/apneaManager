@@ -9,10 +9,7 @@ import SwiftUI
 import SwiftData
 import HealthKit
 
-struct Cycle {
-    var hold: Int
-    var rest: Int
-}
+
 
 
 struct O2TrainingView: View {
@@ -24,7 +21,7 @@ struct O2TrainingView: View {
     @State private var showingDetail = false
     @State private var showingSettings = false
     @State private var currentRoundIndex = 0
-    @State private var o2Table: [(hold: Int, rest: Int)] = []
+    @State private var o2Table: [Cycle] = []
     
     @State private var heartRate: Double? = nil
     @State private var spo2: Double? = nil
@@ -53,13 +50,15 @@ struct O2TrainingView: View {
                     .padding(.bottom)
                 
                 // Display the CO2 training timer
-                O2TrainingTimerView(o2Table: o2Table, 
-                                    currentRoundIndex: $currentRoundIndex, 
+                O2TrainingTimerView(o2Table: o2Table,
+                                    currentRoundIndex: $currentRoundIndex,
                                     heartRate: $heartRate,
                                     spo2: $spo2
                                     ) { totalDuration in
-                                        saveSession(duration: totalDuration)
+                                        // Directly passing the o2Table of type [Cycle]
+                                        saveSession(duration: totalDuration, table: o2Table, sessionType: .O2Table)
                                     }
+
                 Spacer()
                 // HStack for buttons
                 HStack {
@@ -107,7 +106,7 @@ struct O2TrainingView: View {
         }
     }
     
-    private func createO2Table(personalBest: Int) -> [(hold: Int, rest: Int)] {
+    private func createO2Table(personalBest: Int) -> [Cycle] {
         let totalRounds = 2
         let initialBreathHoldPercentage = 0.4 // Starting at 40% of personal best
         let maxBreathHoldPercentage = 0.8 // Maximum at 80% of personal best
@@ -115,18 +114,16 @@ struct O2TrainingView: View {
         let maxBreathHoldDuration = Int(Double(personalBest) * maxBreathHoldPercentage)
         let restDuration = 120 // Consistent 2-minute rest between holds
         
-        var o2table: [(hold: Int, rest: Int)] = []
+        var cycles: [Cycle] = []
         var currentHoldDuration = initialBreathHoldDuration
         let increasePerRound = (maxBreathHoldDuration - initialBreathHoldDuration) / (totalRounds - 1)
         
         for _ in 1...totalRounds {
-            o2table.append((hold: currentHoldDuration, rest: restDuration))
+            cycles.append(Cycle(hold: currentHoldDuration, rest: restDuration))
             currentHoldDuration = min(currentHoldDuration + increasePerRound, maxBreathHoldDuration)
         }
         
-        print("DEBUG: O2 table created using your PB of \(personalBest) with initial hold of \(initialBreathHoldDuration) seconds which is 40% of pb and max hold of \(maxBreathHoldDuration) seconds which is 80% of pb.")
-        print(o2table)
-        return o2table
+        return cycles
     }
     
     func endO2TrainingSession() {
@@ -153,18 +150,27 @@ struct O2TrainingView: View {
         print("O2 training session saved with a duration of \(totalDuration)")
     }
     
-    func saveSession(duration: Int) {
-        let newSession = Session(
-            image: "freediver-8",  // Example image property
-            sessionType: .O2Table, // Session type indicating this is an O2Table session
-            duration: duration     // The total elapsed time passed to this function
-        )
-        // Save the session using SwiftData (or your context management strategy)
-        context.insert(newSession)
-        print("O2 training session saved with a duration of \(duration)")
+    func saveSession(duration: Int, table: [Cycle], sessionType: Session.SessionType) {
+        // Serialize the table data to a JSON string
+        guard let jsonData = try? JSONEncoder().encode(table) else {
+            print("Failed to serialize table data")
+            return
+        }
         
+        let jsonString = String(data: jsonData, encoding: .utf8)
+        
+        let newSession = Session(
+            image: "freediver-8", // Example image property, adjust as needed
+            sessionType: sessionType,
+            duration: duration,
+            tableData: jsonString // Save the serialized table data
+        )
+        // Assuming `context` is your SwiftData context
+        context.insert(newSession)
+        print("Training session saved with duration: \(duration) and table data for \(sessionType.rawValue): \(String(describing: jsonString)).")
     }
-    
+
+
 
 }
     
@@ -175,7 +181,7 @@ struct O2TrainingView: View {
     
 
 struct O2TrainingTimerView: View {
-    var o2Table: [(hold: Int, rest: Int)]
+    var o2Table: [Cycle]
     @Binding var currentRoundIndex: Int
     @Binding var heartRate: Double?
     @Binding var spo2: Double?

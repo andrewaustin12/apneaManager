@@ -9,7 +9,7 @@ import SwiftUI
 
 struct O2TrainingTableDetailView: View {
     @Environment(\.presentationMode) var presentationMode
-    var o2Table: [(hold: Int, rest: Int)]
+    var o2Table: [Cycle]
 
     var body: some View {
         NavigationView {
@@ -76,5 +76,9 @@ struct O2TrainingTableDetailView: View {
 }
 
 #Preview {
-    O2TrainingTableDetailView(o2Table: [(hold: 30, rest: 60), (hold: 30, rest: 55), (hold: 30, rest: 50)])
+    O2TrainingTableDetailView(o2Table: [
+        Cycle(hold: 30, rest: 60),
+        Cycle(hold: 30, rest: 55),
+        Cycle(hold: 30, rest: 50)
+    ])
 }
