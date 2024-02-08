@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		3F03B9942B6A845E00E31152 /* PreBreatheSettingsDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F03B9932B6A845E00E31152 /* PreBreatheSettingsDetailView.swift */; };
 		3F03B9962B6A9AA700E31152 /* SquareBreathingSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F03B9952B6A9AA700E31152 /* SquareBreathingSettingsView.swift */; };
-		3F03B9992B6AA7C000E31152 /* TrainingOptionsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F03B9982B6AA7C000E31152 /* TrainingOptionsViewModel.swift */; };
 		3F23F1FF2B73C7DF003FBC64 /* HealthDataView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F23F1FE2B73C7DF003FBC64 /* HealthDataView.swift */; };
 		3F23F2012B73CB81003FBC64 /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F23F2002B73CB81003FBC64 /* HealthKit.framework */; };
 		3F23F2032B743595003FBC64 /* HistorySessionsChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F23F2022B743595003FBC64 /* HistorySessionsChartView.swift */; };
@@ -96,7 +95,6 @@
 /* Begin PBXFileReference section */
 		3F03B9932B6A845E00E31152 /* PreBreatheSettingsDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreBreatheSettingsDetailView.swift; sourceTree = "<group>"; };
 		3F03B9952B6A9AA700E31152 /* SquareBreathingSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SquareBreathingSettingsView.swift; sourceTree = "<group>"; };
-		3F03B9982B6AA7C000E31152 /* TrainingOptionsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrainingOptionsViewModel.swift; sourceTree = "<group>"; };
 		3F23F1FE2B73C7DF003FBC64 /* HealthDataView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthDataView.swift; sourceTree = "<group>"; };
 		3F23F2002B73CB81003FBC64 /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = System/Library/Frameworks/HealthKit.framework; sourceTree = SDKROOT; };
 		3F23F2022B743595003FBC64 /* HistorySessionsChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistorySessionsChartView.swift; sourceTree = "<group>"; };
@@ -286,7 +284,6 @@
 		3F53E9EA2B4721A600E821BC /* Training */ = {
 			isa = PBXGroup;
 			children = (
-				3F03B9982B6AA7C000E31152 /* TrainingOptionsViewModel.swift */,
 				3F53E9FA2B48698A00E821BC /* TrainingOptionsView.swift */,
 				3F53EA0C2B4AC0C500E821BC /* TrainingsViews */,
 				3F23F1FE2B73C7DF003FBC64 /* HealthDataView.swift */,
@@ -646,7 +643,6 @@
 				3FDB89F22B57EFBA00DF0C51 /* SplashView.swift in Sources */,
 				3FDB89DA2B57D0B300DF0C51 /* TipStore.swift in Sources */,
 				3F53EA322B4B2D0D00E821BC /* ThemePicker.swift in Sources */,
-				3F03B9992B6AA7C000E31152 /* TrainingOptionsViewModel.swift in Sources */,
 				3F53EA1D2B4AC44300E821BC /* Theme.swift in Sources */,
 				3F03B9942B6A845E00E31152 /* PreBreatheSettingsDetailView.swift in Sources */,
 				3FEC43E62B4ED9DE00C262E5 /* SceneView.swift in Sources */,

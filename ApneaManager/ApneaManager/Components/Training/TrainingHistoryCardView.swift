@@ -49,11 +49,12 @@ struct TrainingHistoryCardView: View {
             Spacer()
             VStack(alignment: .trailing) {
                 Text("\(date, format: Date.FormatStyle().month().day())")
+                    .font(.subheadline)
                 Text(formattedDuration(seconds: duration))
+                    .font(.headline)
             }
             //.padding(.trailing)
-            .font(.callout)
-            .bold()
+            
             
         }
 //        .frame(height: 60)

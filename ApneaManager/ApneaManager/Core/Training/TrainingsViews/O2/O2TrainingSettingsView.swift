@@ -9,11 +9,9 @@ import SwiftUI
 
 struct O2TrainingSettingsView: View {
     @Environment(\.presentationMode) var presentationMode
-    @State var percentageOfPersonalBest: Double = 40
-    //@State var percentageOfPersonalBestMax: Double = 80
-    @State var restDuration: Int = 120
-    @State var reductionPerRound: Int = 5
-    @State var totalRounds: Int = 8
+    @Binding var percentageOfPersonalBest: Double
+    @Binding var restDuration: Int
+    @Binding var totalRounds: Int
 
     var body: some View {
         NavigationStack {
@@ -30,17 +28,6 @@ struct O2TrainingSettingsView: View {
                         .font(.subheadline)
                         .foregroundColor(.secondary)
                 }
-//                Section(header: Text("Initial Breath Hold Percentag Max")) {
-//                    Slider(value: $percentageOfPersonalBestMax, in: 20...80, step: 1) {
-//                        Text("Starting % of Personal Best")
-//                    } minimumValueLabel: {
-//                        Text("20%")
-//                    } maximumValueLabel: {
-//                        Text("80%")
-//                    }
-//                    Text("\(Int(percentageOfPersonalBestMax))% of Personal Best")
-//                        .foregroundColor(.secondary)
-//                }
                 
                 Section(header: Text("Rest Duration")) {
                     Stepper("Initial Rest Duration: \(restDuration) sec", value: $restDuration, in: 30...240, step: 5)
@@ -52,7 +39,7 @@ struct O2TrainingSettingsView: View {
                 
                 Section(header: Text("Training Rounds")) {
                     Picker("Total Rounds: \(totalRounds)", selection: $totalRounds) {
-                        ForEach(1...20, id: \.self) { count in
+                        ForEach(2...30, id: \.self) { count in
                             Text("\(count) rounds")
                         }
                     }
@@ -74,5 +61,7 @@ struct O2TrainingSettingsView: View {
 }
 
 #Preview {
-    O2TrainingSettingsView()
+    O2TrainingSettingsView(percentageOfPersonalBest: .constant(40),
+                           restDuration: .constant(120),
+                           totalRounds: .constant(8))
 }

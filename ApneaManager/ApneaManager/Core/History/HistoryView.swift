@@ -78,12 +78,13 @@ struct HistoryView: View {
         }
         .navigationTitle("History")
     }
-
+    /// Upgrade to pro card
     @ViewBuilder
     private var upgradeCardSection: some View {
         UpgradeCardView(image: "freediver-3", title: "Upgrade to Pro", buttonLabel: "Learn More")
     }
     
+    /// Charts
     @ViewBuilder
     private func chartSection<Content: View>(title: String, isExpanded: Binding<Bool>, @ViewBuilder content: () -> Content) -> some View {
         VStack {
@@ -104,6 +105,7 @@ struct HistoryView: View {
         .padding(.bottom, 5)
     }
     
+    /// History session filter
     @ViewBuilder
     private var filterAndSortingPicker: some View {
         HStack {
@@ -138,6 +140,7 @@ struct HistoryView: View {
         .padding(.vertical, 5)
     }
     
+    /// Session Total Counter
     @ViewBuilder
     private func sessionCountView(filteredSessions: [Session]) -> some View {
         HStack {
@@ -149,6 +152,7 @@ struct HistoryView: View {
         .padding()
     }
     
+    /// Session History List
     @ViewBuilder
     private func sessionList(filteredSessions: [Session]) -> some View {
         ForEach(filteredSessions) { session in

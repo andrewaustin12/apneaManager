@@ -26,7 +26,11 @@ struct O2TrainingView: View {
     @State private var heartRate: Double? = nil
     @State private var spo2: Double? = nil
     
-    //@State private var initialBreathHoldDuration: Double = 0.4
+    /// Settings state
+    @State private var totalRounds: Int = 8
+    @State private var initialBreathHoldPercentage: Double = 40
+    @State private var maxBreathHoldPercentage: Double = 80
+    @State private var restDuration: Int = 120
     
     private var longestBreathHoldDuration: Int? {
         let breathHoldSessions = sessions.filter { $0.sessionType == .breathHold }
@@ -86,7 +90,19 @@ struct O2TrainingView: View {
                 
             }
             .sheet(isPresented: $showingSettings) {
-                O2TrainingSettingsView()
+                // Pass the bindings to the settings view
+                O2TrainingSettingsView(percentageOfPersonalBest: $initialBreathHoldPercentage,
+                                       restDuration: $restDuration,
+                                       totalRounds: $totalRounds)
+            }
+            .onChange(of: initialBreathHoldPercentage) {
+                regenerateO2Table()
+            }
+            .onChange(of: restDuration) {
+                regenerateO2Table()
+            }
+            .onChange(of: totalRounds) {
+                regenerateO2Table()
             }
             .sheet(isPresented: $showingDetail) {
                 O2TrainingDetailView()
@@ -107,24 +123,47 @@ struct O2TrainingView: View {
     }
     
     private func createO2Table(personalBest: Int) -> [Cycle] {
-        let totalRounds = 2
-        let initialBreathHoldPercentage = 0.4 // Starting at 40% of personal best
-        let maxBreathHoldPercentage = 0.8 // Maximum at 80% of personal best
+        let totalRounds = self.totalRounds
+        let initialBreathHoldPercentage = self.initialBreathHoldPercentage / 100 // Ensure this is a decimal
+        let maxBreathHoldPercentage = self.maxBreathHoldPercentage / 100 // Ensure this is a decimal
         let initialBreathHoldDuration = Int(Double(personalBest) * initialBreathHoldPercentage)
         let maxBreathHoldDuration = Int(Double(personalBest) * maxBreathHoldPercentage)
-        let restDuration = 120 // Consistent 2-minute rest between holds
+        let restDuration = self.restDuration
         
         var cycles: [Cycle] = []
         var currentHoldDuration = initialBreathHoldDuration
-        let increasePerRound = (maxBreathHoldDuration - initialBreathHoldDuration) / (totalRounds - 1)
+        // Ensure this calculation does not result in a zero or negative value
+        /// Increase per round time is calculated here
+        let increasePerRound = max((maxBreathHoldDuration - initialBreathHoldDuration) / max(1, totalRounds - 1), 1)
         
-        for _ in 1...totalRounds {
+        for roundIndex in 1...totalRounds {
+            // Check if currentHoldDuration exceeds maxBreathHoldDuration and set to max if it does
+            if currentHoldDuration > maxBreathHoldDuration {
+                currentHoldDuration = maxBreathHoldDuration
+            }
+            
             cycles.append(Cycle(hold: currentHoldDuration, rest: restDuration))
-            currentHoldDuration = min(currentHoldDuration + increasePerRound, maxBreathHoldDuration)
+            
+            // Only increase if below max duration
+            if currentHoldDuration < maxBreathHoldDuration {
+                currentHoldDuration += increasePerRound
+            }
+            // Debug print to monitor values
+            print("DEBUG: Your personal best hold being used is \(personalBest) and your initial breath hold duration is \(initialBreathHoldDuration) which should be 60% of your personal best and max breath hold duration of \(maxBreathHoldDuration) which is 80% of you pb.")
+            print("Round \(roundIndex): Hold = \(currentHoldDuration), Increase = \(increasePerRound)")
         }
         
         return cycles
     }
+
+    
+    private func regenerateO2Table() {
+        if let personalBest = longestBreathHoldDuration {
+            o2Table = createO2Table(personalBest: personalBest)
+            print(o2Table)
+        }
+    }
+
     
     func endO2TrainingSession() {
         // Ensure that there is data to save
