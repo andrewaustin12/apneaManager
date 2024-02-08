@@ -13,6 +13,7 @@ import Charts
 struct HistoryChartView: View {
     var sessions: [Session]
     @State private var selectedTimeScale: TimeScale = .total
+    @Environment(\.colorScheme) var colorScheme
 
     private var filteredSessions: [Session] {
         let calendar = Calendar.current
@@ -69,6 +70,12 @@ struct HistoryChartView: View {
                 })
             }
         }
+        .padding()
+        .background(Color(.systemBackground))
+        .clipShape(RoundedRectangle(cornerRadius: 12))
+        .shadow(radius: 5)
+        .padding(.horizontal)
+        .shadow(color: colorScheme == .light ? Color.black.opacity(0.1) : Color.white.opacity(0.1), radius: 2, x: 0, y: 1)
     }
 }
 

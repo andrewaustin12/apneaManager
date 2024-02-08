@@ -7,6 +7,7 @@
 
 import SwiftUI
 import SwiftData
+import HealthKit
 
 struct Cycle {
     var hold: Int
@@ -24,6 +25,9 @@ struct O2TrainingView: View {
     @State private var showingSettings = false
     @State private var currentRoundIndex = 0
     @State private var o2Table: [(hold: Int, rest: Int)] = []
+    
+    @State private var heartRate: Double? = nil
+    @State private var spo2: Double? = nil
     
     //@State private var initialBreathHoldDuration: Double = 0.4
     
@@ -49,9 +53,13 @@ struct O2TrainingView: View {
                     .padding(.bottom)
                 
                 // Display the CO2 training timer
-                O2TrainingTimerView(o2Table: o2Table, currentRoundIndex: $currentRoundIndex) { totalDuration in
-                    saveSession(duration: totalDuration)
-                }
+                O2TrainingTimerView(o2Table: o2Table, 
+                                    currentRoundIndex: $currentRoundIndex, 
+                                    heartRate: $heartRate,
+                                    spo2: $spo2
+                                    ) { totalDuration in
+                                        saveSession(duration: totalDuration)
+                                    }
                 Spacer()
                 // HStack for buttons
                 HStack {
@@ -76,6 +84,7 @@ struct O2TrainingView: View {
                 if let personalBest = longestBreathHoldDuration {
                     o2Table = createO2Table(personalBest: personalBest)
                 }
+                
             }
             .sheet(isPresented: $showingSettings) {
                 O2TrainingSettingsView()
@@ -155,6 +164,8 @@ struct O2TrainingView: View {
         print("O2 training session saved with a duration of \(duration)")
         
     }
+    
+
 }
     
 #Preview {
@@ -166,6 +177,9 @@ struct O2TrainingView: View {
 struct O2TrainingTimerView: View {
     var o2Table: [(hold: Int, rest: Int)]
     @Binding var currentRoundIndex: Int
+    @Binding var heartRate: Double?
+    @Binding var spo2: Double?
+    @State private var errorMessage: String?
     
     @State private var progress: CGFloat = 0
     @State private var elapsedTime: CGFloat = 0
@@ -173,6 +187,7 @@ struct O2TrainingTimerView: View {
     @State private var isActive = false
     @State private var isHoldPhase = true //changes initial start phase
     @State private var phaseTimeRemaining: CGFloat = 0
+    @State private var healthDataFetchTimer: Timer? = nil
     
     var onSave: (Int) -> Void
     
@@ -180,16 +195,47 @@ struct O2TrainingTimerView: View {
     
     var body: some View {
         VStack {
-            Button(action: toggleTimer) {
-                Text(isActive ? "Stop" : "Start")
-                    .font(.title)
-                    .bold()
-                    .padding()
-                    .background(isActive ? Color.red : Color.green)
-                    .foregroundColor(.white)
-                    .clipShape(RoundedRectangle(cornerRadius: 8))
+            VStack {
+                HStack {
+                    // Left side content (Heart Rate)
+                    VStack {
+                        if let heartRate = heartRate {
+                            Text("HR: \(Int(heartRate)) bpm")
+                        } else {
+                            Text("HR: --")
+                        }
+                    }
+                    .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading) // Use dynamic width for alignment
+
+                    // Center content (Start Button)
+                    Button(action: toggleTimer) {
+                        Text(isActive ? "Stop" : "Start")
+                            .font(.title)
+                            .bold()
+                            .padding()
+                            .background(isActive ? Color.red : Color.green)
+                            .foregroundColor(.white)
+                            .clipShape(RoundedRectangle(cornerRadius: 8))
+                    }
+                    .frame(width: 120) // Fixed width for the button for consistent sizing
+
+                    // Right side content (SpO2)
+                    VStack {
+                        if let spo2 = spo2 {
+                            Text("SpO2: \(Int(spo2))%")
+                        } else {
+                            Text("SpO2: --")
+                        }
+                    }
+                    .frame(minWidth: 0, maxWidth: .infinity, alignment: .trailing) // Use dynamic width for alignment
+
+                }
+                .padding(.bottom)
+
+                // Remaining components (progress circle, etc.)
             }
-            .padding(.vertical)
+            .padding(.horizontal) // Ensure there's padding around the HStack to prevent edge content from touching the sides
+
             
             ZStack {
                 Circle()
@@ -222,6 +268,9 @@ struct O2TrainingTimerView: View {
             guard isActive else { return }
             updateProgress()
         }
+        .onAppear {
+            requestHealthData()
+        }
     }
     
     private func phaseIndicatorText() -> String {
@@ -241,14 +290,36 @@ struct O2TrainingTimerView: View {
     private func toggleTimer() {
         isActive.toggle()
         if isActive {
+            // Start or resume the training session
             setPhaseTime()
+            startHealthDataFetchTimer() // Start fetching health data when the timer is active
         } else {
+            // Pause or stop the training session
+            stopHealthDataFetchTimer() // Stop fetching health data when the timer is inactive
             // Include the last active phase's elapsedTime before saving
             totalDuration += elapsedTime
             onSave(Int(totalDuration))
             resetTimer()
         }
     }
+    
+    private func startHealthDataFetchTimer() {
+        // Invalidate existing timer if any to avoid duplicate timers
+        stopHealthDataFetchTimer()
+
+        // Schedule a new timer
+        healthDataFetchTimer = Timer.scheduledTimer(withTimeInterval: 2.0, repeats: true) { _ in
+            print("Fetching health data...") // Debugging line
+            requestHealthData()
+        }
+    }
+
+    private func stopHealthDataFetchTimer() {
+        healthDataFetchTimer?.invalidate()
+        healthDataFetchTimer = nil
+    }
+
+
     
     private func setPhaseTime() {
         if currentRoundIndex < o2Table.count {
@@ -259,12 +330,47 @@ struct O2TrainingTimerView: View {
         }
     }
     
+    private func requestHealthData() {
+        let healthKitManager = HealthKitManager()
+        
+        healthKitManager.fetchLatestHeartRate { rate, error in
+            if let rate = rate {
+                DispatchQueue.main.async {
+                    print("Fetched heart rate: \(rate)")
+                    self.heartRate = rate
+                }
+            } else if let error = error {
+                print("Error fetching heart rate: \(error.localizedDescription)")
+            }
+        }
+
+        healthKitManager.fetchLatestSpO2 { spo2Value, error in
+            if let spo2Value = spo2Value {
+                DispatchQueue.main.async {
+                    print("Fetched SpO2: \(spo2Value)")
+                    self.spo2 = spo2Value
+                }
+            } else if let error = error {
+                print("Error fetching SpO2: \(error.localizedDescription)")
+            }
+        }
+
+    }
+    
     private func resetTimer() {
         elapsedTime = 0
         progress = 0
         isHoldPhase = true
         totalDuration = 0 // Reset total duration for a new session
         currentRoundIndex = 0 // Reset to start from the first round
+    }
+    
+    
+    
+    private func timeString(from totalSeconds: CGFloat) -> String {
+        let minutes = Int(totalSeconds) / 60
+        let seconds = Int(totalSeconds) % 60
+        return String(format: "%02d:%02d", minutes, seconds)
     }
     
     private func updateProgress() {
@@ -297,10 +403,8 @@ struct O2TrainingTimerView: View {
         }
     }
     
-    private func timeString(from totalSeconds: CGFloat) -> String {
-        let minutes = Int(totalSeconds) / 60
-        let seconds = Int(totalSeconds) % 60
-        return String(format: "%02d:%02d", minutes, seconds)
-    }
+    
+    
+    
 }
     

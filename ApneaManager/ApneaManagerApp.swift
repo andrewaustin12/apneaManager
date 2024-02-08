@@ -9,12 +9,14 @@ import SwiftUI
 import WishKit
 import SwiftData
 import StoreKit
+import HealthKit
 
 @main
 struct ApneaManagerApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     let container: ModelContainer
     @StateObject private var store = TipStore()
+    @StateObject private var healthKitManager = HealthKitManager()
     
     
     
@@ -24,6 +26,7 @@ struct ApneaManagerApp: App {
                 //.modelContainer(for: [TrainingReminder.self ,Session.self])
                 .modelContainer(container)
                 .environmentObject(store)
+                .environmentObject(healthKitManager)
         }
         
     }
