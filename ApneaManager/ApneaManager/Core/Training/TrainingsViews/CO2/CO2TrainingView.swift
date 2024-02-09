@@ -20,6 +20,11 @@ struct CO2TrainingView: View {
     @State private var currentRoundIndex = 0
     @State private var co2Table: [Cycle] = []
     
+    /// Settings state
+    @State var percentageOfPersonalBest: Double = 60
+    @State var initialRestDuration: Int = 15
+    @State var reductionPerRound: Int = 5
+    @State var totalRounds: Int = 8
     
     private var longestBreathHoldDuration: Int? {
         let breathHoldSessions = sessions.filter { $0.sessionType == .breathHold }
@@ -40,6 +45,7 @@ struct CO2TrainingView: View {
                 
                 // Display the header with elapsed and remaining rounds
                 TrainingHeaderView(roundsElapsed: roundsElapsed, roundsRemaining: roundsRemaining)
+                    .padding(.bottom)
                 
                 // Display the CO2 training timer
                 CO2TrainingTimerView(co2Table: co2Table, 
@@ -47,7 +53,7 @@ struct CO2TrainingView: View {
                                     ) { totalDuration in
                                         saveSession(duration: totalDuration, table: co2Table, sessionType: .Co2Table)
                 }
-                
+                Spacer()
                 // HStack for buttons
                 HStack {
                     Button("Settings") {
@@ -72,7 +78,23 @@ struct CO2TrainingView: View {
                 }
             }
             .sheet(isPresented: $showingSettings) {
-                CO2TrainingSettingsView()
+                /// Pass the bindings to the settings view
+                CO2TrainingSettingsView(percentageOfPersonalBest: $percentageOfPersonalBest, 
+                                        initialRestDuration: $initialRestDuration,
+                                        reductionPerRound: $reductionPerRound,
+                                        totalRounds: $totalRounds)
+            }
+            .onChange(of: percentageOfPersonalBest) {
+                regenerateCo2Table()
+            }
+            .onChange(of: initialRestDuration) {
+                regenerateCo2Table()
+            }
+            .onChange(of: reductionPerRound) {
+                regenerateCo2Table()
+            }
+            .onChange(of: totalRounds) {
+                regenerateCo2Table()
             }
             .sheet(isPresented: $showingDetail) {
                 CO2TrainingDetailView()
@@ -93,23 +115,30 @@ struct CO2TrainingView: View {
     }
     
     private func createCO2Table(personalBest: Int) -> [Cycle] {
-            let initialBreathHoldDuration = Int(Double(personalBest) * 0.6) // 60% of personal best
-            let initialRestDuration = initialBreathHoldDuration + 15 // 15 seconds more than hold duration
-            let reductionPerRound = 5 // Reduce rest by 5 seconds each round
-            let totalRounds = 2 // Total number of rounds
-            
-            var cycles: [Cycle] = []
-            var currentRestDuration = initialRestDuration
-            
-            for _ in 1...totalRounds {
-                cycles.append(Cycle(hold: initialBreathHoldDuration, rest: currentRestDuration))
-                currentRestDuration = max(15, currentRestDuration - reductionPerRound) // Rest duration should not go below 15 seconds
-            }
-            print("DEBUG: Your personal best hold being used is \(personalBest) and your initial breath hold duration is \(initialBreathHoldDuration) which should be 60% of your personal best.")
-            print(cycles)
-            return cycles
-            
+        let initialBreathHoldDuration = Int(Double(personalBest) * (percentageOfPersonalBest / 100)) // 60% of personal best
+        let initialRestDuration = initialBreathHoldDuration + self.initialRestDuration // 15 seconds more than hold duration
+        let reductionPerRound = self.reductionPerRound // Reduce rest by 5 seconds each round
+        let totalRounds = self.totalRounds // Total number of rounds
+        
+        var cycles: [Cycle] = []
+        var currentRestDuration = initialRestDuration
+        
+        for _ in 1...totalRounds {
+            cycles.append(Cycle(hold: initialBreathHoldDuration, rest: currentRestDuration))
+            currentRestDuration = max(15, currentRestDuration - reductionPerRound) // Rest duration should not go below 15 seconds
         }
+        print("DEBUG: Your personal best hold being used is \(personalBest) and your initial breath hold duration is \(initialBreathHoldDuration) which should be \(percentageOfPersonalBest)% of your personal best.")
+        print(cycles)
+        return cycles
+        
+    }
+    
+    private func regenerateCo2Table() {
+        if let personalBest = longestBreathHoldDuration {
+            co2Table = createCO2Table(personalBest: personalBest)
+            print(co2Table)
+        }
+    }
     
     //    func endCO2TrainingSession() {
     //        // Ensure that there is data to save

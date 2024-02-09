@@ -9,10 +9,10 @@ import SwiftUI
 
 struct CO2TrainingSettingsView: View {
     @Environment(\.presentationMode) var presentationMode
-    @State var percentageOfPersonalBest: Double = 60
-    @State var initialRestDuration: Int = 15
-    @State var reductionPerRound: Int = 5
-    @State var totalRounds: Int = 8
+    @Binding var percentageOfPersonalBest: Double
+    @Binding var initialRestDuration: Int
+    @Binding var reductionPerRound: Int
+    @Binding var totalRounds: Int
     
     var body: some View {
         NavigationStack {
@@ -30,7 +30,7 @@ struct CO2TrainingSettingsView: View {
                 }
                 
                 Section(header: Text("Rest Duration")) {
-                    Stepper("\(initialRestDuration) sec", value: $initialRestDuration, in: 15...120, step: 5)
+                    Stepper("\(initialRestDuration) sec", value: $initialRestDuration, in: 1...120, step: 5)
                     Text("Initial rest duration between holds in seconds.")
                         .font(.subheadline)
                         .foregroundColor(.secondary)
@@ -70,7 +70,10 @@ struct CO2TrainingSettingsView: View {
 // Example usage in a parent view or preview
 struct CO2TrainingSettingsView_Previews: PreviewProvider {
     static var previews: some View {
-        CO2TrainingSettingsView()
+        CO2TrainingSettingsView(percentageOfPersonalBest: .constant(60),
+                                initialRestDuration: .constant(15),
+                                reductionPerRound: .constant(5),
+                                totalRounds: .constant(8))
     }
 }
 
