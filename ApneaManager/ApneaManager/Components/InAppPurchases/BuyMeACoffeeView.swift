@@ -22,6 +22,9 @@ struct BuyMeACoffeeView: View {
     @State private var showThanks = false
     
     @EnvironmentObject private var store: TipStore
+    @Environment(\.colorScheme) var colorScheme
+    let iconWidth: CGFloat = 30 // Adjust based on your icon sizes
+
     
     var body: some View {
         NavigationStack {
@@ -39,32 +42,41 @@ struct BuyMeACoffeeView: View {
                         .font(.largeTitle)
                         .fontWeight(.bold)
 
-                    VStack(alignment: .leading) {
-                        // Description text
-                        Label("Fueling Ongoing Progress", systemImage: "lightbulb.fill")
-                            .multilineTextAlignment(.center)
-                            .font(.title3)
-                            .foregroundColor(.primary) // Replace with your custom color
-                            .padding(2)
+                    VStack(alignment: .leading, spacing: 12) { // Increase spacing between lines
+                        HStack {
+                            Image(systemName: "lightbulb.fill")
+                                .font(.title) // Increased font size
+                                .foregroundColor(.yellow)
+                                .frame(width: iconWidth)
+                            Text("Fueling Ongoing Progress")
+                                .font(.title2) // Increased font size
+                                .foregroundColor(.primary)
+                                .padding(.vertical, 8) // Increased padding for more space
+                        }
                         
-                        // Description text
-                        Label("Empowering Future Endeavors", systemImage: "arrow.right.circle.fill")
-                            .multilineTextAlignment(.center)
-                            .font(.title3)
-                            .foregroundColor(.primary) // Replace with your custom color
-                            .padding(2)
+                        HStack {
+                            Image(systemName: "arrow.right.circle.fill")
+                                .font(.title) // Increased font size
+                                .foregroundColor(.green)
+                                .frame(width: iconWidth)
+                            Text("Empowering Future Endeavors")
+                                .font(.title2) // Increased font size
+                                .foregroundColor(.primary)
+                                .padding(.vertical, 8) // Increased padding for more space
+                        }
                         
-                        // Description text
-                        Label("Supporting My Caffeine Fix", systemImage: "mug.fill")
-                            .multilineTextAlignment(.center)
-                            .font(.title3)
-                            .foregroundColor(.primary) // Replace with your custom color
-                            .padding(2)
+                        HStack {
+                            Image(systemName: "mug.fill")
+                                .font(.title) // Increased font size
+                                .foregroundColor(.brown)
+                                .frame(width: iconWidth)
+                            Text("Supporting My Caffeine Fix")
+                                .font(.title2) // Increased font size
+                                .foregroundColor(.primary)
+                                .padding(.vertical, 8) // Increased padding for more space
+                        }
                     }
-
-
-
-
+                    .padding()
                     // Purchase button
                     Button(action: {
                         showTips.toggle()
