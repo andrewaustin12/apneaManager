@@ -9,21 +9,22 @@ import SwiftUI
 
 struct PrebreatheTimer: View {
     @Environment(\.modelContext) private var context
-        @State private var progress: CGFloat = 0
-        @State private var elapsedTime: CGFloat = 0
-        @State private var isActive = false
-        @State private var showAlert = false  // New state variable for showing the alert
-        let timer = Timer.publish(every: 0.05, on: .main, in: .common).autoconnect()
-        
-        @Binding var totalDuration: Int  // Binding to pass in the total duration
-        
-        let maxTime: CGFloat  // Use the total duration as the max time
-
-        init(totalDuration: Binding<Int>) {
-            self._totalDuration = totalDuration
-            self.maxTime = CGFloat(totalDuration.wrappedValue)
-        }
-
+    @Environment(\.selectedTheme) var theme: Theme
+    @State private var progress: CGFloat = 0
+    @State private var elapsedTime: CGFloat = 0
+    @State private var isActive = false
+    @State private var showAlert = false  // New state variable for showing the alert
+    let timer = Timer.publish(every: 0.05, on: .main, in: .common).autoconnect()
+    
+    @Binding var totalDuration: Int  // Binding to pass in the total duration
+    
+    let maxTime: CGFloat  // Use the total duration as the max time
+    
+    init(totalDuration: Binding<Int>) {
+        self._totalDuration = totalDuration
+        self.maxTime = CGFloat(totalDuration.wrappedValue)
+    }
+    
     var body: some View {
         VStack {
             Button(action: {
@@ -57,7 +58,7 @@ struct PrebreatheTimer: View {
                 
                 CircleProgressShape(progress: progress)
                     .stroke(style: StrokeStyle(lineWidth: 24, lineCap: .round, lineJoin: .round))
-                    .foregroundColor(Color.blue)
+                    .foregroundColor(theme.mainColor)
                     .animation(.linear, value: progress)
                 
                 VStack {
@@ -108,8 +109,8 @@ struct PrebreatheTimer: View {
             image: "freediver-2",
             sessionType : .prebreathe,
             duration: Int(duration)
-            )
-
+        )
+        
         // Save the session using SwiftData
         context.insert(newSession)
         print("DEBUG: New pre breathe session added! Session length: \(newSession.duration)")

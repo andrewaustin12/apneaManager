@@ -3,6 +3,7 @@ import SwiftUI
 struct TrainingHeaderView: View {
     let roundsElapsed: Int
     let roundsRemaining: Int
+    @Environment(\.selectedTheme) var theme: Theme
 
     private var totalRounds: Int {
         roundsElapsed + roundsRemaining
@@ -16,7 +17,7 @@ struct TrainingHeaderView: View {
     var body: some View {
         VStack {
             ProgressView(value: progress)
-                .progressViewStyle(TrainingProgressViewStyle())
+                .progressViewStyle(TrainingProgressViewStyle(theme: theme))
             
             HStack {
                 VStack(alignment: .leading) {

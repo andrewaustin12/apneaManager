@@ -24,6 +24,7 @@ struct PranayamaBreathingView: View {
     @State private var elapsedTime = 0
     
     @State private var startTime: Date?
+    @State private var isExerciseActive = false
     
     let phases = [
         "Inhale through Left Nostril",
@@ -33,6 +34,7 @@ struct PranayamaBreathingView: View {
     ]
     
     let colors = [Color.blue, Color.green, Color.red, Color.yellow]
+    let theme: Theme
     
     private var progress: Double {
         guard let startTime = startTime else { return 0 }
@@ -56,7 +58,7 @@ struct PranayamaBreathingView: View {
             VStack {
                 // Progress View
                 ProgressView(value: progress)
-                    .progressViewStyle(TrainingProgressViewStyle())
+                    .progressViewStyle(TrainingProgressViewStyle(theme: theme))
                 
                 
                 HStack {
@@ -78,11 +80,28 @@ struct PranayamaBreathingView: View {
             }
             .padding([.top, .horizontal])
             VStack {
-                
-                
-                Spacer()
+                HStack {
+                    Button(action: toggleBreathingExercise) {
+                        ZStack {
+                            RoundedRectangle(cornerRadius: 8)
+                                .fill(isExerciseActive ? Color.red : theme.mainColor)
+                                .frame(width: 100, height: 50)
+                                .shadow(radius: 10)
+                            
+                            Text(isExerciseActive ? "Stop" : "Start")
+                                .font(.largeTitle)
+                                .bold()
+                                .foregroundColor(.white)
+                        }
+                    }
+                    
+                    .animation(.easeInOut, value: isExerciseActive)
+                    .scaleEffect(isExerciseActive ? 1.1 : 1.0)
+                }
+                .padding(.vertical)
                 
                 ZStack {
+                    
                     Circle()
                         .stroke(lineWidth: 20)
                         .opacity(0.3)
@@ -101,27 +120,7 @@ struct PranayamaBreathingView: View {
                 }
                 .frame(width: 320, height: 320)
                 .padding()
-                
-                
-                HStack {
-                    Button(action: startBreathingExercise) {
-                        Text("Start")
-                            .foregroundColor(.white)
-                            .padding()
-                            .background(Color.green)
-                            .cornerRadius(8)
-                    }
-                    
-                    Button(action: stopBreathingExercise) {
-                        Text("Stop")
-                            .foregroundColor(.white)
-                            .padding()
-                            .background(Color.red)
-                            .cornerRadius(8)
-                    }
-                }
-                
-                
+
                 Spacer()
             }
             
@@ -152,6 +151,14 @@ struct PranayamaBreathingView: View {
         
     }
     
+    private func toggleBreathingExercise() {
+        if isExerciseActive {
+            stopBreathingExercise()
+        } else {
+            startBreathingExercise()
+        }
+        isExerciseActive.toggle()
+    }
     
     func startBreathingExercise() {
         startTime = Date() // Record the start time
@@ -221,8 +228,10 @@ struct PranayamaBreathingView: View {
 
 
 #Preview {
-    PranayamaBreathingView()
-        .modelContainer(for: Session.self)
+    NavigationStack {
+        PranayamaBreathingView(theme: .bubblegum)
+            .modelContainer(for: Session.self)
+    }
 }
 
 

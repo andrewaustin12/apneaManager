@@ -9,6 +9,7 @@ import SwiftUI
 
 
 struct WarningView: View {
+    @Environment(\.selectedTheme) var theme: Theme
     
     var body: some View {
         NavigationStack {
@@ -36,7 +37,7 @@ struct WarningView: View {
                 Spacer()
   
                 NavigationLink {
-                    MainTab()
+                    MainTab(theme: theme)
                         .navigationBarBackButtonHidden()
                 } label: {
                     Text("I Agree")

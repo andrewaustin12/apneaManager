@@ -61,7 +61,7 @@ struct SettingsView: View {
                         HStack {
                             Label("Theme", systemImage: "paintpalette")
                             Spacer()
-                            NavigationLink(destination: ThemePicker(selection: userTheme)) {
+                            NavigationLink(destination: ThemePicker()) {
                             }
                         }
                         NavigationLink(destination: TrainingRemindersView()) {

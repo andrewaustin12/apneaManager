@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct TrainingProgressViewStyle: ProgressViewStyle {
-    
+    var theme: Theme
 
     func makeBody(configuration: Configuration) -> some View {
         ZStack {
@@ -17,7 +17,7 @@ struct TrainingProgressViewStyle: ProgressViewStyle {
                 .frame(height: 20.0)
             if #available(iOS 15.0, *) {
                 ProgressView(configuration)
-                    .tint(Color.green)
+                    .tint(theme.mainColor)
                     .frame(height: 12.0)
                     .padding(.horizontal)
             } else {
@@ -32,7 +32,7 @@ struct TrainingProgressViewStyle: ProgressViewStyle {
 struct TrainingProgressViewStyle_Previews: PreviewProvider {
     static var previews: some View {
         ProgressView(value: 0.4)
-            .progressViewStyle(TrainingProgressViewStyle())
+            .progressViewStyle(TrainingProgressViewStyle(theme: .buttercup))
             .previewLayout(.sizeThatFits)
     }
 }

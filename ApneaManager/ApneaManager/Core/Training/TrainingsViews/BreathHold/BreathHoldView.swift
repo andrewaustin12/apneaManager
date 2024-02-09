@@ -33,13 +33,13 @@ struct BreathHoldView: View {
                 VStack {
                     let breathHoldSessions = sessions.filter { $0.sessionType == .breathHold }
                     if let longestBreathHoldSession = Session.longestSessionByType(sessions: breathHoldSessions) {
-                        BreathHoldHeader(secondsElapsed: Int(elapsedTime), theme: .buttercup, personalBestSeconds: longestBreathHoldSession.duration)
+                        BreathHoldHeader(secondsElapsed: Int(elapsedTime), personalBestSeconds: longestBreathHoldSession.duration)
                     }
                 }
                 .padding(.bottom)
                 .onAppear {
-                                    updatePersonalBest()
-                                }
+                    updatePersonalBest()
+                }
                 
                 Button(action: {
                     if isActive {
@@ -113,7 +113,7 @@ struct BreathHoldView: View {
             BreathHoldDetailView()
         }
     }
-
+    
     private func updateProgress() {
         elapsedTime += 0.05
         progress = (elapsedTime.truncatingRemainder(dividingBy: 60)) / 60
@@ -122,7 +122,7 @@ struct BreathHoldView: View {
     private func timeString(from totalSeconds: CGFloat) -> String {
         let minutes = Int(totalSeconds) / 60
         let seconds = Int(totalSeconds) % 60
-
+        
         if minutes == 0 {
             // For durations less than a minute, display in seconds format (e.g., "7s")
             return "\(seconds)s"
@@ -132,12 +132,12 @@ struct BreathHoldView: View {
         }
     }
     private func updatePersonalBest() {
-            let breathHoldSessions = sessions.filter { $0.sessionType == .breathHold }
-            if let longestSession = breathHoldSessions.max(by: { $0.duration < $1.duration }) {
-                personalBestHold = longestSession.duration
-            }
+        let breathHoldSessions = sessions.filter { $0.sessionType == .breathHold }
+        if let longestSession = breathHoldSessions.max(by: { $0.duration < $1.duration }) {
+            personalBestHold = longestSession.duration
         }
-
+    }
+    
     
     private func saveSession(duration: Int) {
         let newSession = Session(
@@ -146,9 +146,9 @@ struct BreathHoldView: View {
             image: "freediver-3",
             sessionType : .breathHold,
             duration: Int(duration)
-            )
+        )
         
-
+        
         // Check if the current session is a new personal best
         if duration > personalBestHold {
             personalBestHold = duration
@@ -158,7 +158,7 @@ struct BreathHoldView: View {
             isNewPersonalBest = false
         }
         
-
+        
         // Save the session using SwiftData
         context.insert(newSession)
         print("DEBUG: New breath hold session added! Session length: \(newSession.duration)")

@@ -17,6 +17,8 @@ struct TrainingOptionsView: View {
     @State private var personalBestDuration: String = "N/A"
     @State private var dragOffset: CGFloat = 0
     
+    let theme: Theme
+    
     /// finds most recent breath hold for LAST SESION
     private var mostRecentBreathHold: Session? {
         sessions
@@ -119,7 +121,7 @@ struct TrainingOptionsView: View {
                                 )
                             }
                             
-                            NavigationLink(destination: SquareBreathingView()) {
+                            NavigationLink(destination: SquareBreathingView(theme: theme)) {
                                 TrainingCardView(
                                     image: "freediver-7",
                                     title: "Square Table",
@@ -128,7 +130,7 @@ struct TrainingOptionsView: View {
                                 )
                             }
                             
-                            NavigationLink(destination: PranayamaBreathingView()) {
+                            NavigationLink(destination: PranayamaBreathingView(theme: theme)) {
                                 TrainingCardView(
                                     image: "pranayama-2",
                                     title: "Pranayama Breath",
@@ -243,7 +245,7 @@ struct TrainingOptionsView: View {
 }
 
 #Preview {
-    TrainingOptionsView()
+    TrainingOptionsView(theme: .bubblegum)
 }
 
 

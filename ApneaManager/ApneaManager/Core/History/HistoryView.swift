@@ -3,6 +3,7 @@ import SwiftData
 
 struct HistoryView: View {
     @Environment(\.modelContext) private var context
+    @Environment(\.selectedTheme) var theme: Theme
     @Query(sort: \Session.date) var sessions: [Session]
     @State private var isBreathHoldChartExpanded: Bool = false
     @State private var isOverallSessionsChartExpanded: Bool = false
@@ -94,6 +95,7 @@ struct HistoryView: View {
                 Spacer()
                 Button(action: { isExpanded.wrappedValue.toggle() }) {
                     Image(systemName: isExpanded.wrappedValue ? "chevron.up" : "chevron.down")
+                        .foregroundStyle(.gray)
                 }
             }
             .padding([.horizontal])
@@ -123,7 +125,7 @@ struct HistoryView: View {
                 .padding(.vertical, 5)
                 .padding(.horizontal)
                 .foregroundColor(.white)
-                .background(RoundedRectangle(cornerRadius: 8).fill(Color.blue))
+                .background(RoundedRectangle(cornerRadius: 8).fill(theme.mainColor))
                 .shadow(radius: 2)
             }
 

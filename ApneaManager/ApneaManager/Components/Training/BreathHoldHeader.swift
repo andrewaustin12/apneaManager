@@ -8,8 +8,8 @@
 import SwiftUI
 
 struct BreathHoldHeader: View {
+    @Environment(\.selectedTheme) var theme: Theme
     let secondsElapsed: Int
-    let theme: Theme
     let personalBestSeconds: Int
 
     
@@ -26,12 +26,7 @@ struct BreathHoldHeader: View {
         NavigationStack {
             
             ProgressView(value: progress)
-                .progressViewStyle(TrainingProgressViewStyle())
-//                .overlay {
-//                    Text("\(secondsElapsed) / \(personalBestSeconds) seconds")  // Display elapsed vs. personal best
-//                        .font(.caption)
-//                        .foregroundColor(.secondary)
-//                }
+                .progressViewStyle(TrainingProgressViewStyle(theme: theme))
             HStack {
                 VStack(alignment: .leading) {
                     Text("Seconds Elapsed")
@@ -66,5 +61,5 @@ struct BreathHoldHeader: View {
 
 
 #Preview {
-    BreathHoldHeader(secondsElapsed: 25, theme: .bubblegum, personalBestSeconds: 65)
+    BreathHoldHeader( secondsElapsed: 25, personalBestSeconds: 65)
 }

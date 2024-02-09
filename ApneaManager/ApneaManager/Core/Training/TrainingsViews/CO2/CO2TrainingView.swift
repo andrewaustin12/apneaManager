@@ -187,6 +187,7 @@ struct CO2TrainingView: View {
 
 
 struct CO2TrainingTimerView: View {
+    @Environment(\.selectedTheme) var theme: Theme
     var co2Table: [Cycle]
     @Binding var currentRoundIndex: Int
     
@@ -209,7 +210,7 @@ struct CO2TrainingTimerView: View {
                     .font(.title)
                     .bold()
                     .padding()
-                    .background(isActive ? Color.red : Color.green)
+                    .background(isActive ? Color.red : theme.mainColor)
                     .foregroundColor(.white)
                     .clipShape(RoundedRectangle(cornerRadius: 8))
             }
@@ -225,7 +226,7 @@ struct CO2TrainingTimerView: View {
                 Circle()
                     .trim(from: 0.0, to: CGFloat(min(self.progress, 1.0)))
                     .stroke(style: StrokeStyle(lineWidth: 24, lineCap: .round, lineJoin: .round))
-                    .foregroundColor(Color.blue)
+                    .foregroundColor(theme.mainColor)
                     .rotationEffect(Angle(degrees: 270.0))
                     .animation(.linear, value: progress)
                 

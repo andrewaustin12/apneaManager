@@ -20,6 +20,8 @@ struct SquareBreathingView: View {
     
     let phases = ["Inhale", "Hold", "Exhale", "Hold"]
     let colors = [Color.blue, Color.green, Color.red, Color.yellow]
+    let theme: Theme
+    @State private var isExerciseActive = false
     
     private var progress: Double {
         guard let startTime = startTime else { return 0 }
@@ -46,7 +48,7 @@ struct SquareBreathingView: View {
                 VStack {
                     // Progress View
                     ProgressView(value: progress)
-                        .progressViewStyle(TrainingProgressViewStyle())
+                        .progressViewStyle(TrainingProgressViewStyle(theme: theme))
                     
                     
                     HStack {
@@ -69,9 +71,25 @@ struct SquareBreathingView: View {
                 .padding([.top, .horizontal])
                 
                 VStack {
-                    
-                    
-                    Spacer()
+                    HStack {
+                        Button(action: toggleBreathingExercise) {
+                            ZStack {
+                                RoundedRectangle(cornerRadius: 8)
+                                    .fill(isExerciseActive ? Color.red : theme.mainColor)
+                                    .frame(width: 100, height: 50)
+                                    .shadow(radius: 10)
+                                
+                                Text(isExerciseActive ? "Stop" : "Start")
+                                    .font(.largeTitle)
+                                    .bold()
+                                    .foregroundColor(.white)
+                            }
+                        }
+                        
+                        .animation(.easeInOut, value: isExerciseActive)
+                        .scaleEffect(isExerciseActive ? 1.1 : 1.0)
+                    }
+                    .padding(.vertical)
                     
                     ZStack {
                         Circle()
@@ -90,29 +108,8 @@ struct SquareBreathingView: View {
                     .frame(width: 320, height: 320)
                     .padding()
                     
-                    HStack {
-                        Button(action: startBreathingExercise) {
-                            Text("Start")
-                                .foregroundColor(.white)
-                                .padding()
-                                .background(Color.green)
-                                .cornerRadius(8)
-                        }
-                        
-                        Button(action: stopBreathingExercise) {
-                            Text("Stop")
-                                .foregroundColor(.white)
-                                .padding()
-                                .background(Color.red)
-                                .cornerRadius(8)
-                        }
-                    }
-                    
-                    
                     Spacer()
                 }
-                
-                
                 
                 // HStack for buttons
                 HStack {
@@ -142,6 +139,14 @@ struct SquareBreathingView: View {
             
         }
     }
+    private func toggleBreathingExercise() {
+        if isExerciseActive {
+            stopBreathingExercise()
+        } else {
+            startBreathingExercise()
+        }
+        isExerciseActive.toggle()
+    }
     
     func startBreathingExercise() {
         startTime = Date() // Record the start time
@@ -149,7 +154,6 @@ struct SquareBreathingView: View {
         currentPhaseIndex = 0
         moveToNextPhase()
     }
-    
     
     func stopBreathingExercise() {
         timer?.invalidate()
@@ -163,9 +167,6 @@ struct SquareBreathingView: View {
         startTime = nil // Ensure start time is reset for the next session
         currentPhaseIndex = 0 // Optionally reset the phase index
     }
-    
-    
-    
     
     private func resetTimer() {
         timer?.invalidate()
@@ -197,7 +198,6 @@ struct SquareBreathingView: View {
         }
     }
     
-    
     private func saveSession(duration: Int) {
         // Ensure the duration is not negative
         let validDuration = max(0, duration)
@@ -212,4 +212,11 @@ struct SquareBreathingView: View {
         print("DEBUG: New square breathing session added! Session length: \(validDuration) seconds")
     }
     
+}
+
+#Preview {
+    NavigationStack {
+        SquareBreathingView(theme: .bubblegum)
+            .modelContainer(for: Session.self)
+    }
 }

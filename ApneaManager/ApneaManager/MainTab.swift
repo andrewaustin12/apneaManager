@@ -9,11 +9,11 @@ import SwiftUI
 
 struct MainTab: View {
     @State private var selectedIndex = 0
-    
+    let theme: Theme
     
     var body: some View {
         TabView(selection: $selectedIndex) {
-            TrainingOptionsView()
+            TrainingOptionsView(theme: theme)
                 .onAppear{
                     selectedIndex = 0
                 }
@@ -46,7 +46,7 @@ struct MainTab: View {
                     Image(systemName: "list.dash")
                     Text("History")
                 }.tag(2)
-            SettingsView(userTheme: .buttercup)
+            SettingsView(userTheme: theme)
                 .onAppear{
                     selectedIndex = 3
                 }
@@ -60,5 +60,5 @@ struct MainTab: View {
 }
 
 #Preview {
-    MainTab()
+    MainTab(theme: .primary)
 }

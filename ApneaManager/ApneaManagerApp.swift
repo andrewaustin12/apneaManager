@@ -17,16 +17,21 @@ struct ApneaManagerApp: App {
     let container: ModelContainer
     @StateObject private var store = TipStore()
     @StateObject private var healthKitManager = HealthKitManager()
-    
-    
+
+    // Using AppStorage to save and retrieve the user's selected theme
+    @AppStorage("selectedTheme") var selectedThemeRawValue: String = Theme.primary.rawValue // Default theme
+    private var selectedTheme: Theme {
+        Theme(rawValue: selectedThemeRawValue) ?? .primary // Fallback to default theme
+    }
     
     var body: some Scene {
         WindowGroup {
-            WarningView()
-                //.modelContainer(for: [TrainingReminder.self ,Session.self])
+            WarningView() // Assuming WarningView doesn't actually need the theme passed directly to it.
+                .environment(\.selectedTheme, selectedTheme) // Correctly setting the environment value.
                 .modelContainer(container)
                 .environmentObject(store)
                 .environmentObject(healthKitManager)
+                .accentColor(selectedTheme.mainColor) // Applying the main color of the selected theme as the accent color of the app.
         }
         
     }
@@ -37,7 +42,6 @@ struct ApneaManagerApp: App {
         WishKit.theme.primaryColor = .accentColor
         WishKit.config.buttons.addButton.textColor = .setBoth(to: .white)
         WishKit.config.buttons.saveButton.textColor = .setBoth(to: .white)
-        
         
         let schema = Schema([TrainingReminder.self ,Session.self])
         let config = ModelConfiguration("ApneaManager", schema: schema)
@@ -61,5 +65,17 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
         // Handle the notification when the app is in the foreground.
         // You can customize the presentation options here.
         completionHandler([.banner, .sound])
+    }
+}
+
+// Extend the EnvironmentValues to include the selected theme
+struct SelectedThemeKey: EnvironmentKey {
+    static let defaultValue: Theme = .bubblegum // Default theme
+}
+
+extension EnvironmentValues {
+    var selectedTheme: Theme {
+        get { self[SelectedThemeKey.self] }
+        set { self[SelectedThemeKey.self] = newValue }
     }
 }

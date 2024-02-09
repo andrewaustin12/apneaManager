@@ -54,7 +54,7 @@ struct HistoryChartView: View {
                         x: .value("Date", session.date),
                         y: .value("Duration", session.duration)
                     )
-                    .foregroundStyle(LinearGradient(gradient: Gradient(colors: [.blue, .blue.opacity(0.6)]), startPoint: .top, endPoint: .bottom))
+                    //.foregroundStyle(LinearGradient(gradient: Gradient(colors: [.blue, .blue.opacity(0.6)]), startPoint: .top, endPoint: .bottom))
                 }
                 .chartXAxis {
                     AxisMarks(preset: .aligned, position: .bottom)
