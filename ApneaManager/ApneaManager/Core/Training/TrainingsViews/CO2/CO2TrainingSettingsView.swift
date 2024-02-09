@@ -30,7 +30,7 @@ struct CO2TrainingSettingsView: View {
                 }
                 
                 Section(header: Text("Rest Duration")) {
-                    Stepper("\(initialRestDuration) sec", value: $initialRestDuration, in: 1...120, step: 5)
+                    Stepper("\(initialRestDuration) sec", value: $initialRestDuration, in: 1...120, step: 1)
                     Text("Initial rest duration between holds in seconds.")
                         .font(.subheadline)
                         .foregroundColor(.secondary)

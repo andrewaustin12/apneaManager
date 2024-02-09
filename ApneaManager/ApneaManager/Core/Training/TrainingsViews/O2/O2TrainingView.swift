@@ -149,7 +149,7 @@ struct O2TrainingView: View {
                 currentHoldDuration += increasePerRound
             }
             // Debug print to monitor values
-            print("DEBUG: Your personal best hold being used is \(personalBest) and your initial breath hold duration is \(initialBreathHoldDuration) which should be 60% of your personal best and max breath hold duration of \(maxBreathHoldDuration) which is 80% of you pb.")
+            print("DEBUG: Your personal best hold being used is \(personalBest) and your initial breath hold duration is \(initialBreathHoldDuration) which should be \(initialBreathHoldPercentage) of your personal best and max breath hold duration of \(maxBreathHoldDuration) which is 80% of you pb.")
             print("Round \(roundIndex): Hold = \(currentHoldDuration), Increase = \(increasePerRound)")
         }
         

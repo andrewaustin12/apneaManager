@@ -42,7 +42,7 @@ struct TrainingCardView: View {
             
             Spacer()
         }
-        .frame(width: 300, height: 200)
+        .frame(width: 350, height: 200)
         .background(Color(UIColor.systemBackground))
         .clipShape(RoundedRectangle(cornerRadius: 15))
         .shadow(color: colorScheme == .light ? Color.black.opacity(0.3) : Color.white.opacity(0.3), radius: 5, x: 0, y: 2)

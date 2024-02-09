@@ -15,7 +15,7 @@ struct TrainingOptionsView: View {
     //@State var session: Session
     @State private var allSessions: [Session] = []
     @State private var personalBestDuration: String = "N/A"
-    
+    @State private var dragOffset: CGFloat = 0
     
     /// finds most recent breath hold for LAST SESION
     private var mostRecentBreathHold: Session? {
@@ -79,66 +79,82 @@ struct TrainingOptionsView: View {
     var body: some View {
         NavigationStack {
             VStack {
-                ScrollView(.horizontal, showsIndicators: false) {
-                    HStack {
-                        
-                        NavigationLink(destination: BreathHoldView()) {
-                            TrainingCardView(
-                                image: "freediver-3",
-                                title: "Breath Hold Test",
-                                subHeading: "Test Your Hold",
-                                description: "Start here to set your tables based on your best breath hold time."
-                            )
+                GeometryReader{ geometry in
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        HStack(spacing: 20 ) {
+                            
+                            NavigationLink(destination: BreathHoldView()) {
+                                TrainingCardView(
+                                    image: "freediver-3",
+                                    title: "Breath Hold Test",
+                                    subHeading: "Test Your Hold",
+                                    description: "Start here to set your tables based on your best breath hold time."
+                                )
+                            }
+                            
+                            NavigationLink(destination: PreBreatheView()) {
+                                TrainingCardView(
+                                    image: "freediver-2",
+                                    title: "Pre Breathe",
+                                    subHeading: "TIME | 2:00",
+                                    description: "Pre-breathing involves controlled breathing a exercise to balance oxygen and carbon dioxide levels."
+                                )
+                            }
+                            
+                            NavigationLink(destination: CO2TrainingView()) {
+                                TrainingCardView(
+                                    image: "freediver-1",
+                                    title: "CO2 Training",
+                                    subHeading: "8 Rounds | 10 min",
+                                    description: "CO2 table is a series of breath hold sessions that give you less recovery time between each round."
+                                )
+                            }
+                            
+                            NavigationLink(destination: O2TrainingView()) {
+                                TrainingCardView(
+                                    image: "freediver-8",
+                                    title: "O2 Training",
+                                    subHeading: "8 Rounds | 21 min",
+                                    description: "O2 table is a series of breath hold sessions that give you more apnea time each round."
+                                )
+                            }
+                            
+                            NavigationLink(destination: SquareBreathingView()) {
+                                TrainingCardView(
+                                    image: "freediver-7",
+                                    title: "Square Table",
+                                    subHeading: "4 Cycles | 5 min",
+                                    description: "Begin with 5-10 minutes of square breathing to prepare for the breath-hold exercises."
+                                )
+                            }
+                            
+                            NavigationLink(destination: PranayamaBreathingView()) {
+                                TrainingCardView(
+                                    image: "pranayama-2",
+                                    title: "Pranayama Breath",
+                                    subHeading: "4 Cycles | 5 min",
+                                    description: "Begin with 5-10 minutes of alternate nose breathing to relax."
+                                )
+                            }
+                            
                         }
-                        
-                        NavigationLink(destination: PreBreatheView()) {
-                            TrainingCardView(
-                                image: "freediver-2",
-                                title: "Pre Breathe",
-                                subHeading: "TIME | 2:00",
-                                description: "Pre-breathing involves controlled breathing a exercise to balance oxygen and carbon dioxide levels."
-                            )
-                        }
-                        
-                        NavigationLink(destination: CO2TrainingView()) {
-                            TrainingCardView(
-                                image: "freediver-1",
-                                title: "CO2 Training",
-                                subHeading: "8 Rounds | 10 min",
-                                description: "CO2 table is a series of breath hold sessions that give you less recovery time between each round."
-                            )
-                        }
-                        
-                        NavigationLink(destination: O2TrainingView()) {
-                            TrainingCardView(
-                                image: "freediver-8",
-                                title: "O2 Training",
-                                subHeading: "8 Rounds | 21 min",
-                                description: "O2 table is a series of breath hold sessions that give you more apnea time each round."
-                            )
-                        }
-                        
-                        NavigationLink(destination: SquareBreathingView()) {
-                            TrainingCardView(
-                                image: "freediver-7",
-                                title: "Square Table",
-                                subHeading: "4 Cycles | 5 min",
-                                description: "Begin with 5-10 minutes of square breathing to prepare for the breath-hold exercises."
-                            )
-                        }
-                        
-                        NavigationLink(destination: PranayamaBreathingView()) {
-                            TrainingCardView(
-                                image: "pranayama-2",
-                                title: "Pranayama Breath",
-                                subHeading: "4 Cycles | 5 min",
-                                description: "Begin with 5-10 minutes of alternate nose breathing to relax."
-                            )
-                        }
-                        
+                        .padding(.horizontal, geometry.size.width * 0.1)
+                        .offset(x: self.dragOffset, y: 0)
+                        .gesture(
+                            DragGesture().onChanged { value in
+                                self.dragOffset = value.translation.width
+                            }
+                                .onEnded { value in
+                                    // You can add further logic here to "snap" to a card
+                                    // For simplicity, we're just resetting the drag offset
+                                    withAnimation(.easeOut) {
+                                        self.dragOffset = 0
+                                    }
+                                }
+                        )
                     }
                 }
-                .padding()
+                .frame(height: 220)
                 
                 HStack{
                     Text("Sessions")
@@ -147,6 +163,7 @@ struct TrainingOptionsView: View {
                     Spacer()
                 }
                 .padding(.leading)
+                .padding(.top)
                 
                 List {
                     
