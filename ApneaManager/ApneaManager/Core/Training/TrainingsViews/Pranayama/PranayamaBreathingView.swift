@@ -25,6 +25,7 @@ struct PranayamaBreathingView: View {
     
     @State private var startTime: Date?
     @State private var isExerciseActive = false
+    @State private var showAlert = false
     
     let phases = [
         "Inhale through Left Nostril",
@@ -142,6 +143,13 @@ struct PranayamaBreathingView: View {
             }
         }
         .navigationTitle("Pranayama Training")
+        .alert(isPresented: $showAlert) {
+            Alert(
+                title: Text("Timer Complete"),
+                message: Text("Your session is complete."),
+                dismissButton: .default(Text("OK"))
+            )
+        }
         .sheet(isPresented: $showingDetail) {
             PranayamaBreathingDetailView()
         }
@@ -157,7 +165,6 @@ struct PranayamaBreathingView: View {
         } else {
             startBreathingExercise()
         }
-        isExerciseActive.toggle()
     }
     
     func startBreathingExercise() {
@@ -165,6 +172,7 @@ struct PranayamaBreathingView: View {
         resetTimer()
         currentPhaseIndex = 0
         moveToNextPhase()
+        isExerciseActive = true
     }
     
     
@@ -172,11 +180,13 @@ struct PranayamaBreathingView: View {
         timer?.invalidate()
         timer = nil
         phase = "Ready"
-        
+        isExerciseActive = false
         if let start = startTime {
             let duration = Date().timeIntervalSince(start)
             saveSession(duration: Int(duration))
         }
+        timeRemaining = phaseDuration // Reset time remaining to phase duration
+        elapsedTime = 0 // Reset elapsed time
         startTime = nil // Ensure start time is reset for the next session
         currentPhaseIndex = 0 // Optionally reset the phase index
     }
@@ -196,6 +206,7 @@ struct PranayamaBreathingView: View {
             let elapsedTime = Date().timeIntervalSince(startTime)
             if elapsedTime >= Double(self.totalDuration) {
                 self.stopBreathingExercise() // Automatically stop if total duration reached
+                showAlert = true
                 return
             }
             

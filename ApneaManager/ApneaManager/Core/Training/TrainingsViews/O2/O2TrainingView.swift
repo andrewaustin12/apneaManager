@@ -298,10 +298,12 @@ struct O2TrainingTimerView: View {
                 
                 VStack {
                     Text(phaseIndicatorText())
-                        .font(.headline)
+                        .font(.title)
+                        .bold()
+                        .foregroundStyle(.white)
                         .padding()
-                        .background(phaseIndicatorColor().opacity(0.2))
-                        .cornerRadius(10)
+                        .background(phaseIndicatorColor().opacity(0.5))
+                        .cornerRadius(8)
                     
                     Text(timeString(from: elapsedTime))
                         .font(.largeTitle)

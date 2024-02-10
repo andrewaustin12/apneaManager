@@ -14,6 +14,7 @@ struct HistoryChartView: View {
     var sessions: [Session]
     @State private var selectedTimeScale: TimeScale = .total
     @Environment(\.colorScheme) var colorScheme
+    @Environment(\.selectedTheme) var theme: Theme
 
     private var filteredSessions: [Session] {
         let calendar = Calendar.current
@@ -54,10 +55,7 @@ struct HistoryChartView: View {
                         x: .value("Date", session.date),
                         y: .value("Duration", session.duration)
                     )
-                    //.foregroundStyle(LinearGradient(gradient: Gradient(colors: [.blue, .blue.opacity(0.6)]), startPoint: .top, endPoint: .bottom))
-                }
-                .chartXAxis {
-                    AxisMarks(preset: .aligned, position: .bottom)
+                    .foregroundStyle(LinearGradient(gradient: Gradient(colors: [theme.mainColor, theme.mainColor.opacity(0.5)]), startPoint: .top, endPoint: .bottom))
                 }
                 .frame(height: 200)
                 .padding()
@@ -77,6 +75,23 @@ struct HistoryChartView: View {
         .padding(.horizontal)
         .shadow(color: colorScheme == .light ? Color.black.opacity(0.1) : Color.white.opacity(0.1), radius: 2, x: 0, y: 1)
     }
+    
+    private func formatSessionDate(_ date: Date) -> String {
+        let formatter = DateFormatter()
+        // Customize the date format based on the selectedTimeScale
+        switch selectedTimeScale {
+        case .day:
+            formatter.dateFormat = "MMM d, HH:mm" // Example: "Jan 1, 15:30"
+        case .month:
+            formatter.dateFormat = "MMM d" // Example: "Jan 1"
+        case .year:
+            formatter.dateFormat = "yyyy MMM" // Example: "2021 Jan"
+        case .total:
+            formatter.dateFormat = "yyyy MMM d" // Example: "2021 Jan 1"
+        }
+        return formatter.string(from: date)
+    }
+
 }
 
 enum TimeScale: String, CaseIterable, Identifiable {

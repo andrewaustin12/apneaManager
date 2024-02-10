@@ -25,7 +25,7 @@ struct PreBreatheView: View {
             
             PrebreatheTimer(totalDuration: $totalDuration)
                 .padding()
-            
+            Spacer()
             // HStack for buttons
             HStack {
                 Button("Settings") {
@@ -43,6 +43,10 @@ struct PreBreatheView: View {
                 .buttonStyle(.bordered)
             }
             
+        }
+        .onChange(of: totalDuration) {
+            PrebreatheTimer(totalDuration: $totalDuration)
+            print(totalDuration)
         }
         .sheet(isPresented: $showingDetail) {
             PreBreatheDetailView()

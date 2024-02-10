@@ -15,6 +15,7 @@ struct SquareBreathingView: View {
     @State private var totalDuration: Int = 5 * 60 // Default total duration is 10 minutes
     @State private var currentPhaseIndex = 0
     @State private var elapsedTime = 0
+    @State private var showAlert = false
     
     @State private var startTime: Date?
     
@@ -129,7 +130,13 @@ struct SquareBreathingView: View {
                 }
             }
             .navigationTitle("Square Breath Training")
-            
+            .alert(isPresented: $showAlert) {
+                Alert(
+                    title: Text("Timer Complete"),
+                    message: Text("Your session is complete."),
+                    dismissButton: .default(Text("OK"))
+                )
+            }
             .sheet(isPresented: $showingDetail) {
                 SquareBreathingDetailView()
             }
@@ -145,7 +152,6 @@ struct SquareBreathingView: View {
         } else {
             startBreathingExercise()
         }
-        isExerciseActive.toggle()
     }
     
     func startBreathingExercise() {
@@ -153,17 +159,20 @@ struct SquareBreathingView: View {
         resetTimer()
         currentPhaseIndex = 0
         moveToNextPhase()
+        isExerciseActive = true
     }
     
     func stopBreathingExercise() {
         timer?.invalidate()
         timer = nil
-        phase = "Ready"
-        
+        phase = "Ready" // resets phase to Ready
+        isExerciseActive = false // resets stop to Start
         if let start = startTime {
             let duration = Date().timeIntervalSince(start)
             saveSession(duration: Int(duration))
         }
+        timeRemaining = phaseDuration // Reset time remaining to phase duration
+        elapsedTime = 0 // Reset elapsed time
         startTime = nil // Ensure start time is reset for the next session
         currentPhaseIndex = 0 // Optionally reset the phase index
     }
@@ -183,6 +192,7 @@ struct SquareBreathingView: View {
             let elapsedTime = Date().timeIntervalSince(startTime)
             if elapsedTime >= Double(self.totalDuration) {
                 self.stopBreathingExercise() // Automatically stop if total duration reached
+                showAlert = true
                 return
             }
             

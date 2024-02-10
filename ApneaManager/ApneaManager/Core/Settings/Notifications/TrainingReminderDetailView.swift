@@ -71,6 +71,7 @@ struct TrainingReminderDetailView: View {
                             showAlert = true // Trigger the alert
                         }
                     }
+                    .disabled(selectedSessionType.isEmpty)
                     .alert(isPresented: $showAlert) {
                         Alert(
                             title: Text("Training Scheduled"),
@@ -97,9 +98,17 @@ struct TrainingReminderDetailView: View {
         }
         .navigationBarBackButtonHidden()
         .navigationBarTitleDisplayMode(.inline)
-        .onAppear(perform: {
-            notify.askPermission()
-        })
+        .onAppear {
+                    // Initialize with default session type if not already set
+                    if trainingReminder.sessionType.isEmpty {
+                        trainingReminder.sessionType = "Breath Hold Test"
+                        selectedSessionType = trainingReminder.sessionType
+                    } else {
+                        // Ensure selectedSessionType matches the current trainingReminder session type
+                        selectedSessionType = trainingReminder.sessionType
+                    }
+                    notify.askPermission()
+                }
     }
 }
 

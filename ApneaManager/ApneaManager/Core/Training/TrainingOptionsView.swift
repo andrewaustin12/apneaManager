@@ -83,7 +83,7 @@ struct TrainingOptionsView: View {
             VStack {
                 GeometryReader{ geometry in
                     ScrollView(.horizontal, showsIndicators: false) {
-                        HStack(spacing: 20 ) {
+                        HStack(spacing: 2) {
                             
                             NavigationLink(destination: BreathHoldView()) {
                                 TrainingCardView(
@@ -140,7 +140,7 @@ struct TrainingOptionsView: View {
                             }
                             
                         }
-                        .padding(.horizontal, geometry.size.width * 0.1)
+                        //.padding(.leading)
                         .offset(x: self.dragOffset, y: 0)
                         .gesture(
                             DragGesture().onChanged { value in
@@ -149,7 +149,7 @@ struct TrainingOptionsView: View {
                                 .onEnded { value in
                                     // You can add further logic here to "snap" to a card
                                     // For simplicity, we're just resetting the drag offset
-                                    withAnimation(.easeOut) {
+                                    withAnimation(.easeInOut) {
                                         self.dragOffset = 0
                                     }
                                 }

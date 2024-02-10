@@ -25,6 +25,7 @@ struct PreBreatheSettingsDetailView: View {
                     .pickerStyle(MenuPickerStyle())
                 }
             }
+            
             VStack {
                 UpgradeCardView(image: "freediver-3", title: "Upgrade to pro", buttonLabel: "Learn more")
             }

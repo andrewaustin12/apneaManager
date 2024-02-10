@@ -10,45 +10,30 @@ import SwiftUI
 struct PrebreatheTimer: View {
     @Environment(\.modelContext) private var context
     @Environment(\.selectedTheme) var theme: Theme
-    @State private var progress: CGFloat = 0
+    @State private var progress: CGFloat = 0 // Start with progress empty
     @State private var elapsedTime: CGFloat = 0
     @State private var isActive = false
-    @State private var showAlert = false  // New state variable for showing the alert
+    @State private var showAlert = false
     let timer = Timer.publish(every: 0.05, on: .main, in: .common).autoconnect()
     
-    @Binding var totalDuration: Int  // Binding to pass in the total duration
+    @Binding var totalDuration: Int
     
-    let maxTime: CGFloat  // Use the total duration as the max time
-    
-    init(totalDuration: Binding<Int>) {
-        self._totalDuration = totalDuration
-        self.maxTime = CGFloat(totalDuration.wrappedValue)
+    var maxTime: CGFloat {
+        CGFloat(totalDuration)
     }
     
     var body: some View {
         VStack {
-            Button(action: {
-                if isActive {
-                    isActive = false
-                    let elapsedInt = Int(elapsedTime)
-                    
-                    // Save the session and check for new prebreathe
-                    saveSession(duration: elapsedInt)
-                    
-                    // Reset for the next session
-                    progress = 0
-                    elapsedTime = 0
-                } else {
-                    isActive = true
-                    showAlert = false  // Reset alert when starting
-                    
-                }
-            }) {
+            Button(action: toggleTimer) {
                 Text(isActive ? "Stop" : "Start")
                     .font(.title)
                     .bold()
+                    .padding()
+                    .background(isActive ? Color.red : theme.mainColor)
+                    .foregroundColor(.white)
+                    .clipShape(RoundedRectangle(cornerRadius: 8))
             }
-            .buttonStyle(.borderedProminent)
+            .padding(.vertical)
             
             ZStack {
                 Circle()
@@ -56,14 +41,18 @@ struct PrebreatheTimer: View {
                     .opacity(0.3)
                     .foregroundColor(Color.gray)
                 
-                CircleProgressShape(progress: progress)
+                Circle()
+                    .trim(from: 0.0, to: progress)
                     .stroke(style: StrokeStyle(lineWidth: 24, lineCap: .round, lineJoin: .round))
                     .foregroundColor(theme.mainColor)
+                    .rotationEffect(Angle(degrees: 270)) // Start from the top
                     .animation(.linear, value: progress)
                 
                 VStack {
-                    Text("Time")
+                    Text("Time Remaining")
                         .font(.largeTitle)
+                        .bold()
+                        
                     Text(timeString(from: elapsedTime))
                         .font(.largeTitle)
                         .bold()
@@ -74,33 +63,71 @@ struct PrebreatheTimer: View {
         .onReceive(timer) { _ in
             guard isActive else { return }
             updateProgress()
-            
         }
-        .alert(isPresented: $showAlert) {  // Alert view
+        .alert(isPresented: $showAlert) {
             Alert(
                 title: Text("Timer Complete"),
-                message: Text("Your pre-breath is complete."),
+                message: Text("Your pre-breath session is complete."),
                 dismissButton: .default(Text("OK"))
             )
+        }
+        .onAppear {
+            self.elapsedTime = self.maxTime // Initialize elapsedTime with maxTime on appear
+        }
+        .onChange(of: totalDuration) { _ in
+                    updateTimerSettings()
+                }
+    }
+    
+    private func updateTimerSettings() {
+            if !isActive {
+                // Reset the timer settings only if the timer is not currently active
+                self.progress = 0 // Ensure progress starts empty
+                self.elapsedTime = CGFloat(totalDuration) // Reset elapsedTime to the full duration
+                // Implement any additional logic needed for the new total duration
+            }
+        }
+    
+    private func toggleTimer() {
+        isActive.toggle()
+        if isActive {
+            // Only reset if timer starts
+            self.elapsedTime = self.maxTime
+        } else {
+            // Save session upon stopping
+            saveSession(duration: Int(maxTime - elapsedTime))
         }
     }
     
     private func updateProgress() {
-        if elapsedTime < maxTime {
-            elapsedTime += 0.05
+        if elapsedTime > 0 {
+            elapsedTime -= 0.05
             progress = elapsedTime / maxTime
-        } else {
+        } else if isActive {
+            // Timer completes
             isActive = false
             showAlert = true
-            saveSession(duration: Int(elapsedTime))
+            saveSession(duration: Int(maxTime - elapsedTime))
+            elapsedTime = maxTime // Reset for next session, optional based on desired behavior
+            progress = 1.0
         }
     }
     
     private func timeString(from totalSeconds: CGFloat) -> String {
         let minutes = Int(totalSeconds) / 60
-        let seconds = Int(totalSeconds) % 60
-        return String(format: "%02d:%02d", minutes, seconds)
+            let seconds = Int(totalSeconds) % 60
+            if minutes == 0 {
+                // For times less than a minute, show ":ss"
+                return String(format: ":%02d", seconds)
+            } else if minutes < 10 {
+                // For times with less than 10 minutes, show "m:ss"
+                return "\(minutes):\(String(format: "%02d", seconds))"
+            } else {
+                // For times with 10 or more minutes, show "mm:ss"
+                return String(format: "%d:%02d", minutes, seconds)
+            }
     }
+
     
     private func saveSession(duration: Int) {
         let newSession = Session(

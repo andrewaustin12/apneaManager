@@ -8,12 +8,16 @@
 import SwiftUI
 
 struct TimerNotificationView: View {
+    @State private var isMinuteNotificationChecked = false
+    @State private var is10SecondsNotificationChecked = false
+    
     var body: some View {
         NavigationStack {
-            Text("Timer Notification")
-                .font(.title)
-                .bold()
-            Spacer()
+            List {
+                Toggle("Minute Notification", isOn: $isMinuteNotificationChecked)
+                Toggle("10 Seconds Notification", isOn: $is10SecondsNotificationChecked)
+            }
+            .navigationTitle("Timer Notifications")
         }
     }
 }

@@ -68,11 +68,8 @@ struct SettingsView: View {
                             Label("Training Reminders", systemImage: "bell.badge")
                         }
                         NavigationLink(destination: TimerNotificationView()) {
-                            Label("Audio Guidance Options", systemImage: "person.wave.2")
+                            Label("Timer Notifications", systemImage: "bell")
                         }
-                        
-                        
-                        
                     } header: {
                         Text("Pro Settings")
                     }

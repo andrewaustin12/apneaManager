@@ -9,6 +9,7 @@ import SwiftUI
 import SwiftData
 
 struct BreathHoldView: View {
+    @Environment(\.selectedTheme) var theme: Theme
     // Detail view state
     @State private var showingDetail = false
     @State private var detailViewType: String = ""
@@ -41,27 +42,17 @@ struct BreathHoldView: View {
                     updatePersonalBest()
                 }
                 
-                Button(action: {
-                    if isActive {
-                        isActive = false
-                        let elapsedInt = Int(elapsedTime)
-                        
-                        // Save the session and check for new personal best
-                        saveSession(duration: elapsedInt)
-                        
-                        // Reset for the next session
-                        progress = 0
-                        elapsedTime = 0
-                    } else {
-                        isActive = true
-                        isNewPersonalBest = false
-                    }
-                }) {
+                // Start/Stop Button
+                Button(action: toggleTimer) {
                     Text(isActive ? "Stop" : "Start")
                         .font(.title)
                         .bold()
+                        .padding()
+                        .background(isActive ? Color.red : theme.mainColor)
+                        .foregroundColor(.white)
+                        .clipShape(RoundedRectangle(cornerRadius: 8))
                 }
-                .buttonStyle(.borderedProminent)
+                
                 
                 // Progress Circle
                 ZStack {
@@ -72,15 +63,18 @@ struct BreathHoldView: View {
                     
                     CircleProgressShape(progress: progress)
                         .stroke(style: StrokeStyle(lineWidth: 24, lineCap: .round, lineJoin: .round))
-                        .foregroundColor(Color.blue)
+                        .foregroundColor(theme.mainColor)
                         .animation(.linear, value: progress)
                     
                     VStack {
                         Text("Time")
                             .font(.largeTitle)
+                            .bold()
+                            
                         Text(timeString(from: elapsedTime))
                             .font(.largeTitle)
                             .bold()
+                        
                     }
                 }
                 .padding(.horizontal)
@@ -114,6 +108,23 @@ struct BreathHoldView: View {
         }
     }
     
+    private func toggleTimer() {
+        if isActive {
+            isActive = false
+            let elapsedInt = Int(elapsedTime)
+            
+            // Save the session and check for new personal best
+            saveSession(duration: elapsedInt)
+            
+            // Reset for the next session
+            progress = 0
+            elapsedTime = 0
+        } else {
+            isActive = true
+            isNewPersonalBest = false
+        }
+    }
+    
     private func updateProgress() {
         elapsedTime += 0.05
         progress = (elapsedTime.truncatingRemainder(dividingBy: 60)) / 60
@@ -131,13 +142,13 @@ struct BreathHoldView: View {
             return String(format: "%d:%02d", minutes, seconds)
         }
     }
+    
     private func updatePersonalBest() {
         let breathHoldSessions = sessions.filter { $0.sessionType == .breathHold }
         if let longestSession = breathHoldSessions.max(by: { $0.duration < $1.duration }) {
             personalBestHold = longestSession.duration
         }
     }
-    
     
     private func saveSession(duration: Int) {
         let newSession = Session(
