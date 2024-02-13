@@ -13,6 +13,7 @@
 		3F23F2012B73CB81003FBC64 /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F23F2002B73CB81003FBC64 /* HealthKit.framework */; };
 		3F23F2032B743595003FBC64 /* HistorySessionsChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F23F2022B743595003FBC64 /* HistorySessionsChartView.swift */; };
 		3F23F2052B752021003FBC64 /* SessionHistoryDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F23F2042B752021003FBC64 /* SessionHistoryDetailView.swift */; };
+		3F23F20B2B77D38F003FBC64 /* UserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F23F20A2B77D38F003FBC64 /* UserDefaults.swift */; };
 		3F31881A2B5AE42A0092880E /* CO2TrainingTableDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F3188192B5AE42A0092880E /* CO2TrainingTableDetailView.swift */; };
 		3F53E9CF2B470D8400E821BC /* ApneaManagerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F53E9CE2B470D8400E821BC /* ApneaManagerApp.swift */; };
 		3F53E9D32B470D8500E821BC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3F53E9D22B470D8500E821BC /* Assets.xcassets */; };
@@ -48,7 +49,7 @@
 		3F53EA352B4B2D4900E821BC /* ThemeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F53EA342B4B2D4900E821BC /* ThemeView.swift */; };
 		3F53EA422B4C4EF300E821BC /* TrainingRemindersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F53EA412B4C4EF300E821BC /* TrainingRemindersView.swift */; };
 		3F53EA442B4C4FA200E821BC /* TimerNotificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F53EA432B4C4FA200E821BC /* TimerNotificationView.swift */; };
-		3F53EA462B4C5A5D00E821BC /* HistoryChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F53EA452B4C5A5D00E821BC /* HistoryChartView.swift */; };
+		3F53EA462B4C5A5D00E821BC /* HistoryBreathHoldChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F53EA452B4C5A5D00E821BC /* HistoryBreathHoldChartView.swift */; };
 		3F69B6942B4C68F000BC9222 /* ExerciseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F69B6932B4C68F000BC9222 /* ExerciseView.swift */; };
 		3F69B69E2B4D780600BC9222 /* TrainingTimerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F69B69D2B4D780600BC9222 /* TrainingTimerView.swift */; };
 		3F69B6A22B4D78A300BC9222 /* CircleProgressShape.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F69B6A12B4D78A300BC9222 /* CircleProgressShape.swift */; };
@@ -99,6 +100,7 @@
 		3F23F2002B73CB81003FBC64 /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = System/Library/Frameworks/HealthKit.framework; sourceTree = SDKROOT; };
 		3F23F2022B743595003FBC64 /* HistorySessionsChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistorySessionsChartView.swift; sourceTree = "<group>"; };
 		3F23F2042B752021003FBC64 /* SessionHistoryDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionHistoryDetailView.swift; sourceTree = "<group>"; };
+		3F23F20A2B77D38F003FBC64 /* UserDefaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaults.swift; sourceTree = "<group>"; };
 		3F3188192B5AE42A0092880E /* CO2TrainingTableDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CO2TrainingTableDetailView.swift; sourceTree = "<group>"; };
 		3F53E9CB2B470D8400E821BC /* ApneaManager.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ApneaManager.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3F53E9CE2B470D8400E821BC /* ApneaManagerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApneaManagerApp.swift; sourceTree = "<group>"; };
@@ -134,7 +136,7 @@
 		3F53EA342B4B2D4900E821BC /* ThemeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeView.swift; sourceTree = "<group>"; };
 		3F53EA412B4C4EF300E821BC /* TrainingRemindersView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrainingRemindersView.swift; sourceTree = "<group>"; };
 		3F53EA432B4C4FA200E821BC /* TimerNotificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerNotificationView.swift; sourceTree = "<group>"; };
-		3F53EA452B4C5A5D00E821BC /* HistoryChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryChartView.swift; sourceTree = "<group>"; };
+		3F53EA452B4C5A5D00E821BC /* HistoryBreathHoldChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryBreathHoldChartView.swift; sourceTree = "<group>"; };
 		3F69B6932B4C68F000BC9222 /* ExerciseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseView.swift; sourceTree = "<group>"; };
 		3F69B69D2B4D780600BC9222 /* TrainingTimerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrainingTimerView.swift; sourceTree = "<group>"; };
 		3F69B6A12B4D78A300BC9222 /* CircleProgressShape.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleProgressShape.swift; sourceTree = "<group>"; };
@@ -195,6 +197,33 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		3F23F2092B77D382003FBC64 /* UserDefaults */ = {
+			isa = PBXGroup;
+			children = (
+				3F23F20A2B77D38F003FBC64 /* UserDefaults.swift */,
+			);
+			path = UserDefaults;
+			sourceTree = "<group>";
+		};
+		3F23F20C2B78E4A1003FBC64 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				3F53EA042B4AA42C00E821BC /* HistoryView.swift */,
+				3F23F2042B752021003FBC64 /* SessionHistoryDetailView.swift */,
+				3FEC43E72B4EDEE400C262E5 /* DetailedSessionHistoryView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		3F23F20D2B78E4B3003FBC64 /* Charts */ = {
+			isa = PBXGroup;
+			children = (
+				3F23F2022B743595003FBC64 /* HistorySessionsChartView.swift */,
+				3F53EA452B4C5A5D00E821BC /* HistoryBreathHoldChartView.swift */,
+			);
+			path = Charts;
+			sourceTree = "<group>";
+		};
 		3F53E9C22B470D8400E821BC = {
 			isa = PBXGroup;
 			children = (
@@ -307,11 +336,8 @@
 		3F53EA032B4AA40900E821BC /* History */ = {
 			isa = PBXGroup;
 			children = (
-				3F53EA042B4AA42C00E821BC /* HistoryView.swift */,
-				3F23F2042B752021003FBC64 /* SessionHistoryDetailView.swift */,
-				3F53EA452B4C5A5D00E821BC /* HistoryChartView.swift */,
-				3FEC43E72B4EDEE400C262E5 /* DetailedSessionHistoryView.swift */,
-				3F23F2022B743595003FBC64 /* HistorySessionsChartView.swift */,
+				3F23F20D2B78E4B3003FBC64 /* Charts */,
+				3F23F20C2B78E4A1003FBC64 /* Views */,
 			);
 			path = History;
 			sourceTree = "<group>";
@@ -525,6 +551,7 @@
 		3FDB89FB2B597DFB00DF0C51 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				3F23F2092B77D382003FBC64 /* UserDefaults */,
 				3F53E9E92B47219E00E821BC /* Models */,
 				3FAE0AC62B724E5D00FB0110 /* Handlers */,
 			);
@@ -665,7 +692,7 @@
 				3F69B69E2B4D780600BC9222 /* TrainingTimerView.swift in Sources */,
 				3F69B6BC2B4DA03E00BC9222 /* BreathHoldDetailView.swift in Sources */,
 				3F53E9E42B471CEB00E821BC /* BenifitsView.swift in Sources */,
-				3F53EA462B4C5A5D00E821BC /* HistoryChartView.swift in Sources */,
+				3F53EA462B4C5A5D00E821BC /* HistoryBreathHoldChartView.swift in Sources */,
 				3FA7C1F12B6A557B00AED17A /* O2TrainingTableDetailView.swift in Sources */,
 				3FAE0ABA2B6D5B3300FB0110 /* PranayamaBreathingSettingsView.swift in Sources */,
 				3F23F2052B752021003FBC64 /* SessionHistoryDetailView.swift in Sources */,
@@ -684,6 +711,7 @@
 				3FAE0AC52B724E1000FB0110 /* TrainingReminderDetailView.swift in Sources */,
 				3FDB89F72B57F17900DF0C51 /* RoundedShape.swift in Sources */,
 				3F03B9962B6A9AA700E31152 /* SquareBreathingSettingsView.swift in Sources */,
+				3F23F20B2B77D38F003FBC64 /* UserDefaults.swift in Sources */,
 				3F53E9DD2B470E3A00E821BC /* GuidanceView.swift in Sources */,
 				3F53EA002B495A3700E821BC /* TrainingTimeCardView.swift in Sources */,
 				3FAE0ABE2B7104E100FB0110 /* CO2TrainingSettingsView.swift in Sources */,

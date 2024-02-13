@@ -7,9 +7,11 @@ struct HistoryView: View {
     @Query(sort: \Session.date) var sessions: [Session]
     @State private var isBreathHoldChartExpanded: Bool = false
     @State private var isOverallSessionsChartExpanded: Bool = false
-    
+    /// Default filter
     @State private var selectedFilter: SessionFilter = .all
-
+    @State private var selectedSection: ViewSection = .sessionHistory
+    
+    /// Sessions Picker Options
     enum SessionFilter: String, CaseIterable, Identifiable {
         case all = "All Sessions"
         case breathHold = "Breath Hold"
@@ -20,9 +22,15 @@ struct HistoryView: View {
         case pranayama = "Pranayama"
         var id: String { self.rawValue }
     }
-    
+    /// Session History Sort Order
     enum SortOrder {
         case newestFirst, oldestFirst
+    }
+    /// History View Sections
+    enum ViewSection: String, CaseIterable, Identifiable {
+        case sessionHistory = "Session History"
+        case charts = "Charts"
+        var id: String { self.rawValue }
     }
     
     @State private var sortOrder: SortOrder = .newestFirst
@@ -53,28 +61,41 @@ struct HistoryView: View {
     }
     
     var body: some View {
-        ScrollView {
+        NavigationStack {
             VStack {
                 upgradeCardSection
-                
-                chartSection(title: "Breath Hold Test Progress Chart", isExpanded: $isBreathHoldChartExpanded) {
-                    if sessions.filter({ $0.sessionType == .breathHold }).count > 1 {
-                        HistoryChartView(sessions: sessions.filter { $0.sessionType == .breathHold })
-                    } else {
-                        Text("Two or more breath hold tests are needed to show charts")
-                            .padding()
+                Picker("Select View", selection: $selectedSection) {
+                    ForEach(ViewSection.allCases) { section in
+                        Text(section.rawValue).tag(section)
                     }
                 }
+                .pickerStyle(SegmentedPickerStyle())
+                .padding()
                 
-                chartSection(title: "Overall Sessions Chart", isExpanded: $isOverallSessionsChartExpanded) {
-                    HistorySessionsChartView(sessions: sessions)
+                if selectedSection == .sessionHistory {
+                    filterAndSortingPicker
+                    
+                    sessionCountView(filteredSessions: filteredAndSortedSessions)
+                    List {
+                        sessionList(filteredSessions: filteredAndSortedSessions)
+                    }
+                    .listStyle(.plain)
+                } else {
+                    ScrollView {
+                        chartSection(title: "Breath Hold Test Progress Chart", isExpanded: $isBreathHoldChartExpanded) {
+                            if sessions.filter({ $0.sessionType == .breathHold }).count > 1 {
+                                HistoryBreathHoldChartView(sessions: sessions.filter { $0.sessionType == .breathHold })
+                            } else {
+                                Text("Two or more breath hold tests are needed to show charts")
+                                    .padding()
+                            }
+                        }
+                        
+                        chartSection(title: "Overall Sessions Chart", isExpanded: $isOverallSessionsChartExpanded) {
+                            HistorySessionsChartView(sessions: sessions)
+                        }
+                    }
                 }
-                
-                filterAndSortingPicker
-                
-                sessionCountView(filteredSessions: filteredAndSortedSessions)
-                
-                sessionList(filteredSessions: filteredAndSortedSessions)
             }
         }
         .navigationTitle("History")
@@ -156,27 +177,22 @@ struct HistoryView: View {
     
     /// Session History List
     @ViewBuilder
+    
     private func sessionList(filteredSessions: [Session]) -> some View {
         ForEach(filteredSessions) { session in
             NavigationLink(destination: SessionHistoryDetailView(session: session)) {
                 HStack {
                     TrainingHistoryCardView(image: session.image, title: session.sessionType.rawValue, date: session.date, duration: Double(session.duration))
                         .foregroundColor(.primary) // Ensure text color remains black
-                    
-                    Spacer() // Use Spacer to push the arrow to the right
-                    
-                    Image(systemName: "chevron.right")
-                        .foregroundColor(.gray) // Right arrow to indicate it's a link
+
                 }
-                .padding(.horizontal)
-                .padding(.bottom, 2)
+                .swipeActions{
+                    Button("Delete", role: .destructive) {
+                        context.delete(session)
+                    }
+                }
             }
-            .buttonStyle(PlainButtonStyle()) // Use PlainButtonStyle to avoid NavigationLink altering the appearance
-            Divider()
-                .padding(.horizontal)
-                .padding(.bottom, 10)
         }
     }
-
 
 }

@@ -7,6 +7,7 @@
 
 import SwiftUI
 import SwiftData
+import AudioToolbox
 
 struct CO2TrainingView: View {
     // Model state
@@ -301,6 +302,22 @@ struct CO2TrainingTimerView: View {
         
         let totalPhaseTime = isHoldPhase ? CGFloat(co2Table[currentRoundIndex].hold) : CGFloat(co2Table[currentRoundIndex].rest)
         progress = (totalPhaseTime - phaseTimeRemaining) / totalPhaseTime
+        
+        let enableMinuteNotification = UserDefaults.standard.bool(forKey: UserDefaults.Keys.isMinuteNotificationChecked)
+        let enable10SecondsNotification = UserDefaults.standard.bool(forKey: UserDefaults.Keys.is10SecondsNotificationChecked)
+        
+        if enableMinuteNotification && Int(phaseTimeRemaining) % 60 == 0 && phaseTimeRemaining > 10 {
+            AudioServicesPlaySystemSound(1052) // Adjust sound ID accordingly
+        }
+        
+        // Check for 10 seconds remaining using a range, considering the timer ticks every 0.05 seconds
+        if enable10SecondsNotification && phaseTimeRemaining <= 10.05 && phaseTimeRemaining > 9.95 {
+            AudioServicesPlaySystemSound(1052) // Play twice for two dings
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                AudioServicesPlaySystemSound(1052)
+            }
+        }
+        
         
         if phaseTimeRemaining <= 0 {
             totalDuration += totalPhaseTime // Add completed phase time to total duration

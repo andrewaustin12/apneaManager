@@ -8,9 +8,9 @@
 import SwiftUI
 
 struct TimerNotificationView: View {
-    @State private var isMinuteNotificationChecked = false
-    @State private var is10SecondsNotificationChecked = false
-    
+    @AppStorage("isMinuteNotificationChecked") var isMinuteNotificationChecked: Bool = false
+    @AppStorage("is10SecondsNotificationChecked") var is10SecondsNotificationChecked: Bool = false
+
     var body: some View {
         NavigationStack {
             List {

@@ -8,9 +8,7 @@
 import SwiftUI
 import SwiftData
 import HealthKit
-
-
-
+import AudioToolbox
 
 struct O2TrainingView: View {
     // Model state
@@ -366,8 +364,6 @@ struct O2TrainingTimerView: View {
         healthDataFetchTimer?.invalidate()
         healthDataFetchTimer = nil
     }
-
-
     
     private func setPhaseTime() {
         if currentRoundIndex < o2Table.count {
@@ -413,8 +409,6 @@ struct O2TrainingTimerView: View {
         currentRoundIndex = 0 // Reset to start from the first round
     }
     
-    
-    
     private func timeString(from totalSeconds: CGFloat) -> String {
         let minutes = Int(totalSeconds) / 60
         let seconds = Int(totalSeconds) % 60
@@ -428,6 +422,21 @@ struct O2TrainingTimerView: View {
         let totalPhaseTime = isHoldPhase ? CGFloat(o2Table[currentRoundIndex].hold) : CGFloat(o2Table[currentRoundIndex].rest)
         progress = (totalPhaseTime - phaseTimeRemaining) / totalPhaseTime
         
+        let enableMinuteNotification = UserDefaults.standard.bool(forKey: UserDefaults.Keys.isMinuteNotificationChecked)
+        let enable10SecondsNotification = UserDefaults.standard.bool(forKey: UserDefaults.Keys.is10SecondsNotificationChecked)
+        
+        // minute notification
+        if enableMinuteNotification && Int(phaseTimeRemaining) % 60 == 0 && phaseTimeRemaining > 10 {
+            AudioServicesPlaySystemSound(1052) // Adjust sound ID accordingly
+        }
+        
+        // Check for 10 seconds remaining using a range, considering the timer ticks every 0.05 seconds
+        if enable10SecondsNotification && phaseTimeRemaining <= 10.05 && phaseTimeRemaining > 9.95 {
+            AudioServicesPlaySystemSound(1052) // Play twice for two dings
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                AudioServicesPlaySystemSound(1052)
+            }
+        }
         if phaseTimeRemaining <= 0 {
             totalDuration += totalPhaseTime // Add completed phase time to total duration
             

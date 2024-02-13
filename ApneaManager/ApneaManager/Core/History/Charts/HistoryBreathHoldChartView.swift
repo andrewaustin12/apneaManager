@@ -10,7 +10,7 @@ import Charts
 
 
 
-struct HistoryChartView: View {
+struct HistoryBreathHoldChartView: View {
     var sessions: [Session]
     @State private var selectedTimeScale: TimeScale = .total
     @Environment(\.colorScheme) var colorScheme

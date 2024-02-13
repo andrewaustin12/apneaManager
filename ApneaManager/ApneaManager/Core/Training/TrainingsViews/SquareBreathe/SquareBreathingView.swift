@@ -1,4 +1,5 @@
 import SwiftUI
+import AudioToolbox
 
 struct SquareBreathingView: View {
     // Model state
@@ -190,6 +191,11 @@ struct SquareBreathingView: View {
             guard let startTime = self.startTime else { return }
             
             let elapsedTime = Date().timeIntervalSince(startTime)
+            let timeLeft = self.totalDuration - Int(elapsedTime)
+            
+            let enableMinuteNotification = UserDefaults.standard.bool(forKey: UserDefaults.Keys.isMinuteNotificationChecked)
+            let enable10SecondsNotification = UserDefaults.standard.bool(forKey: UserDefaults.Keys.is10SecondsNotificationChecked)
+            
             if elapsedTime >= Double(self.totalDuration) {
                 self.stopBreathingExercise() // Automatically stop if total duration reached
                 showAlert = true
@@ -197,6 +203,20 @@ struct SquareBreathingView: View {
             }
             
             self.timeRemaining -= 1
+            
+            // Minute Notification is one ding
+            if enableMinuteNotification && timeLeft % 60 == 0 && timeLeft != self.totalDuration && timeLeft > 10 {
+                AudioServicesPlaySystemSound(1052) // Adjust sound ID accordingly
+            }
+            
+            // 10 Seconds Notification is two
+            if enable10SecondsNotification && timeLeft == 10 {
+                AudioServicesPlaySystemSound(1052) // Play twice for two dings
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                    AudioServicesPlaySystemSound(1052)
+                }
+            }
+            
             if self.timeRemaining <= 0 {
                 self.currentPhaseIndex += 1
                 if self.currentPhaseIndex >= self.phases.count {

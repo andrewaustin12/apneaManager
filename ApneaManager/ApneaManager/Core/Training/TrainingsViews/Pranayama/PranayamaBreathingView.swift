@@ -6,6 +6,8 @@
 //
 
 import SwiftUI
+import AudioToolbox
+
 
 struct PranayamaBreathingView: View {
     // Model state
@@ -199,11 +201,16 @@ struct PranayamaBreathingView: View {
     private func moveToNextPhase() {
         if startTime == nil { startTime = Date() } // Start the timer if not already started
         
+        let enableMinuteNotification = UserDefaults.standard.bool(forKey: "isMinuteNotificationChecked")
+        let enable10SecondsNotification = UserDefaults.standard.bool(forKey: "is10SecondsNotificationChecked")
+        
         phase = phases[currentPhaseIndex % phases.count]
         timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
             guard let startTime = self.startTime else { return }
             
             let elapsedTime = Date().timeIntervalSince(startTime)
+            let timeLeft = self.totalDuration - Int(elapsedTime)
+            
             if elapsedTime >= Double(self.totalDuration) {
                 self.stopBreathingExercise() // Automatically stop if total duration reached
                 showAlert = true
@@ -211,6 +218,20 @@ struct PranayamaBreathingView: View {
             }
             
             self.timeRemaining -= 1
+            
+            // Minute Notification
+            if enableMinuteNotification && timeLeft % 60 == 0 && timeLeft != self.totalDuration && timeLeft > 10 {
+                AudioServicesPlaySystemSound(1052) // Adjust sound ID accordingly
+            }
+            
+            // 10 Seconds Notification
+            if enable10SecondsNotification && timeLeft == 10 {
+                AudioServicesPlaySystemSound(1052) // Play twice for two dings
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                    AudioServicesPlaySystemSound(1052)
+                }
+            }
+            
             if self.timeRemaining <= 0 {
                 self.currentPhaseIndex += 1
                 if self.currentPhaseIndex >= self.phases.count {
