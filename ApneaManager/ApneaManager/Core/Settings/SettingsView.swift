@@ -7,6 +7,8 @@
 
 import SwiftUI
 import WishKit
+import RevenueCat
+import RevenueCatUI
 
 struct SettingsView: View {
     @Environment(\.colorScheme) var colorScheme // Detect the color scheme
@@ -14,6 +16,8 @@ struct SettingsView: View {
     @State var isPreBreatheChecked: Bool = false
     @State var isVibrationChecked: Bool = false
     @State var isAudioGuidanceChecked: Bool = false
+    @State private var isProUser: Bool = false
+    @State private var showingProAlert = false
     
     var body: some View {
         NavigationStack {
@@ -23,11 +27,12 @@ struct SettingsView: View {
                     .fontWeight(.bold) // Make the title bold
                     //.foregroundColor(colorScheme == .light ? .black : .white) // Change the text color
                     .padding(.bottom, 10)
-                VStack {
-                    UpgradeCardView(image: "freediver-3", title: "Upgrade to pro", buttonLabel: "Learn more")
+                if !isProUser {
+                    VStack {
+                        UpgradeCardView(image: "freediver-3", title: "Upgrade to pro", buttonLabel: "Learn more")
+                    }
+                    .padding(.bottom)
                 }
-                
-                .padding(.bottom)
             }
             .frame(maxWidth: .infinity)
             .background(.ultraThinMaterial)
@@ -57,21 +62,72 @@ struct SettingsView: View {
 //                    }
                     
                     /// IF is not a PRO user DISABLE
-                    Section{
+                    Section {
                         HStack {
                             Label("Theme", systemImage: "paintpalette")
                             Spacer()
-                            NavigationLink(destination: ThemePicker()) {
+
+                            if isProUser {
+                                NavigationLink(destination: ThemePicker()) {
+                                    EmptyView() // Use an EmptyView to not manually add an arrow.
+                                }
+                                .frame(width: 0, height: 0) // Make the NavigationLink invisible.
+                                .opacity(0) // Fully transparent.
+
+                                // Optionally, explicitly show an arrow if you want it to match other designs or have custom styling.
+                                Image(systemName: "chevron.right")
+                                    .foregroundColor(Color(.systemGray4))
+                            } else {
+                                Image(systemName: "lock.fill")
+                                    .foregroundColor(Color(.systemGray))
+                                    .onTapGesture {
+                                        // Show alert or action to encourage upgrading to Pro
+                                        showingProAlert = true
+                                    }
                             }
                         }
-                        NavigationLink(destination: TrainingRemindersView()) {
-                            Label("Training Reminders", systemImage: "bell.badge")
-                        }
-                        NavigationLink(destination: TimerNotificationView()) {
-                            Label("Timer Notifications", systemImage: "bell")
+
+
+
+                        
+                        if isProUser {
+                            NavigationLink(destination: TrainingRemindersView()) {
+                                Label("Training Reminders", systemImage: "bell.badge")
+                            }
+                            NavigationLink(destination: TimerNotificationView()) {
+                                Label("Timer Notifications", systemImage: "bell")
+                            }
+                        } else {
+                            HStack {
+                                Label("Training Reminders", systemImage: "bell.badge")
+                                Spacer()
+                                Image(systemName: "lock.fill")
+                                    .foregroundColor(Color(.systemGray))
+                            }
+                            .onTapGesture {
+                                // Show alert or action to encourage upgrading to Pro
+                                showingProAlert = true
+                            }
+                            HStack {
+                                Label("Timer Notifications", systemImage: "bell")
+                                Spacer()
+                                Image(systemName: "lock.fill")
+                                    .foregroundColor(Color(.systemGray))
+                            }
+                            .onTapGesture {
+                                // Show alert or action to encourage upgrading to Pro
+                                showingProAlert = true
+                            }
                         }
                     } header: {
                         Text("Pro Settings")
+                    }
+                    .alert(isPresented: $showingProAlert) {
+                        Alert(
+                            title: Text("Pro Feature"),
+                            message: Text("This feature is available for Pro users only."),
+                            dismissButton: .default(Text("OK"))
+                        )
                     }
                     
                     
@@ -107,8 +163,6 @@ struct SettingsView: View {
                         .onTapGesture {
                             openAppStoreForRating()
                         }
-                        
-                        
                     }
                 }
                 .listStyle(PlainListStyle())
@@ -118,9 +172,23 @@ struct SettingsView: View {
             
             /// IF user is upgraded to PRO this should not show. wrap the whole view in an IF ELSE statement.
             .navigationBarHidden(true)
+            .onAppear {
+                checkProStatus()
+            }
         }
     }
     
+    private func checkProStatus() {
+        // Check the subscription status with RevenueCat
+        Purchases.shared.getCustomerInfo { (purchaserInfo, error) in
+            if let purchaserInfo = purchaserInfo {
+                // Assuming "Pro" is your entitlement identifier on RevenueCat change Pro to No to test
+                self.isProUser = purchaserInfo.entitlements["Pro"]?.isActive == true
+            } else if let error = error {
+                print("Error fetching purchaser info: \(error)")
+            }
+        }
+    }
 }
 
 

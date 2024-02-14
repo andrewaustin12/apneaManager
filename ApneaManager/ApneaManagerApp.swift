@@ -6,10 +6,12 @@
 //
 
 import SwiftUI
-import WishKit
 import SwiftData
+import WishKit
 import StoreKit
 import HealthKit
+import RevenueCat
+import RevenueCatUI
 
 @main
 struct ApneaManagerApp: App {
@@ -32,6 +34,7 @@ struct ApneaManagerApp: App {
                 .environmentObject(store)
                 .environmentObject(healthKitManager)
                 .accentColor(selectedTheme.mainColor) // Applying the main color of the selected theme as the accent color of the app.
+                
         }
         
     }
@@ -42,6 +45,9 @@ struct ApneaManagerApp: App {
         WishKit.theme.primaryColor = .accentColor
         WishKit.config.buttons.addButton.textColor = .setBoth(to: .white)
         WishKit.config.buttons.saveButton.textColor = .setBoth(to: .white)
+        
+        /// RevenueCat
+        Purchases.configure(withAPIKey: "appl_ByZIIVEeQyrtAvjeKUflGkyECho")
         
         let schema = Schema([TrainingReminder.self ,Session.self])
         let config = ModelConfiguration("ApneaManager", schema: schema)

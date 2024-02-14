@@ -1,6 +1,15 @@
 {
   "pins" : [
     {
+      "identity" : "purchases-ios",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/RevenueCat/purchases-ios.git",
+      "state" : {
+        "revision" : "cea42913621e7797b6d13dd9797df358bf090189",
+        "version" : "4.36.2"
+      }
+    },
+    {
       "identity" : "wishkit-ios",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/wishkit/wishkit-ios.git",

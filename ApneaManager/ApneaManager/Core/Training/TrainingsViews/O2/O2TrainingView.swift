@@ -460,8 +460,5 @@ struct O2TrainingTimerView: View {
         }
     }
     
-    
-    
-    
 }
     

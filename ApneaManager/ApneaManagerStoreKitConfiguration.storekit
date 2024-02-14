@@ -26,7 +26,7 @@
       "localizations" : [
         {
           "description" : "Buy your developer a donut 🍩",
-          "displayName" : "Small",
+          "displayName" : "Small Tip",
           "locale" : "en_US"
         }
       ],
@@ -116,7 +116,73 @@
     ]
   },
   "subscriptionGroups" : [
+    {
+      "id" : "18FF453B",
+      "localizations" : [
 
+      ],
+      "name" : "Apnea Manager Pro",
+      "subscriptions" : [
+        {
+          "adHocOffers" : [
+
+          ],
+          "codeOffers" : [
+
+          ],
+          "displayPrice" : "3.99",
+          "familyShareable" : false,
+          "groupNumber" : 1,
+          "internalID" : "1A809C39",
+          "introductoryOffer" : {
+            "displayPrice" : "0.99",
+            "internalID" : "C3C5E178",
+            "paymentMode" : "none"
+          },
+          "localizations" : [
+            {
+              "description" : "Pro access unlocks all features",
+              "displayName" : "Monthly Subscription",
+              "locale" : "en_US"
+            }
+          ],
+          "productID" : "com.andy.ApneaManager.monthlySubscription",
+          "recurringSubscriptionPeriod" : "P1M",
+          "referenceName" : "Monthly Subscription",
+          "subscriptionGroupID" : "18FF453B",
+          "type" : "RecurringSubscription"
+        },
+        {
+          "adHocOffers" : [
+
+          ],
+          "codeOffers" : [
+
+          ],
+          "displayPrice" : "14.99",
+          "familyShareable" : false,
+          "groupNumber" : 1,
+          "internalID" : "1A04CCFD",
+          "introductoryOffer" : {
+            "internalID" : "A8DCF0F2",
+            "paymentMode" : "free",
+            "subscriptionPeriod" : "P1W"
+          },
+          "localizations" : [
+            {
+              "description" : "Pro access unlocks all features",
+              "displayName" : "Annual Subscription",
+              "locale" : "en_US"
+            }
+          ],
+          "productID" : "com.andy.ApneaManager.annualSubscription",
+          "recurringSubscriptionPeriod" : "P1M",
+          "referenceName" : "Annual Subscription",
+          "subscriptionGroupID" : "18FF453B",
+          "type" : "RecurringSubscription"
+        }
+      ]
+    }
   ],
   "version" : {
     "major" : 3,

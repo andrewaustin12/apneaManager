@@ -69,6 +69,9 @@
 		3FAE0AC52B724E1000FB0110 /* TrainingReminderDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FAE0AC42B724E1000FB0110 /* TrainingReminderDetailView.swift */; };
 		3FAE0AC82B724E7000FB0110 /* NotificationHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FAE0AC72B724E7000FB0110 /* NotificationHandler.swift */; };
 		3FAE0ACB2B73A19700FB0110 /* HealthKitHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FAE0ACA2B73A19700FB0110 /* HealthKitHandler.swift */; };
+		3FD701982B7BA38100617DA5 /* RevenueCat in Frameworks */ = {isa = PBXBuildFile; productRef = 3FD701972B7BA38100617DA5 /* RevenueCat */; };
+		3FD7019A2B7BA38100617DA5 /* RevenueCatUI in Frameworks */ = {isa = PBXBuildFile; productRef = 3FD701992B7BA38100617DA5 /* RevenueCatUI */; };
+		3FD7019C2B7C018C00617DA5 /* StoreKitTestCertificate.cer in Resources */ = {isa = PBXBuildFile; fileRef = 3FD7019B2B7C018C00617DA5 /* StoreKitTestCertificate.cer */; };
 		3FDB89DA2B57D0B300DF0C51 /* TipStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FDB89D92B57D0B300DF0C51 /* TipStore.swift */; };
 		3FDB89DC2B57D0FA00DF0C51 /* TipsButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FDB89DB2B57D0FA00DF0C51 /* TipsButtonView.swift */; };
 		3FDB89DE2B57D11700DF0C51 /* TipsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FDB89DD2B57D11700DF0C51 /* TipsView.swift */; };
@@ -158,6 +161,7 @@
 		3FAE0AC72B724E7000FB0110 /* NotificationHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationHandler.swift; sourceTree = "<group>"; };
 		3FAE0AC92B73A04200FB0110 /* ApneaManager.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ApneaManager.entitlements; sourceTree = "<group>"; };
 		3FAE0ACA2B73A19700FB0110 /* HealthKitHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthKitHandler.swift; sourceTree = "<group>"; };
+		3FD7019B2B7C018C00617DA5 /* StoreKitTestCertificate.cer */ = {isa = PBXFileReference; lastKnownFileType = file; path = StoreKitTestCertificate.cer; sourceTree = "<group>"; };
 		3FDB89D92B57D0B300DF0C51 /* TipStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TipStore.swift; sourceTree = "<group>"; };
 		3FDB89DB2B57D0FA00DF0C51 /* TipsButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TipsButtonView.swift; sourceTree = "<group>"; };
 		3FDB89DD2B57D11700DF0C51 /* TipsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TipsView.swift; sourceTree = "<group>"; };
@@ -188,8 +192,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3FD701982B7BA38100617DA5 /* RevenueCat in Frameworks */,
 				3F23F2012B73CB81003FBC64 /* HealthKit.framework in Frameworks */,
 				3F53EA302B4AEAED00E821BC /* WishKit in Frameworks */,
+				3FD7019A2B7BA38100617DA5 /* RevenueCatUI in Frameworks */,
 				3FDB89EA2B57D9CC00DF0C51 /* StoreKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -230,6 +236,7 @@
 				3FEC43E32B4ED95700C262E5 /* Coffee_Shop_Cup.scn */,
 				3F53E9CE2B470D8400E821BC /* ApneaManagerApp.swift */,
 				3FDB89E52B57D27200DF0C51 /* ApneaManagerStoreKitConfiguration.storekit */,
+				3FD7019B2B7C018C00617DA5 /* StoreKitTestCertificate.cer */,
 				3F53E9CD2B470D8400E821BC /* ApneaManager */,
 				3F53E9CC2B470D8400E821BC /* Products */,
 				3FDB89E82B57D9CC00DF0C51 /* Frameworks */,
@@ -596,6 +603,8 @@
 			name = ApneaManager;
 			packageProductDependencies = (
 				3F53EA2F2B4AEAED00E821BC /* WishKit */,
+				3FD701972B7BA38100617DA5 /* RevenueCat */,
+				3FD701992B7BA38100617DA5 /* RevenueCatUI */,
 			);
 			productName = ApneaManager;
 			productReference = 3F53E9CB2B470D8400E821BC /* ApneaManager.app */;
@@ -627,6 +636,7 @@
 			mainGroup = 3F53E9C22B470D8400E821BC;
 			packageReferences = (
 				3F53EA2E2B4AEAED00E821BC /* XCRemoteSwiftPackageReference "wishkit-ios" */,
+				3FD701962B7BA38100617DA5 /* XCRemoteSwiftPackageReference "purchases-ios" */,
 			);
 			productRefGroup = 3F53E9CC2B470D8400E821BC /* Products */;
 			projectDirPath = "";
@@ -645,6 +655,7 @@
 				3F53E9D62B470D8500E821BC /* Preview Assets.xcassets in Resources */,
 				3FEC43E42B4ED95700C262E5 /* Coffee_Shop_Cup.scn in Resources */,
 				3F53E9D32B470D8500E821BC /* Assets.xcassets in Resources */,
+				3FD7019C2B7C018C00617DA5 /* StoreKitTestCertificate.cer in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -958,6 +969,14 @@
 				minimumVersion = 4.0.5;
 			};
 		};
+		3FD701962B7BA38100617DA5 /* XCRemoteSwiftPackageReference "purchases-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/RevenueCat/purchases-ios.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 4.36.2;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -965,6 +984,16 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 3F53EA2E2B4AEAED00E821BC /* XCRemoteSwiftPackageReference "wishkit-ios" */;
 			productName = WishKit;
+		};
+		3FD701972B7BA38100617DA5 /* RevenueCat */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 3FD701962B7BA38100617DA5 /* XCRemoteSwiftPackageReference "purchases-ios" */;
+			productName = RevenueCat;
+		};
+		3FD701992B7BA38100617DA5 /* RevenueCatUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 3FD701962B7BA38100617DA5 /* XCRemoteSwiftPackageReference "purchases-ios" */;
+			productName = RevenueCatUI;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

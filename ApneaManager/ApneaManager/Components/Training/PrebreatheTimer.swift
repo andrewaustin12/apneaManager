@@ -94,8 +94,12 @@ struct PrebreatheTimer: View {
             // Only reset if timer starts
             self.elapsedTime = self.maxTime
         } else {
+
             // Save session upon stopping
             saveSession(duration: Int(maxTime - elapsedTime))
+            // If the timer is stopping, reset the timer for next session
+                   elapsedTime = maxTime // Ensure this is the chosen duration
+                   progress = 0 // Reset progress
         }
     }
     

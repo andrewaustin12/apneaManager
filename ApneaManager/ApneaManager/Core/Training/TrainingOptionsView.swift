@@ -7,7 +7,7 @@
 
 import SwiftUI
 import SwiftData
-
+import RevenueCatUI
 
 struct TrainingOptionsView: View {
     @Environment(\.modelContext) private var context
@@ -234,6 +234,7 @@ struct TrainingOptionsView: View {
                 .scrollIndicators(.hidden)
             }
             .navigationTitle("Training")
+            //.presentPaywallIfNeeded(requiredEntitlementIdentifier: "Pro")
         }
     }
     
