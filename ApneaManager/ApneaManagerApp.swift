@@ -34,7 +34,7 @@ struct ApneaManagerApp: App {
                 .environmentObject(store)
                 .environmentObject(healthKitManager)
                 .accentColor(selectedTheme.mainColor) // Applying the main color of the selected theme as the accent color of the app.
-                
+                .environmentObject(SubscriptionManager.shared)
         }
         
     }

@@ -4,13 +4,20 @@ import RevenueCat
 import RevenueCatUI
 
 
+enum ActiveAlert: Identifiable {
+    case proFeature, proFeature2, proFeature3
+
+    var id: Self { self }
+}
+
 struct HistoryView: View {
     @Environment(\.modelContext) private var context
     @Environment(\.selectedTheme) var theme: Theme
+    @EnvironmentObject var subscriptionManager: SubscriptionManager
     @Query(sort: \Session.date) var sessions: [Session]
     @State private var isBreathHoldChartExpanded: Bool = true
     @State private var isOverallSessionsChartExpanded: Bool = true
-    @State private var showingProAlert = false
+    
     /// Default filter
     @State private var selectedFilter: SessionFilter = .all
     @State private var selectedSection: ViewSection = .sessionHistory
@@ -18,6 +25,9 @@ struct HistoryView: View {
     /// Pro state
     @State private var isProUser: Bool = false
     
+    /// Alerts
+    @State private var activeAlert: ActiveAlert?
+
     /// Sessions Picker Options
     enum SessionFilter: String, CaseIterable, Identifiable {
         case all = "All Sessions"
@@ -72,13 +82,13 @@ struct HistoryView: View {
         }
         
         // Finally, if the user is not a pro user, limit the array to the last 5 sessions.
-        return isProUser ? sortedSessions : Array(sortedSessions.prefix(5))
+        return subscriptionManager.isProUser ? sortedSessions : Array(sortedSessions.prefix(5))
     }
     
     var body: some View {
         NavigationStack {
             VStack {
-                if !isProUser {
+                if !subscriptionManager.isProUser {
                     upgradeCardSection
                 }
                 Picker("Select View", selection: customPickerBinding) {
@@ -93,6 +103,7 @@ struct HistoryView: View {
                     filterAndSortingPicker
                     
                     sessionCountView(filteredSessions: filteredAndSortedSessions)
+                    
                     List {
                         sessionList(filteredSessions: filteredAndSortedSessions)
                     }
@@ -116,16 +127,34 @@ struct HistoryView: View {
             }
         }
         .navigationTitle("History")
-        .onAppear {
-            checkProStatus()
+//        .onAppear {
+//            checkProStatus()
+//        }
+        .alert(item: $activeAlert) { activeAlert in
+            switch activeAlert {
+            case .proFeature:
+                return Alert(
+                    title: Text("Pro Feature"),
+                    message: Text("Charts are available for Pro users only."),
+                    dismissButton: .default(Text("OK"))
+                )
+            case .proFeature2:
+                return Alert(
+                    title: Text("Pro Feature"),
+                    message: Text("Filtering sessions by type is available for Pro users only."),
+                    dismissButton: .default(Text("OK"))
+                )
+            case .proFeature3:
+                return Alert(
+                    title: Text("Pro Feature"),
+                    message: Text("Unlimited history and session history details is available for Pro users only."),
+                    dismissButton: .default(Text("OK"))
+                )
+                
+            }
+            
         }
-        .alert(isPresented: $showingProAlert) {
-            Alert(
-                title: Text("Pro Feature"),
-                message: Text("This session type is available for Pro users only."),
-                dismissButton: .default(Text("OK"))
-            )
-        }
+
     }
     /// Upgrade to pro card
     @ViewBuilder
@@ -159,7 +188,7 @@ struct HistoryView: View {
     @ViewBuilder
     private var filterAndSortingPicker: some View {
         HStack {
-            if isProUser {
+            if subscriptionManager.isProUser {
                 Menu {
                     ForEach(SessionFilter.allCases, id: \.self) { filter in
                         Button(filter.rawValue) {
@@ -173,7 +202,7 @@ struct HistoryView: View {
                 filterLabel
                     .onTapGesture {
                         // Optionally show an alert or disable interaction
-                        showingProAlert = true
+                        activeAlert = .proFeature2
                     }
             }
             
@@ -188,13 +217,7 @@ struct HistoryView: View {
         }
         .padding(.horizontal)
         .padding(.vertical, 5)
-        .alert(isPresented: $showingProAlert) {
-            Alert(
-                title: Text("Pro Feature"),
-                message: Text("Filtering sessions by type is available for Pro users only."),
-                dismissButton: .default(Text("OK"))
-            )
-        }
+        
     }
     
     /// Filter for session type
@@ -215,8 +238,8 @@ struct HistoryView: View {
             // Example logic to restrict certain filters to pro users
             switch filter {
             case .O2Table, .Co2Table:
-                if !isProUser {
-                    showingProAlert = true
+                if !subscriptionManager.isProUser {
+                    activeAlert = .proFeature2
                     // Do not change the filter; Optionally, guide them to upgrade
                     return
                 }
@@ -243,29 +266,52 @@ struct HistoryView: View {
     @ViewBuilder
     private func sessionList(filteredSessions: [Session]) -> some View {
         ForEach(filteredSessions) { session in
-            NavigationLink(destination: SessionHistoryDetailView(session: session)) {
-                HStack {
-                    TrainingHistoryCardView(image: session.image, title: session.sessionType.rawValue, date: session.date, duration: Double(session.duration))
-                        .foregroundColor(.primary) // Ensure text color remains black
-
+            if subscriptionManager.isProUser {
+                NavigationLink(destination: SessionHistoryDetailView(session: session)) {
+                    sessionRow(session)
                 }
-                .swipeActions{
-                    Button("Delete", role: .destructive) {
-                        context.delete(session)
+            } else {
+                sessionRow(session)
+                    .onTapGesture {
+                        // Optionally show an alert or some other indication that this is a Pro feature
+                        activeAlert = .proFeature3
                     }
+            }
+        }
+    }
+
+    @ViewBuilder
+    private func sessionRow(_ session: Session) -> some View {
+        HStack {
+            TrainingHistoryCardView(image: session.image, title: session.sessionType.rawValue, date: session.date, duration: Double(session.duration))
+                .foregroundColor(.primary) // Ensure text color remains black
+            
+            if subscriptionManager.isProUser {
+                Image(systemName: "chevron.right")
+                    .foregroundColor(Color(.systemGray4))
+            } else {
+                Image(systemName: "lock.fill")
+                    .foregroundColor(Color(.systemGray))
+            }
+        }
+        .swipeActions {
+            if subscriptionManager.isProUser {
+                Button("Delete", role: .destructive) {
+                    context.delete(session)
                 }
             }
         }
     }
+
     
     /// disables charts if not Pro user
     private var customPickerBinding: Binding<ViewSection> {
         Binding(
             get: { self.selectedSection },
             set: {
-                if $0 == .charts && !isProUser {
+                if $0 == .charts && !subscriptionManager.isProUser {
                     // Prevent changing to Charts if the user is not a pro user
-                    showingProAlert = true
+                    activeAlert = .proFeature
                 } else {
                     self.selectedSection = $0
                 }
@@ -274,15 +320,15 @@ struct HistoryView: View {
     }
 
     /// checks the status of the user onAppear
-    private func checkProStatus() {
-        // Check the subscription status with RevenueCat
-        Purchases.shared.getCustomerInfo { (purchaserInfo, error) in
-            if let purchaserInfo = purchaserInfo {
-                // Assuming "Pro" is your entitlement identifier on RevenueCat change Pro to No to test
-                self.isProUser = purchaserInfo.entitlements["Pro"]?.isActive == true
-            } else if let error = error {
-                print("Error fetching purchaser info: \(error)")
-            }
-        }
-    }
+//    private func checkProStatus() {
+//        // Check the subscription status with RevenueCat
+//        Purchases.shared.getCustomerInfo { (purchaserInfo, error) in
+//            if let purchaserInfo = purchaserInfo {
+//                // Assuming "Pro" is your entitlement identifier on RevenueCat change Pro to No to test
+//                self.isProUser = purchaserInfo.entitlements["Pro"]?.isActive == true
+//            } else if let error = error {
+//                print("Error fetching purchaser info: \(error)")
+//            }
+//        }
+//    }
 }

@@ -7,15 +7,22 @@
 
 import SwiftUI
 import SwiftData
+import RevenueCat
 import RevenueCatUI
+
 
 struct TrainingOptionsView: View {
     @Environment(\.modelContext) private var context
+    @EnvironmentObject var subscriptionManager: SubscriptionManager
     @Query var sessions: [Session]
     //@State var session: Session
     @State private var allSessions: [Session] = []
     @State private var personalBestDuration: String = "N/A"
     @State private var dragOffset: CGFloat = 0
+    
+    @State private var navigateToSquareBreathing = false
+    @State private var isProUser: Bool = false
+    @State private var showPaywall = false
     
     let theme: Theme
     
@@ -69,14 +76,14 @@ struct TrainingOptionsView: View {
     
     /// Formats the time into 4m 32s
     private func formattedDuration(seconds: Double) -> String {
-            if seconds < 60 {
-                return "\(Int(seconds))s" // Just seconds
-            } else {
-                let minutes = Int(seconds) / 60
-                let remainingSeconds = Int(seconds) % 60
-                return "\(minutes)m \(remainingSeconds)s" // Minutes and seconds
-            }
+        if seconds < 60 {
+            return "\(Int(seconds))s" // Just seconds
+        } else {
+            let minutes = Int(seconds) / 60
+            let remainingSeconds = Int(seconds) % 60
+            return "\(minutes)m \(remainingSeconds)s" // Minutes and seconds
         }
+    }
     
     var body: some View {
         NavigationStack {
@@ -121,24 +128,55 @@ struct TrainingOptionsView: View {
                                 )
                             }
                             
-                            NavigationLink(destination: SquareBreathingView(theme: theme)) {
+                            if subscriptionManager.isProUser {
+                                NavigationLink(destination: SquareBreathingView(theme: theme)) {
+                                    TrainingCardView(
+                                        image: "freediver-7",
+                                        title: "Square Table",
+                                        subHeading: "4 Cycles | 5 min",
+                                        description: "Begin with 5-10 minutes of square breathing to prepare for the breath-hold exercises."
+                                    )
+                                }
+                            } else {
                                 TrainingCardView(
                                     image: "freediver-7",
                                     title: "Square Table",
                                     subHeading: "4 Cycles | 5 min",
                                     description: "Begin with 5-10 minutes of square breathing to prepare for the breath-hold exercises."
                                 )
+                                .onTapGesture {
+                                    showPaywall = true
+                                }
                             }
                             
-                            NavigationLink(destination: PranayamaBreathingView(theme: theme)) {
+//                            NavigationLink(destination: PranayamaBreathingView(theme: theme)) {
+//                                TrainingCardView(
+//                                    image: "pranayama-2",
+//                                    title: "Pranayama Breath",
+//                                    subHeading: "4 Cycles | 5 min",
+//                                    description: "Begin with 5-10 minutes of alternate nose breathing to relax."
+//                                )
+//                            }
+                            if subscriptionManager.isProUser {
+                                NavigationLink(destination: PranayamaBreathingView(theme: theme)) {
+                                    TrainingCardView(
+                                        image: "pranayama-2",
+                                        title: "Pranayama Breath",
+                                        subHeading: "4 Cycles | 5 min",
+                                        description: "Begin with 5-10 minutes of alternate nose breathing to relax."
+                                    )
+                                }
+                            } else {
                                 TrainingCardView(
                                     image: "pranayama-2",
                                     title: "Pranayama Breath",
                                     subHeading: "4 Cycles | 5 min",
                                     description: "Begin with 5-10 minutes of alternate nose breathing to relax."
                                 )
+                                .onTapGesture {
+                                    showPaywall = true
+                                }
                             }
-                            
                         }
                         //.padding(.leading)
                         .offset(x: self.dragOffset, y: 0)
@@ -220,8 +258,8 @@ struct TrainingOptionsView: View {
                         if let mostRecentPranayamaBreathe = mostRecentPranayamaBreathe {
                             TrainingLastSessionCard(image: "pranayama-2", sessionType: "Pranayama Breathe", duration: mostRecentPranayamaBreathe.duration)
                         }
-                    
-                } else {
+                        
+                    } else {
                         ContentUnavailableView(label: {
                             Label("No Training Session", systemImage: "list.bullet.rectangle.portrait")
                         }, description: {
@@ -234,7 +272,9 @@ struct TrainingOptionsView: View {
                 .scrollIndicators(.hidden)
             }
             .navigationTitle("Training")
-            //.presentPaywallIfNeeded(requiredEntitlementIdentifier: "Pro")
+            .sheet(isPresented: $showPaywall, content: {
+                PaywallView(displayCloseButton: true)
+            })
         }
     }
     

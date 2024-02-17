@@ -154,7 +154,6 @@ struct O2TrainingView: View {
         return cycles
     }
 
-    
     private func regenerateO2Table() {
         if let personalBest = longestBreathHoldDuration {
             o2Table = createO2Table(personalBest: personalBest)
@@ -162,7 +161,6 @@ struct O2TrainingView: View {
         }
     }
 
-    
     func endO2TrainingSession() {
         // Ensure that there is data to save
         guard !o2Table.isEmpty else { return }
@@ -206,8 +204,6 @@ struct O2TrainingView: View {
         context.insert(newSession)
         print("Training session saved with duration: \(duration) and table data for \(sessionType.rawValue): \(String(describing: jsonString)).")
     }
-
-
 
 }
     

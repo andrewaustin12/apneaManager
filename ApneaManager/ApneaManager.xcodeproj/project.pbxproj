@@ -72,6 +72,7 @@
 		3FD701982B7BA38100617DA5 /* RevenueCat in Frameworks */ = {isa = PBXBuildFile; productRef = 3FD701972B7BA38100617DA5 /* RevenueCat */; };
 		3FD7019A2B7BA38100617DA5 /* RevenueCatUI in Frameworks */ = {isa = PBXBuildFile; productRef = 3FD701992B7BA38100617DA5 /* RevenueCatUI */; };
 		3FD7019C2B7C018C00617DA5 /* StoreKitTestCertificate.cer in Resources */ = {isa = PBXBuildFile; fileRef = 3FD7019B2B7C018C00617DA5 /* StoreKitTestCertificate.cer */; };
+		3FD7019F2B80FFF700617DA5 /* SubscriptionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FD7019E2B80FFF700617DA5 /* SubscriptionManager.swift */; };
 		3FDB89DA2B57D0B300DF0C51 /* TipStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FDB89D92B57D0B300DF0C51 /* TipStore.swift */; };
 		3FDB89DC2B57D0FA00DF0C51 /* TipsButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FDB89DB2B57D0FA00DF0C51 /* TipsButtonView.swift */; };
 		3FDB89DE2B57D11700DF0C51 /* TipsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FDB89DD2B57D11700DF0C51 /* TipsView.swift */; };
@@ -162,6 +163,7 @@
 		3FAE0AC92B73A04200FB0110 /* ApneaManager.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ApneaManager.entitlements; sourceTree = "<group>"; };
 		3FAE0ACA2B73A19700FB0110 /* HealthKitHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthKitHandler.swift; sourceTree = "<group>"; };
 		3FD7019B2B7C018C00617DA5 /* StoreKitTestCertificate.cer */ = {isa = PBXFileReference; lastKnownFileType = file; path = StoreKitTestCertificate.cer; sourceTree = "<group>"; };
+		3FD7019E2B80FFF700617DA5 /* SubscriptionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionManager.swift; sourceTree = "<group>"; };
 		3FDB89D92B57D0B300DF0C51 /* TipStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TipStore.swift; sourceTree = "<group>"; };
 		3FDB89DB2B57D0FA00DF0C51 /* TipsButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TipsButtonView.swift; sourceTree = "<group>"; };
 		3FDB89DD2B57D11700DF0C51 /* TipsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TipsView.swift; sourceTree = "<group>"; };
@@ -354,8 +356,8 @@
 			children = (
 				3F69B6B02B4D93ED00BC9222 /* BreathHold */,
 				3F69B6B12B4D93FA00BC9222 /* PreBreathe */,
-				3F69B6AF2B4D93B800BC9222 /* O2 */,
 				3F69B6AE2B4D93A200BC9222 /* CO2 */,
+				3F69B6AF2B4D93B800BC9222 /* O2 */,
 				3F69B6B22B4D940A00BC9222 /* SquareBreathe */,
 				3F69B6B32B4D941F00BC9222 /* Pranayama */,
 			);
@@ -494,6 +496,14 @@
 			path = Handlers;
 			sourceTree = "<group>";
 		};
+		3FD7019D2B80FFE600617DA5 /* SubscriptionManager */ = {
+			isa = PBXGroup;
+			children = (
+				3FD7019E2B80FFF700617DA5 /* SubscriptionManager.swift */,
+			);
+			path = SubscriptionManager;
+			sourceTree = "<group>";
+		};
 		3FDB89D82B57D09100DF0C51 /* StoreKit */ = {
 			isa = PBXGroup;
 			children = (
@@ -558,6 +568,7 @@
 		3FDB89FB2B597DFB00DF0C51 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				3FD7019D2B80FFE600617DA5 /* SubscriptionManager */,
 				3F23F2092B77D382003FBC64 /* UserDefaults */,
 				3F53E9E92B47219E00E821BC /* Models */,
 				3FAE0AC62B724E5D00FB0110 /* Handlers */,
@@ -716,6 +727,7 @@
 				3F53EA242B4ACF6600E821BC /* TrainingHeaderView.swift in Sources */,
 				3F53EA102B4AC10F00E821BC /* SquareBreathingView.swift in Sources */,
 				3F53EA072B4AA73000E821BC /* TrainingHistoryCardView.swift in Sources */,
+				3FD7019F2B80FFF700617DA5 /* SubscriptionManager.swift in Sources */,
 				3FDB89ED2B57EF5F00DF0C51 /* WarningView.swift in Sources */,
 				3F69B6A22B4D78A300BC9222 /* CircleProgressShape.swift in Sources */,
 				3F53EA162B4AC15B00E821BC /* PranayamaBreathingView.swift in Sources */,

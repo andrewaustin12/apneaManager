@@ -8,6 +8,7 @@ import RevenueCatUI
 
 struct O2TrainingSettingsView: View {
     @Environment(\.presentationMode) var presentationMode
+    @EnvironmentObject var subscriptionManager: SubscriptionManager
     @Binding var percentageOfPersonalBest: Double
     @Binding var restDuration: Int
     @Binding var totalRounds: Int
@@ -26,7 +27,7 @@ struct O2TrainingSettingsView: View {
                     } maximumValueLabel: {
                         Text("80%")
                     }
-                    .disabled(!isProUser)
+                    .disabled(!subscriptionManager.isProUser)
                     Text("\(Int(percentageOfPersonalBest))% of Personal Best")
                         .font(.subheadline)
                         .foregroundColor(.secondary)
@@ -34,7 +35,7 @@ struct O2TrainingSettingsView: View {
                 
                 Section(header: Text("Rest Duration")) {
                     Stepper("Initial Rest Duration: \(restDuration) sec", value: $restDuration, in: 30...240, step: 5)
-                        .disabled(!isProUser)
+                        .disabled(!subscriptionManager.isProUser)
                     Text("Amount of rest between each round")
                         .font(.subheadline)
                         .foregroundColor(.secondary)
@@ -48,7 +49,7 @@ struct O2TrainingSettingsView: View {
                     }
                     .pickerStyle(WheelPickerStyle())
                     .frame(height: 120) // Adjust the frame height to better accommodate the picker
-                    .disabled(!isProUser)
+                    .disabled(!subscriptionManager.isProUser)
                 }
 
             }
@@ -56,10 +57,10 @@ struct O2TrainingSettingsView: View {
             .navigationBarItems(trailing: Button("Done") {
                 presentationMode.wrappedValue.dismiss()
             })
-            .onAppear {
-                checkProStatus()
-            }
-            if !isProUser {
+//            .onAppear {
+//                checkProStatus()
+//            }
+            if !subscriptionManager.isProUser {
                 VStack {
                     UpgradeCardView(image: "freediver-3", title: "Upgrade to pro", buttonLabel: "Unlock")
                 }
@@ -67,17 +68,17 @@ struct O2TrainingSettingsView: View {
         }
     }
     
-    private func checkProStatus() {
-        // Check the subscription status with RevenueCat
-        Purchases.shared.getCustomerInfo { (purchaserInfo, error) in
-            if let purchaserInfo = purchaserInfo {
-                // Assuming "Pro" is your entitlement identifier on RevenueCat change Pro to No to test 
-                self.isProUser = purchaserInfo.entitlements["Pro"]?.isActive == true
-            } else if let error = error {
-                print("Error fetching purchaser info: \(error)")
-            }
-        }
-    }
+//    private func checkProStatus() {
+//        // Check the subscription status with RevenueCat
+//        Purchases.shared.getCustomerInfo { (purchaserInfo, error) in
+//            if let purchaserInfo = purchaserInfo {
+//                // Assuming "Pro" is your entitlement identifier on RevenueCat change Pro to No to test 
+//                self.isProUser = purchaserInfo.entitlements["Pro"]?.isActive == true
+//            } else if let error = error {
+//                print("Error fetching purchaser info: \(error)")
+//            }
+//        }
+//    }
 }
 
 #Preview {

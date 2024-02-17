@@ -5,6 +5,8 @@ struct SquareBreathingView: View {
     // Model state
     @Environment(\.modelContext) private var context
     
+    @State private var isUserPro: Bool = false
+    
     @State private var showingDetail = false
     @State private var showingSettingsSheet = false
     @State private var detailViewType: String = ""
@@ -147,6 +149,7 @@ struct SquareBreathingView: View {
             
         }
     }
+    
     private func toggleBreathingExercise() {
         if isExerciseActive {
             stopBreathingExercise()

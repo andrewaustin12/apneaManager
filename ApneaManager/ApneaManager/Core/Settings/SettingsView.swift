@@ -12,6 +12,7 @@ import RevenueCatUI
 
 struct SettingsView: View {
     @Environment(\.colorScheme) var colorScheme // Detect the color scheme
+    @EnvironmentObject var subscriptionManager: SubscriptionManager
     @State var userTheme: Theme
     @State var isPreBreatheChecked: Bool = false
     @State var isVibrationChecked: Bool = false
@@ -27,7 +28,7 @@ struct SettingsView: View {
                     .fontWeight(.bold) // Make the title bold
                     //.foregroundColor(colorScheme == .light ? .black : .white) // Change the text color
                     .padding(.bottom, 10)
-                if !isProUser {
+                if !subscriptionManager.isProUser {
                     VStack {
                         UpgradeCardView(image: "freediver-3", title: "Upgrade to pro", buttonLabel: "Learn more")
                     }
@@ -67,14 +68,13 @@ struct SettingsView: View {
                             Label("Theme", systemImage: "paintpalette")
                             Spacer()
 
-                            if isProUser {
+                            if subscriptionManager.isProUser {
                                 NavigationLink(destination: ThemePicker()) {
                                     EmptyView() // Use an EmptyView to not manually add an arrow.
                                 }
                                 .frame(width: 0, height: 0) // Make the NavigationLink invisible.
                                 .opacity(0) // Fully transparent.
 
-                                // Optionally, explicitly show an arrow if you want it to match other designs or have custom styling.
                                 Image(systemName: "chevron.right")
                                     .foregroundColor(Color(.systemGray4))
                             } else {
@@ -90,7 +90,7 @@ struct SettingsView: View {
 
 
                         
-                        if isProUser {
+                        if subscriptionManager.isProUser {
                             NavigationLink(destination: TrainingRemindersView()) {
                                 Label("Training Reminders", systemImage: "bell.badge")
                             }
@@ -172,23 +172,23 @@ struct SettingsView: View {
             
             /// IF user is upgraded to PRO this should not show. wrap the whole view in an IF ELSE statement.
             .navigationBarHidden(true)
-            .onAppear {
-                checkProStatus()
-            }
+//            .onAppear {
+//                checkProStatus()
+//            }
         }
     }
     
-    private func checkProStatus() {
-        // Check the subscription status with RevenueCat
-        Purchases.shared.getCustomerInfo { (purchaserInfo, error) in
-            if let purchaserInfo = purchaserInfo {
-                // Assuming "Pro" is your entitlement identifier on RevenueCat change Pro to No to test
-                self.isProUser = purchaserInfo.entitlements["Pro"]?.isActive == true
-            } else if let error = error {
-                print("Error fetching purchaser info: \(error)")
-            }
-        }
-    }
+//    private func checkProStatus() {
+//        // Check the subscription status with RevenueCat
+//        Purchases.shared.getCustomerInfo { (purchaserInfo, error) in
+//            if let purchaserInfo = purchaserInfo {
+//                // Assuming "Pro" is your entitlement identifier on RevenueCat change Pro to No to test
+//                self.isProUser = purchaserInfo.entitlements["Pro"]?.isActive == true
+//            } else if let error = error {
+//                print("Error fetching purchaser info: \(error)")
+//            }
+//        }
+//    }
 }
 
 

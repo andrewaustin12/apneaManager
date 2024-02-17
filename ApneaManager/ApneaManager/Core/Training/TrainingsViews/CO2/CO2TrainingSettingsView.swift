@@ -5,6 +5,7 @@ import RevenueCat
 
 struct CO2TrainingSettingsView: View {
     @Environment(\.presentationMode) var presentationMode
+    @EnvironmentObject var subscriptionManager: SubscriptionManager
     @Binding var percentageOfPersonalBest: Double
     @Binding var initialRestDuration: Int
     @Binding var reductionPerRound: Int
@@ -22,14 +23,14 @@ struct CO2TrainingSettingsView: View {
                         Text("20%")
                     } maximumValueLabel: {
                         Text("80%")
-                    }.disabled(!isProUser)
+                    }.disabled(!subscriptionManager.isProUser)
                     Text("\(Int(percentageOfPersonalBest))% of Personal Best")
                         .foregroundColor(.secondary)
                 }
                 
                 Section(header: Text("Rest Duration")) {
                     Stepper("\(initialRestDuration) sec", value: $initialRestDuration, in: 1...120, step: 1)
-                        .disabled(!isProUser)
+                        .disabled(!subscriptionManager.isProUser)
                     Text("Initial rest duration between holds in seconds.")
                         .font(.subheadline)
                         .foregroundColor(.secondary)
@@ -37,7 +38,7 @@ struct CO2TrainingSettingsView: View {
                 
                 Section(header: Text("Rest Reduction")) {
                     Stepper("\(reductionPerRound) sec", value: $reductionPerRound, in: 1...10)
-                        .disabled(!isProUser)
+                        .disabled(!subscriptionManager.isProUser)
                     Text("Amount of rest reduced each round in seconds.")
                         .font(.subheadline)
                         .foregroundColor(.secondary)
@@ -52,7 +53,7 @@ struct CO2TrainingSettingsView: View {
                     }
                     .pickerStyle(WheelPickerStyle())
                     .frame(height: 100) // Adjust the frame height to better accommodate the picker
-                    .disabled(!isProUser)
+                    .disabled(!subscriptionManager.isProUser)
                 }
                 
             }
@@ -61,10 +62,10 @@ struct CO2TrainingSettingsView: View {
             .navigationBarItems(trailing: Button("Done") {
                 presentationMode.wrappedValue.dismiss()
             })
-            .onAppear {
-                checkProStatus()
-            }
-            if !isProUser {
+//            .onAppear {
+//                checkProStatus()
+//            }
+            if !subscriptionManager.isProUser {
                 VStack {
                     UpgradeCardView(image: "freediver-3", title: "Upgrade to pro", buttonLabel: "Unlock")
                 }
@@ -72,17 +73,17 @@ struct CO2TrainingSettingsView: View {
         }
     }
     
-    private func checkProStatus() {
-        // Example code to check the subscription status with RevenueCat
-        Purchases.shared.getCustomerInfo { (purchaserInfo, error) in
-            if let purchaserInfo = purchaserInfo {
-                // Assuming "pro_access" is your entitlement identifier on RevenueCat
-                self.isProUser = purchaserInfo.entitlements["Pro"]?.isActive == true
-            } else if let error = error {
-                print("Error fetching purchaser info: \(error)")
-            }
-        }
-    }
+//    private func checkProStatus() {
+//        // Example code to check the subscription status with RevenueCat
+//        Purchases.shared.getCustomerInfo { (purchaserInfo, error) in
+//            if let purchaserInfo = purchaserInfo {
+//                // Assuming "pro_access" is your entitlement identifier on RevenueCat
+//                self.isProUser = purchaserInfo.entitlements["Pro"]?.isActive == true
+//            } else if let error = error {
+//                print("Error fetching purchaser info: \(error)")
+//            }
+//        }
+//    }
 }
 
 // Example usage in a parent view or preview
