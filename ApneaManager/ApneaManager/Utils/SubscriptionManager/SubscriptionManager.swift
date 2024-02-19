@@ -20,7 +20,7 @@ class SubscriptionManager: ObservableObject {
 
     func checkProStatus() {
         Purchases.shared.getCustomerInfo { [weak self] (info, error) in
-            if let entitlements = info?.entitlements, entitlements.all["Pro"]?.isActive == true {
+            if let entitlements = info?.entitlements, entitlements.all["ro"]?.isActive == true {
                 DispatchQueue.main.async {
                     self?.isProUser = true
                 }

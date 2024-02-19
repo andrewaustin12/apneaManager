@@ -20,6 +20,7 @@ struct CO2TrainingView: View {
     @State private var showingSettings = false
     @State private var currentRoundIndex = 0
     @State private var co2Table: [Cycle] = []
+    @State private var sessionCompleted = false
     
     /// Settings state
     @State var percentageOfPersonalBest: Double = 60
@@ -50,7 +51,8 @@ struct CO2TrainingView: View {
                 
                 // Display the CO2 training timer
                 CO2TrainingTimerView(co2Table: co2Table, 
-                                     currentRoundIndex: $currentRoundIndex
+                                     currentRoundIndex: $currentRoundIndex,
+                                     sessionCompleted: $sessionCompleted
                                     ) { totalDuration in
                                         saveSession(duration: totalDuration, table: co2Table, sessionType: .Co2Table)
                 }
@@ -77,6 +79,13 @@ struct CO2TrainingView: View {
                 if let personalBest = longestBreathHoldDuration {
                     co2Table = createCO2Table(personalBest: personalBest)
                 }
+            }
+            .alert(isPresented: $sessionCompleted) {
+                Alert(
+                    title: Text("Timer Complete"),
+                    message: Text("Congratulations! You've completed your CO2 training session."),
+                    dismissButton: .default(Text("OK"))
+                )
             }
             .sheet(isPresented: $showingSettings) {
                 /// Pass the bindings to the settings view
@@ -198,6 +207,11 @@ struct CO2TrainingTimerView: View {
     @State private var isActive = false
     @State private var isHoldPhase = true //changes initial start phase
     @State private var phaseTimeRemaining: CGFloat = 0
+    /// State for timer beeps
+    @State private var tenSecondSoundPlayed = false
+    @State private var lastMinuteNotificationTime: Int? = nil
+    @Binding var sessionCompleted: Bool
+
     
     var onSave: (Int) -> Void
     
@@ -296,32 +310,84 @@ struct CO2TrainingTimerView: View {
         currentRoundIndex = 0 // Reset to start from the first round
     }
     
+//    private func updateProgress() {
+//        elapsedTime += 0.05
+//        phaseTimeRemaining -= 0.05
+//        
+//        let totalPhaseTime = isHoldPhase ? CGFloat(co2Table[currentRoundIndex].hold) : CGFloat(co2Table[currentRoundIndex].rest)
+//        progress = (totalPhaseTime - phaseTimeRemaining) / totalPhaseTime
+//        
+//        let enableMinuteNotification = UserDefaults.standard.bool(forKey: UserDefaults.Keys.isMinuteNotificationChecked)
+//        let enable10SecondsNotification = UserDefaults.standard.bool(forKey: UserDefaults.Keys.is10SecondsNotificationChecked)
+//        
+//        if enableMinuteNotification && Int(phaseTimeRemaining) % 60 == 0 && phaseTimeRemaining > 10 {
+//            AudioServicesPlaySystemSound(1052) // Adjust sound ID accordingly
+//        }
+//        
+//        // Check for 10 seconds remaining using a range, considering the timer ticks every 0.05 seconds
+//        if enable10SecondsNotification && phaseTimeRemaining <= 10.05 && phaseTimeRemaining > 9.95 {
+//            AudioServicesPlaySystemSound(1052) // Play twice for two dings
+//            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+//                AudioServicesPlaySystemSound(1052)
+//            }
+//        }
+//        
+//        
+//        if phaseTimeRemaining <= 0 {
+//            totalDuration += totalPhaseTime // Add completed phase time to total duration
+//            
+//            if isHoldPhase {
+//                isHoldPhase = false
+//                elapsedTime = 0
+//                setPhaseTime()
+//            } else {
+//                isHoldPhase = true
+//                currentRoundIndex += 1
+//                if currentRoundIndex < co2Table.count {
+//                    elapsedTime = 0
+//                    setPhaseTime()
+//                } else {
+//                    // Session ends, so we call endCO2TrainingSession and reset timer
+//                    isActive = false
+//                    onSave(Int(totalDuration))
+//                    resetTimer()
+//                }
+//            }
+//        }
+//    }
     private func updateProgress() {
         elapsedTime += 0.05
         phaseTimeRemaining -= 0.05
-        
+
         let totalPhaseTime = isHoldPhase ? CGFloat(co2Table[currentRoundIndex].hold) : CGFloat(co2Table[currentRoundIndex].rest)
         progress = (totalPhaseTime - phaseTimeRemaining) / totalPhaseTime
-        
+
         let enableMinuteNotification = UserDefaults.standard.bool(forKey: UserDefaults.Keys.isMinuteNotificationChecked)
         let enable10SecondsNotification = UserDefaults.standard.bool(forKey: UserDefaults.Keys.is10SecondsNotificationChecked)
         
-        if enableMinuteNotification && Int(phaseTimeRemaining) % 60 == 0 && phaseTimeRemaining > 10 {
-            AudioServicesPlaySystemSound(1052) // Adjust sound ID accordingly
+        let timeLeft = Int(round(phaseTimeRemaining))
+        let currentMinute = timeLeft / 60
+
+        // Minute notification
+        if enableMinuteNotification && timeLeft % 60 == 0 && timeLeft > 10 && lastMinuteNotificationTime != currentMinute {
+            AudioServicesPlaySystemSound(1052) // Play sound for minute notification
+            lastMinuteNotificationTime = currentMinute // Update the last minute notification time
         }
         
-        // Check for 10 seconds remaining using a range, considering the timer ticks every 0.05 seconds
-        if enable10SecondsNotification && phaseTimeRemaining <= 10.05 && phaseTimeRemaining > 9.95 {
-            AudioServicesPlaySystemSound(1052) // Play twice for two dings
+        // 10 seconds notification
+        if enable10SecondsNotification && phaseTimeRemaining <= 10.05 && phaseTimeRemaining > 9.95 && !tenSecondSoundPlayed {
+            AudioServicesPlaySystemSound(1052) // Play first ding for 10 seconds
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                AudioServicesPlaySystemSound(1052)
+                AudioServicesPlaySystemSound(1052) // Play second ding
             }
+            tenSecondSoundPlayed = true // Mark the sound as played to prevent it from playing again
+        } else if phaseTimeRemaining > 10.05 {
+            tenSecondSoundPlayed = false // Reset for the next 10-second window
         }
-        
-        
+
         if phaseTimeRemaining <= 0 {
             totalDuration += totalPhaseTime // Add completed phase time to total duration
-            
+
             if isHoldPhase {
                 isHoldPhase = false
                 elapsedTime = 0
@@ -333,15 +399,15 @@ struct CO2TrainingTimerView: View {
                     elapsedTime = 0
                     setPhaseTime()
                 } else {
-                    // Session ends, so we call endCO2TrainingSession and reset timer
                     isActive = false
+                    // Save the session here to include the duration of the last phase
                     onSave(Int(totalDuration))
                     resetTimer()
+                    sessionCompleted = true
                 }
             }
         }
     }
-
     
     private func timeString(from totalSeconds: CGFloat) -> String {
         let minutes = Int(totalSeconds) / 60

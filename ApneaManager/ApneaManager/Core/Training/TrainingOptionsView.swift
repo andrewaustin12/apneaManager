@@ -275,6 +275,7 @@ struct TrainingOptionsView: View {
             .sheet(isPresented: $showPaywall, content: {
                 PaywallView(displayCloseButton: true)
             })
+            .presentPaywallIfNeeded(requiredEntitlementIdentifier: "Pro")
         }
     }
     

@@ -16,6 +16,7 @@ struct SquareBreathingView: View {
     @State private var timer: Timer?
     @State private var phaseDuration: Int = 4 // Duration for each phase in seconds
     @State private var totalDuration: Int = 5 * 60 // Default total duration is 10 minutes
+    @State private var tenSecondSoundPlayed = false
     @State private var currentPhaseIndex = 0
     @State private var elapsedTime = 0
     @State private var showAlert = false
@@ -23,7 +24,7 @@ struct SquareBreathingView: View {
     @State private var startTime: Date?
     
     let phases = ["Inhale", "Hold", "Exhale", "Hold"]
-    let colors = [Color.blue, Color.green, Color.red, Color.yellow]
+    let colors = [Color.green, Color.blue, Color.red, Color.yellow]
     let theme: Theme
     @State private var isExerciseActive = false
     
@@ -186,10 +187,57 @@ struct SquareBreathingView: View {
         timeRemaining = phaseDuration
     }
     
+//    private func moveToNextPhase() {
+//        if startTime == nil { startTime = Date() } // Start the timer if not already started
+//        
+//        phase = phases[currentPhaseIndex % phases.count]
+//        timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
+//            guard let startTime = self.startTime else { return }
+//            
+//            let elapsedTime = Date().timeIntervalSince(startTime)
+//            let timeLeft = self.totalDuration - Int(elapsedTime)
+//            
+//            let enableMinuteNotification = UserDefaults.standard.bool(forKey: UserDefaults.Keys.isMinuteNotificationChecked)
+//            let enable10SecondsNotification = UserDefaults.standard.bool(forKey: UserDefaults.Keys.is10SecondsNotificationChecked)
+//            
+//            if elapsedTime >= Double(self.totalDuration) {
+//                self.stopBreathingExercise() // Automatically stop if total duration reached
+//                showAlert = true
+//                return
+//            }
+//            
+//            self.timeRemaining -= 1
+//            
+//            // Minute Notification is one ding
+//            if enableMinuteNotification && timeLeft % 60 == 0 && timeLeft != self.totalDuration && timeLeft > 10 {
+//                AudioServicesPlaySystemSound(1052) // Adjust sound ID accordingly
+//            }
+//            
+//            // 10 Seconds Notification is two
+//            if enable10SecondsNotification && timeLeft == 10 {
+//                AudioServicesPlaySystemSound(1052) // Play twice for two dings
+//                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+//                    AudioServicesPlaySystemSound(1052)
+//                }
+//            }
+//            
+//            if self.timeRemaining <= 0 {
+//                self.currentPhaseIndex += 1
+//                if self.currentPhaseIndex >= self.phases.count {
+//                    self.currentPhaseIndex = 0 // Restart or adjust as necessary
+//                }
+//                self.phase = self.phases[self.currentPhaseIndex % self.phases.count]
+//                self.timeRemaining = self.phaseDuration // Reset the timer for the next phase
+//            }
+//        }
+//    }
+    
     private func moveToNextPhase() {
         if startTime == nil { startTime = Date() } // Start the timer if not already started
         
         phase = phases[currentPhaseIndex % phases.count]
+        let initialTime = self.totalDuration // Capture the initial total duration for comparison
+        var minuteSoundPlayed = false // To manage minute sound play
         timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
             guard let startTime = self.startTime else { return }
             
@@ -201,22 +249,25 @@ struct SquareBreathingView: View {
             
             if elapsedTime >= Double(self.totalDuration) {
                 self.stopBreathingExercise() // Automatically stop if total duration reached
-                showAlert = true
+                self.showAlert = true
                 return
             }
             
             self.timeRemaining -= 1
             
             // Minute Notification is one ding
-            if enableMinuteNotification && timeLeft % 60 == 0 && timeLeft != self.totalDuration && timeLeft > 10 {
+            if enableMinuteNotification && timeLeft % 60 == 0 && timeLeft != initialTime && timeLeft > 10 && !minuteSoundPlayed {
                 AudioServicesPlaySystemSound(1052) // Adjust sound ID accordingly
+                minuteSoundPlayed = true // Prevents the sound from playing more than once per minute
+            } else if timeLeft % 60 == 59 {
+                minuteSoundPlayed = false // Reset the flag one second before the next minute starts
             }
             
-            // 10 Seconds Notification is two
+            // 10 Seconds Notification is two dings
             if enable10SecondsNotification && timeLeft == 10 {
-                AudioServicesPlaySystemSound(1052) // Play twice for two dings
+                AudioServicesPlaySystemSound(1052) // Play first ding for 10 seconds
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                    AudioServicesPlaySystemSound(1052)
+                    AudioServicesPlaySystemSound(1052) // Play second ding
                 }
             }
             
@@ -230,6 +281,7 @@ struct SquareBreathingView: View {
             }
         }
     }
+
     
     private func saveSession(duration: Int) {
         // Ensure the duration is not negative

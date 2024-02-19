@@ -10,7 +10,6 @@
 		3F03B9942B6A845E00E31152 /* PreBreatheSettingsDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F03B9932B6A845E00E31152 /* PreBreatheSettingsDetailView.swift */; };
 		3F03B9962B6A9AA700E31152 /* SquareBreathingSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F03B9952B6A9AA700E31152 /* SquareBreathingSettingsView.swift */; };
 		3F23F1FF2B73C7DF003FBC64 /* HealthDataView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F23F1FE2B73C7DF003FBC64 /* HealthDataView.swift */; };
-		3F23F2012B73CB81003FBC64 /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F23F2002B73CB81003FBC64 /* HealthKit.framework */; };
 		3F23F2032B743595003FBC64 /* HistorySessionsChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F23F2022B743595003FBC64 /* HistorySessionsChartView.swift */; };
 		3F23F2052B752021003FBC64 /* SessionHistoryDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F23F2042B752021003FBC64 /* SessionHistoryDetailView.swift */; };
 		3F23F20B2B77D38F003FBC64 /* UserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F23F20A2B77D38F003FBC64 /* UserDefaults.swift */; };
@@ -160,7 +159,6 @@
 		3FAE0AC22B72471000FB0110 /* TrainingReminder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrainingReminder.swift; sourceTree = "<group>"; };
 		3FAE0AC42B724E1000FB0110 /* TrainingReminderDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrainingReminderDetailView.swift; sourceTree = "<group>"; };
 		3FAE0AC72B724E7000FB0110 /* NotificationHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationHandler.swift; sourceTree = "<group>"; };
-		3FAE0AC92B73A04200FB0110 /* ApneaManager.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ApneaManager.entitlements; sourceTree = "<group>"; };
 		3FAE0ACA2B73A19700FB0110 /* HealthKitHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthKitHandler.swift; sourceTree = "<group>"; };
 		3FD7019B2B7C018C00617DA5 /* StoreKitTestCertificate.cer */ = {isa = PBXFileReference; lastKnownFileType = file; path = StoreKitTestCertificate.cer; sourceTree = "<group>"; };
 		3FD7019E2B80FFF700617DA5 /* SubscriptionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionManager.swift; sourceTree = "<group>"; };
@@ -195,7 +193,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				3FD701982B7BA38100617DA5 /* RevenueCat in Frameworks */,
-				3F23F2012B73CB81003FBC64 /* HealthKit.framework in Frameworks */,
 				3F53EA302B4AEAED00E821BC /* WishKit in Frameworks */,
 				3FD7019A2B7BA38100617DA5 /* RevenueCatUI in Frameworks */,
 				3FDB89EA2B57D9CC00DF0C51 /* StoreKit.framework in Frameworks */,
@@ -256,7 +253,6 @@
 		3F53E9CD2B470D8400E821BC /* ApneaManager */ = {
 			isa = PBXGroup;
 			children = (
-				3FAE0AC92B73A04200FB0110 /* ApneaManager.entitlements */,
 				3FAE0AC12B723F9100FB0110 /* Info.plist */,
 				3FDB89FB2B597DFB00DF0C51 /* Utils */,
 				3FDB89F82B57F8BC00DF0C51 /* Core */,

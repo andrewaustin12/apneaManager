@@ -9,6 +9,8 @@ final class Session: Identifiable, Hashable, Codable {
     var sessionType: SessionType
     var duration: Int // Duration in seconds
     var tableData: String?
+    var spo2: Int? // Optional SpO2 field
+    var heartrate: Int? // Optional heart rate field
 
     init(
         id: UUID = UUID(),
@@ -16,7 +18,9 @@ final class Session: Identifiable, Hashable, Codable {
         image: String,
         sessionType: SessionType,
         duration: Int,
-        tableData: String? = nil
+        tableData: String? = nil,
+        spo2: Int? = nil,
+        heartrate: Int? = nil
     ) {
         self.id = id
         self.date = date
@@ -24,6 +28,8 @@ final class Session: Identifiable, Hashable, Codable {
         self.sessionType = sessionType
         self.duration = duration
         self.tableData = tableData
+        self.spo2 = spo2
+        self.heartrate = heartrate
     }
 
     required init(from decoder: Decoder) throws {
@@ -34,6 +40,8 @@ final class Session: Identifiable, Hashable, Codable {
         sessionType = try container.decode(SessionType.self, forKey: .sessionType)
         duration = try container.decode(Int.self, forKey: .duration)
         tableData = try container.decodeIfPresent(String.self, forKey: .tableData)
+        spo2 = try container.decodeIfPresent(Int.self, forKey: .spo2)
+        heartrate = try container.decodeIfPresent(Int.self, forKey: .heartrate)
     }
 
     func hash(into hasher: inout Hasher) {
@@ -45,8 +53,8 @@ final class Session: Identifiable, Hashable, Codable {
     }
 
     private enum CodingKeys: String, CodingKey {
-        case id, date, image, sessionType, duration, tableData
-    }
+           case id, date, image, sessionType, duration, tableData, spo2, heartrate
+       }
 
     var o2Table: [Cycle]? {
         guard sessionType == .O2Table, let data = tableData?.data(using: .utf8) else { return nil }
@@ -98,5 +106,7 @@ extension Session {
         try container.encode(sessionType, forKey: .sessionType)
         try container.encode(duration, forKey: .duration)
         try container.encodeIfPresent(tableData, forKey: .tableData)
+        try container.encodeIfPresent(spo2, forKey: .spo2)
+        try container.encodeIfPresent(heartrate, forKey: .heartrate)
     }
 }

@@ -266,12 +266,13 @@ struct HistoryView: View {
     @ViewBuilder
     private func sessionList(filteredSessions: [Session]) -> some View {
         ForEach(filteredSessions) { session in
+            // Conditionally wrap the sessionRow in a NavigationLink only for Pro users
             if subscriptionManager.isProUser {
                 NavigationLink(destination: SessionHistoryDetailView(session: session)) {
-                    sessionRow(session)
+                    sessionRow(session, isProUser: subscriptionManager.isProUser)
                 }
             } else {
-                sessionRow(session)
+                sessionRow(session, isProUser: subscriptionManager.isProUser)
                     .onTapGesture {
                         // Optionally show an alert or some other indication that this is a Pro feature
                         activeAlert = .proFeature3
@@ -281,15 +282,12 @@ struct HistoryView: View {
     }
 
     @ViewBuilder
-    private func sessionRow(_ session: Session) -> some View {
+    private func sessionRow(_ session: Session, isProUser: Bool) -> some View {
         HStack {
             TrainingHistoryCardView(image: session.image, title: session.sessionType.rawValue, date: session.date, duration: Double(session.duration))
-                .foregroundColor(.primary) // Ensure text color remains black
+                .foregroundColor(.primary) // Ensure text color remains appropriate
             
-            if subscriptionManager.isProUser {
-                Image(systemName: "chevron.right")
-                    .foregroundColor(Color(.systemGray4))
-            } else {
+            if !subscriptionManager.isProUser {
                 Image(systemName: "lock.fill")
                     .foregroundColor(Color(.systemGray))
             }
@@ -302,6 +300,7 @@ struct HistoryView: View {
             }
         }
     }
+
 
     
     /// disables charts if not Pro user

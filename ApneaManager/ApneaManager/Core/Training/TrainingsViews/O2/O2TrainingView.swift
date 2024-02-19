@@ -24,6 +24,8 @@ struct O2TrainingView: View {
     @State private var heartRate: Double? = nil
     @State private var spo2: Double? = nil
     
+    @State private var sessionCompleted = false
+    
     /// Settings state
     @State private var totalRounds: Int = 8
     @State private var initialBreathHoldPercentage: Double = 40
@@ -55,7 +57,8 @@ struct O2TrainingView: View {
                 O2TrainingTimerView(o2Table: o2Table,
                                     currentRoundIndex: $currentRoundIndex,
                                     heartRate: $heartRate,
-                                    spo2: $spo2
+                                    spo2: $spo2,
+                                    sessionCompleted: $sessionCompleted
                                     ) { totalDuration in
                                         // Directly passing the o2Table of type [Cycle]
                                         saveSession(duration: totalDuration, table: o2Table, sessionType: .O2Table)
@@ -81,6 +84,13 @@ struct O2TrainingView: View {
                 
             }
             .navigationTitle("O2 Table Training")
+            .alert(isPresented: $sessionCompleted) {
+                Alert(
+                    title: Text("Training Complete"),
+                    message: Text("Congratulations! You've completed your O2 training session."),
+                    dismissButton: .default(Text("OK"))
+                )
+            }
             .onAppear {
                 if let personalBest = longestBreathHoldDuration {
                     o2Table = createO2Table(personalBest: personalBest)
@@ -228,7 +238,12 @@ struct O2TrainingTimerView: View {
     @State private var isHoldPhase = true //changes initial start phase
     @State private var phaseTimeRemaining: CGFloat = 0
     @State private var healthDataFetchTimer: Timer? = nil
-    
+    /// State for timer beeps
+    @State private var tenSecondSoundPlayed = false
+    @State private var lastMinuteNotificationTime: Int? = nil
+    @Binding var sessionCompleted: Bool
+
+
     var onSave: (Int) -> Void
     
     let timer = Timer.publish(every: 0.05, on: .main, in: .common).autoconnect()
@@ -236,43 +251,58 @@ struct O2TrainingTimerView: View {
     var body: some View {
         VStack {
             VStack {
-                HStack {
-                    // Left side content (Heart Rate)
-                    VStack {
-                        if let heartRate = heartRate {
-                            Text("HR: \(Int(heartRate)) bpm")
-                        } else {
-                            Text("HR: --")
-                        }
-                    }
-                    .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading) // Use dynamic width for alignment
-
-                    // Center content (Start Button)
-                    Button(action: toggleTimer) {
-                        Text(isActive ? "Stop" : "Start")
-                            .font(.title)
-                            .bold()
-                            .padding()
-                            .background(isActive ? Color.red : theme.mainColor)
-                            .foregroundColor(.white)
-                            .clipShape(RoundedRectangle(cornerRadius: 8))
-                    }
-                    .frame(width: 120) // Fixed width for the button for consistent sizing
-
-                    // Right side content (SpO2)
-                    VStack {
-                        if let spo2 = spo2 {
-                            Text("SpO2: \(Int(spo2))%")
-                        } else {
-                            Text("SpO2: --")
-                        }
-                    }
-                    .frame(minWidth: 0, maxWidth: .infinity, alignment: .trailing) // Use dynamic width for alignment
-
+                
+                // Start/Stop Button
+                Button(action: toggleTimer) {
+                    Text(isActive ? "Stop" : "Start")
+                        .font(.title)
+                        .bold()
+                        .padding()
+                        .background(isActive ? Color.red : theme.mainColor)
+                        .foregroundColor(.white)
+                        .clipShape(RoundedRectangle(cornerRadius: 8))
                 }
-                .padding(.bottom)
+                .padding(.vertical)
+                
+                // Heart rate and Spo2 plust start button
+                
+//                HStack {
+//                    // Left side content (Heart Rate)
+//                    VStack {
+//                        if let heartRate = heartRate {
+//                            Text("HR: \(Int(heartRate)) bpm")
+//                        } else {
+//                            Text("HR: --")
+//                        }
+//                    }
+//                    .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading) // Use dynamic width for alignment
+//
+//                    // Center content (Start Button)
+//                    Button(action: toggleTimer) {
+//                        Text(isActive ? "Stop" : "Start")
+//                            .font(.title)
+//                            .bold()
+//                            .padding()
+//                            .background(isActive ? Color.red : theme.mainColor)
+//                            .foregroundColor(.white)
+//                            .clipShape(RoundedRectangle(cornerRadius: 8))
+//                    }
+//                    .frame(width: 120) // Fixed width for the button for consistent sizing
+//
+//                    // Right side content (SpO2)
+//                    VStack {
+//                        if let spo2 = spo2 {
+//                            Text("SpO2: \(Int(spo2))%")
+//                        } else {
+//                            Text("SpO2: --")
+//                        }
+//                    }
+//                    .frame(minWidth: 0, maxWidth: .infinity, alignment: .trailing) // Use dynamic width for alignment
+//
+//                }
+//                .padding(.bottom)
 
-                // Remaining components (progress circle, etc.)
+                
             }
             .padding(.horizontal) // Ensure there's padding around the HStack to prevent edge content from touching the sides
 
@@ -310,9 +340,9 @@ struct O2TrainingTimerView: View {
             guard isActive else { return }
             updateProgress()
         }
-        .onAppear {
-            requestHealthData()
-        }
+//        .onAppear {
+//            requestHealthData()
+//        }
     }
     
     private func phaseIndicatorText() -> String {
@@ -334,10 +364,10 @@ struct O2TrainingTimerView: View {
         if isActive {
             // Start or resume the training session
             setPhaseTime()
-            startHealthDataFetchTimer() // Start fetching health data when the timer is active
+            //startHealthDataFetchTimer() // Start fetching health data when the timer is active
         } else {
             // Pause or stop the training session
-            stopHealthDataFetchTimer() // Stop fetching health data when the timer is inactive
+            //stopHealthDataFetchTimer() // Stop fetching health data when the timer is inactive
             // Include the last active phase's elapsedTime before saving
             totalDuration += elapsedTime
             onSave(Int(totalDuration))
@@ -345,21 +375,21 @@ struct O2TrainingTimerView: View {
         }
     }
     
-    private func startHealthDataFetchTimer() {
-        // Invalidate existing timer if any to avoid duplicate timers
-        stopHealthDataFetchTimer()
+//    private func startHealthDataFetchTimer() {
+//        // Invalidate existing timer if any to avoid duplicate timers
+//        stopHealthDataFetchTimer()
+//
+//        // Schedule a new timer
+//        healthDataFetchTimer = Timer.scheduledTimer(withTimeInterval: 2.0, repeats: true) { _ in
+//            print("Fetching health data...") // Debugging line
+//            requestHealthData()
+//        }
+//    }
 
-        // Schedule a new timer
-        healthDataFetchTimer = Timer.scheduledTimer(withTimeInterval: 2.0, repeats: true) { _ in
-            print("Fetching health data...") // Debugging line
-            requestHealthData()
-        }
-    }
-
-    private func stopHealthDataFetchTimer() {
-        healthDataFetchTimer?.invalidate()
-        healthDataFetchTimer = nil
-    }
+//    private func stopHealthDataFetchTimer() {
+//        healthDataFetchTimer?.invalidate()
+//        healthDataFetchTimer = nil
+//    }
     
     private func setPhaseTime() {
         if currentRoundIndex < o2Table.count {
@@ -370,32 +400,32 @@ struct O2TrainingTimerView: View {
         }
     }
     
-    private func requestHealthData() {
-        let healthKitManager = HealthKitManager()
-        
-        healthKitManager.fetchLatestHeartRate { rate, error in
-            if let rate = rate {
-                DispatchQueue.main.async {
-                    print("Fetched heart rate: \(rate)")
-                    self.heartRate = rate
-                }
-            } else if let error = error {
-                print("Error fetching heart rate: \(error.localizedDescription)")
-            }
-        }
-
-        healthKitManager.fetchLatestSpO2 { spo2Value, error in
-            if let spo2Value = spo2Value {
-                DispatchQueue.main.async {
-                    print("Fetched SpO2: \(spo2Value)")
-                    self.spo2 = spo2Value
-                }
-            } else if let error = error {
-                print("Error fetching SpO2: \(error.localizedDescription)")
-            }
-        }
-
-    }
+//    private func requestHealthData() {
+//        let healthKitManager = HealthKitManager()
+//        
+//        healthKitManager.fetchLatestHeartRate { rate, error in
+//            if let rate = rate {
+//                DispatchQueue.main.async {
+//                    print("Fetched heart rate: \(rate)")
+//                    self.heartRate = rate
+//                }
+//            } else if let error = error {
+//                print("Error fetching heart rate: \(error.localizedDescription)")
+//            }
+//        }
+//
+//        healthKitManager.fetchLatestSpO2 { spo2Value, error in
+//            if let spo2Value = spo2Value {
+//                DispatchQueue.main.async {
+//                    print("Fetched SpO2: \(spo2Value)")
+//                    self.spo2 = spo2Value
+//                }
+//            } else if let error = error {
+//                print("Error fetching SpO2: \(error.localizedDescription)")
+//            }
+//        }
+//
+//    }
     
     private func resetTimer() {
         elapsedTime = 0
@@ -411,31 +441,84 @@ struct O2TrainingTimerView: View {
         return String(format: "%02d:%02d", minutes, seconds)
     }
     
+//    private func updateProgress() {
+//        elapsedTime += 0.05
+//        phaseTimeRemaining -= 0.05
+//        
+//        let totalPhaseTime = isHoldPhase ? CGFloat(o2Table[currentRoundIndex].hold) : CGFloat(o2Table[currentRoundIndex].rest)
+//        progress = (totalPhaseTime - phaseTimeRemaining) / totalPhaseTime
+//        
+//        let enableMinuteNotification = UserDefaults.standard.bool(forKey: UserDefaults.Keys.isMinuteNotificationChecked)
+//        let enable10SecondsNotification = UserDefaults.standard.bool(forKey: UserDefaults.Keys.is10SecondsNotificationChecked)
+//        
+//        // minute notification
+//        if enableMinuteNotification && Int(phaseTimeRemaining) % 60 == 0 && phaseTimeRemaining > 10 {
+//            AudioServicesPlaySystemSound(1052) // Adjust sound ID accordingly
+//        }
+//        
+//        // Check for 10 seconds remaining using a range, considering the timer ticks every 0.05 seconds
+//        if enable10SecondsNotification && phaseTimeRemaining <= 10.05 && phaseTimeRemaining > 9.95 {
+//            AudioServicesPlaySystemSound(1052) // Play twice for two dings
+//            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+//                AudioServicesPlaySystemSound(1052)
+//            }
+//        }
+//        if phaseTimeRemaining <= 0 {
+//            totalDuration += totalPhaseTime // Add completed phase time to total duration
+//            
+//            if isHoldPhase {
+//                isHoldPhase = false
+//                elapsedTime = 0
+//                setPhaseTime()
+//            } else {
+//                isHoldPhase = true
+//                currentRoundIndex += 1
+//                if currentRoundIndex < o2Table.count {
+//                    elapsedTime = 0
+//                    setPhaseTime()
+//                } else {
+//                    isActive = false
+//                    // Save the session here to include the duration of the last phase
+//                    onSave(Int(totalDuration))
+//                    resetTimer()
+//                }
+//            }
+//        }
+//    }
+    
     private func updateProgress() {
         elapsedTime += 0.05
         phaseTimeRemaining -= 0.05
-        
+
         let totalPhaseTime = isHoldPhase ? CGFloat(o2Table[currentRoundIndex].hold) : CGFloat(o2Table[currentRoundIndex].rest)
         progress = (totalPhaseTime - phaseTimeRemaining) / totalPhaseTime
-        
+
         let enableMinuteNotification = UserDefaults.standard.bool(forKey: UserDefaults.Keys.isMinuteNotificationChecked)
         let enable10SecondsNotification = UserDefaults.standard.bool(forKey: UserDefaults.Keys.is10SecondsNotificationChecked)
         
-        // minute notification
-        if enableMinuteNotification && Int(phaseTimeRemaining) % 60 == 0 && phaseTimeRemaining > 10 {
-            AudioServicesPlaySystemSound(1052) // Adjust sound ID accordingly
+        let timeLeft = Int(round(phaseTimeRemaining))
+        let currentMinute = timeLeft / 60
+
+        // Minute notification
+        if enableMinuteNotification && timeLeft % 60 == 0 && timeLeft > 10 && lastMinuteNotificationTime != currentMinute {
+            AudioServicesPlaySystemSound(1052) // Play sound for minute notification
+            lastMinuteNotificationTime = currentMinute // Update the last minute notification time
         }
         
-        // Check for 10 seconds remaining using a range, considering the timer ticks every 0.05 seconds
-        if enable10SecondsNotification && phaseTimeRemaining <= 10.05 && phaseTimeRemaining > 9.95 {
-            AudioServicesPlaySystemSound(1052) // Play twice for two dings
+        // 10 seconds notification
+        if enable10SecondsNotification && phaseTimeRemaining <= 10.05 && phaseTimeRemaining > 9.95 && !tenSecondSoundPlayed {
+            AudioServicesPlaySystemSound(1052) // Play first ding for 10 seconds
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                AudioServicesPlaySystemSound(1052)
+                AudioServicesPlaySystemSound(1052) // Play second ding
             }
+            tenSecondSoundPlayed = true // Mark the sound as played to prevent it from playing again
+        } else if phaseTimeRemaining > 10.05 {
+            tenSecondSoundPlayed = false // Reset for the next 10-second window
         }
+
         if phaseTimeRemaining <= 0 {
             totalDuration += totalPhaseTime // Add completed phase time to total duration
-            
+
             if isHoldPhase {
                 isHoldPhase = false
                 elapsedTime = 0
@@ -451,6 +534,7 @@ struct O2TrainingTimerView: View {
                     // Save the session here to include the duration of the last phase
                     onSave(Int(totalDuration))
                     resetTimer()
+                    sessionCompleted = true
                 }
             }
         }

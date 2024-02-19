@@ -29,6 +29,9 @@ struct PranayamaBreathingView: View {
     @State private var isExerciseActive = false
     @State private var showAlert = false
     
+    @State private var tenSecondSoundPlayed = false
+
+    
     let phases = [
         "Inhale through Left Nostril",
         "Exhale through Right Nostril",
@@ -205,6 +208,7 @@ struct PranayamaBreathingView: View {
         let enable10SecondsNotification = UserDefaults.standard.bool(forKey: "is10SecondsNotificationChecked")
         
         phase = phases[currentPhaseIndex % phases.count]
+        tenSecondSoundPlayed = false // Reset the 10-second sound flag at the start of each phase
         timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
             guard let startTime = self.startTime else { return }
             
@@ -213,23 +217,24 @@ struct PranayamaBreathingView: View {
             
             if elapsedTime >= Double(self.totalDuration) {
                 self.stopBreathingExercise() // Automatically stop if total duration reached
-                showAlert = true
+                self.showAlert = true
                 return
             }
             
             self.timeRemaining -= 1
             
             // Minute Notification
-            if enableMinuteNotification && timeLeft % 60 == 0 && timeLeft != self.totalDuration && timeLeft > 10 {
+            if enableMinuteNotification && timeLeft % 60 == 0 && timeLeft != self.totalDuration && timeLeft > 10 && timeLeft < self.totalDuration - 1 {
                 AudioServicesPlaySystemSound(1052) // Adjust sound ID accordingly
             }
             
             // 10 Seconds Notification
-            if enable10SecondsNotification && timeLeft == 10 {
-                AudioServicesPlaySystemSound(1052) // Play twice for two dings
+            if enable10SecondsNotification && timeLeft == 10 && !self.tenSecondSoundPlayed {
+                AudioServicesPlaySystemSound(1052) // Play sound for 10 seconds left
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                    AudioServicesPlaySystemSound(1052)
+                    AudioServicesPlaySystemSound(1052) // Optional: Play it twice
                 }
+                self.tenSecondSoundPlayed = true // Ensure it doesn't play more than once
             }
             
             if self.timeRemaining <= 0 {
@@ -239,9 +244,11 @@ struct PranayamaBreathingView: View {
                 }
                 self.phase = self.phases[self.currentPhaseIndex % self.phases.count]
                 self.timeRemaining = self.phaseDuration // Reset the timer for the next phase
+                self.tenSecondSoundPlayed = false // Reset the 10-second sound flag for the next phase
             }
         }
     }
+
     
     private func saveSession(duration: Int) {
         let validDuration = max(0, duration)

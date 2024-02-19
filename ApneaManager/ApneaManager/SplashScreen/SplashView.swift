@@ -10,7 +10,7 @@ import SwiftUI
 
 struct SplashView: View {
     var body: some View {
-        Image("freediver-4")
+        Image("freediver-8")
             .resizable()
             .aspectRatio(contentMode: .fill)
             .frame(maxWidth: .infinity, maxHeight: .infinity)

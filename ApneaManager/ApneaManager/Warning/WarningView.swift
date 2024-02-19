@@ -31,6 +31,7 @@ struct WarningView: View {
                         .padding(.trailing)
                         .font(.subheadline)
                         .foregroundColor(.red)
+                        .multilineTextAlignment(.center)
                         
                 }
                 
