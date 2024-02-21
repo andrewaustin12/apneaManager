@@ -288,7 +288,7 @@ struct SquareBreathingView: View {
         let validDuration = max(0, duration)
         let newSession = Session(
             date: Date(),
-            image: "freediver-4",
+            image: "freediver-7",
             sessionType: .squareBreath,
             duration: validDuration
         )

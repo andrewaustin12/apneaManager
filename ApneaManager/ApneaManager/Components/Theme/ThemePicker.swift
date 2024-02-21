@@ -7,7 +7,7 @@ struct ThemePicker: View {
     // Computed property to easily convert between Theme and its rawValue
     private var selectedTheme: Theme {
         get {
-            Theme(rawValue: selectedThemeRawValue) ?? .bubblegum
+            Theme(rawValue: selectedThemeRawValue) ?? .primary
         }
         set {
             selectedThemeRawValue = newValue.rawValue

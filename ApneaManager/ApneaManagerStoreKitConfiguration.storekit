@@ -176,7 +176,7 @@
             }
           ],
           "productID" : "com.andy.ApneaManager.annualSubscription",
-          "recurringSubscriptionPeriod" : "P1M",
+          "recurringSubscriptionPeriod" : "P1Y",
           "referenceName" : "Annual Subscription",
           "subscriptionGroupID" : "18FF453B",
           "type" : "RecurringSubscription"

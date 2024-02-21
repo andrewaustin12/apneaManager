@@ -179,7 +179,7 @@ struct CO2TrainingView: View {
         let jsonString = String(data: jsonData, encoding: .utf8)
         
         let newSession = Session(
-            image: "freediver-4",  // Example image property
+            image: "freediver-1",  // Example image property
             sessionType: sessionType, // Session type indicating this is an O2Table session
             duration: duration ,    // The total elapsed time passed to this function
             tableData: jsonString
@@ -271,7 +271,7 @@ struct CO2TrainingTimerView: View {
         if !isActive {
             return "Ready"
         }
-        return isHoldPhase ? "Hold" : "Breath"
+        return isHoldPhase ? "Hold" : "Breathe"
     }
     
     private func phaseIndicatorColor() -> Color {

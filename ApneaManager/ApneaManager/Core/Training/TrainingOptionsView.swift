@@ -23,6 +23,9 @@ struct TrainingOptionsView: View {
     @State private var navigateToSquareBreathing = false
     @State private var isProUser: Bool = false
     @State private var showPaywall = false
+    @State private var showNoValidSessionAlert = false
+    @State private var showCO2Training = false
+    @State private var showO2Training = false
     
     let theme: Theme
     
@@ -85,6 +88,12 @@ struct TrainingOptionsView: View {
         }
     }
     
+    // Check if there are valid breath hold sessions
+    private func hasValidBreathHoldSession() -> Bool {
+        let breathHoldSessions = sessions.filter { $0.sessionType == .breathHold }
+        return breathHoldSessions.contains { $0.duration > 0 }
+    }
+    
     var body: some View {
         NavigationStack {
             VStack {
@@ -110,23 +119,47 @@ struct TrainingOptionsView: View {
                                 )
                             }
                             
-                            NavigationLink(destination: CO2TrainingView()) {
-                                TrainingCardView(
-                                    image: "freediver-1",
-                                    title: "CO2 Training",
-                                    subHeading: "8 Rounds | 10 min",
-                                    description: "CO2 table is a series of breath hold sessions that give you less recovery time between each round."
-                                )
+                            TrainingCardView(
+                                image: "freediver-1",
+                                title: "CO2 Training",
+                                subHeading: "8 Rounds | 10 min",
+                                description: "CO2 table is a series of breath hold sessions that give you less recovery time between each round."
+                            )
+                            .contentShape(Rectangle()) // Makes the entire area tappable
+                            .onTapGesture {
+                                if hasValidBreathHoldSession() {
+                                    self.showCO2Training = true
+                                } else {
+                                    self.showNoValidSessionAlert = true
+                                }
                             }
+                            .background(
+                                NavigationLink(destination: CO2TrainingView(), isActive: $showCO2Training) {
+                                    EmptyView()
+                                }
+                                .hidden() // Ensure the NavigationLink does not affect layout
+                            )
                             
-                            NavigationLink(destination: O2TrainingView()) {
-                                TrainingCardView(
-                                    image: "freediver-8",
-                                    title: "O2 Training",
-                                    subHeading: "8 Rounds | 21 min",
-                                    description: "O2 table is a series of breath hold sessions that give you more apnea time each round."
-                                )
+                            TrainingCardView(
+                                image: "freediver-8",
+                                title: "O2 Training",
+                                subHeading: "8 Rounds | 21 min",
+                                description: "O2 table is a series of breath hold sessions that give you more apnea time each round."
+                            )
+                            .contentShape(Rectangle()) // Makes the entire area tappable
+                            .onTapGesture {
+                                if hasValidBreathHoldSession() {
+                                    self.showO2Training = true
+                                } else {
+                                    self.showNoValidSessionAlert = true
+                                }
                             }
+                            .background(
+                                NavigationLink(destination: O2TrainingView(), isActive: $showO2Training) {
+                                    EmptyView()
+                                }
+                                .hidden() // Ensure the NavigationLink does not affect layout
+                            )
                             
                             if subscriptionManager.isProUser {
                                 NavigationLink(destination: SquareBreathingView(theme: theme)) {
@@ -149,14 +182,14 @@ struct TrainingOptionsView: View {
                                 }
                             }
                             
-//                            NavigationLink(destination: PranayamaBreathingView(theme: theme)) {
-//                                TrainingCardView(
-//                                    image: "pranayama-2",
-//                                    title: "Pranayama Breath",
-//                                    subHeading: "4 Cycles | 5 min",
-//                                    description: "Begin with 5-10 minutes of alternate nose breathing to relax."
-//                                )
-//                            }
+                            //                            NavigationLink(destination: PranayamaBreathingView(theme: theme)) {
+                            //                                TrainingCardView(
+                            //                                    image: "pranayama-2",
+                            //                                    title: "Pranayama Breath",
+                            //                                    subHeading: "4 Cycles | 5 min",
+                            //                                    description: "Begin with 5-10 minutes of alternate nose breathing to relax."
+                            //                                )
+                            //                            }
                             if subscriptionManager.isProUser {
                                 NavigationLink(destination: PranayamaBreathingView(theme: theme)) {
                                     TrainingCardView(
@@ -248,11 +281,11 @@ struct TrainingOptionsView: View {
                         
                         /// Last Session: O2 Table
                         if let mostRecent02TableTraining = mostRecent02TableTraining {
-                            TrainingLastSessionCard(image: "freediver-5", sessionType: "O2 Table", duration: mostRecent02TableTraining.duration)
+                            TrainingLastSessionCard(image: "freediver-8", sessionType: "O2 Table", duration: mostRecent02TableTraining.duration)
                         }
                         /// Last Session: Square Breath
                         if let mostRecentSquareBreathe = mostRecentSquareBreathe {
-                            TrainingLastSessionCard(image: "freediver-4", sessionType: "Square Breath", duration: mostRecentSquareBreathe.duration)
+                            TrainingLastSessionCard(image: "freediver-7", sessionType: "Square Breath", duration: mostRecentSquareBreathe.duration)
                         }
                         /// Last Session: Pranayama
                         if let mostRecentPranayamaBreathe = mostRecentPranayamaBreathe {
@@ -272,6 +305,13 @@ struct TrainingOptionsView: View {
                 .scrollIndicators(.hidden)
             }
             .navigationTitle("Training")
+            .alert(isPresented: $showNoValidSessionAlert) {
+                Alert(
+                    title: Text("Complete A Breath Hold Test"),
+                    message: Text("To unlock this training please complete a breath hold test. It is used to create your training table."),
+                    dismissButton: .default(Text("OK"))
+                )
+            }
             .sheet(isPresented: $showPaywall, content: {
                 PaywallView(displayCloseButton: true)
             })

@@ -10,6 +10,7 @@ import SwiftUI
 
 struct PranayamaBreathingSettingsView: View {
     @Environment(\.presentationMode) var presentationMode
+    @EnvironmentObject var subscriptionManager: SubscriptionManager
     @Binding var phaseDuration: Int
     @Binding var totalDuration: Int
 
@@ -34,13 +35,15 @@ struct PranayamaBreathingSettingsView: View {
                     .pickerStyle(MenuPickerStyle())
                 }
             }
-            VStack {
-                UpgradeCardView(image: "freediver-3", title: "Upgrade to pro", buttonLabel: "Learn more")
-            }
             .navigationBarTitle("Settings", displayMode: .large)
             .toolbar {
                 Button("Dismiss") {
                     presentationMode.wrappedValue.dismiss()
+                }
+            }
+            if !subscriptionManager.isProUser {
+                VStack {
+                    UpgradeCardView(image: "freediver-3", title: "Upgrade to pro", buttonLabel: "Learn more")
                 }
             }
         }

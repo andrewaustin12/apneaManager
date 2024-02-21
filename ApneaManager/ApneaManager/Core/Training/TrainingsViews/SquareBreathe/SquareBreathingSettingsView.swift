@@ -9,6 +9,7 @@ import SwiftUI
 
 struct SquareBreathingSettingsView: View {
     @Environment(\.presentationMode) var presentationMode
+    @EnvironmentObject var subscriptionManager: SubscriptionManager
     @Binding var phaseDuration: Int
     @Binding var totalDuration: Int
     
@@ -35,15 +36,17 @@ struct SquareBreathingSettingsView: View {
                     .pickerStyle(MenuPickerStyle())
                 }
             }
-            VStack {
-                UpgradeCardView(image: "freediver-3", title: "Upgrade to pro", buttonLabel: "Learn more")
-            }
             .navigationTitle("Settings")
             .toolbar{
                 Button("Dismiss") {
                     presentationMode.wrappedValue.dismiss()
                 }
                 .position(x: 16, y: 16)
+            }
+            if !subscriptionManager.isProUser {
+                VStack {
+                    UpgradeCardView(image: "freediver-3", title: "Upgrade to pro", buttonLabel: "Learn more")
+                }
             }
         }
     }
